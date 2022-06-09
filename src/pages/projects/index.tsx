@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { Project } from "../../services/types";
 
-import { useProjects, useCreateProject } from "../../services/projects";
+import { useProjects, createProject } from "../../services/projects";
 
 const ProjectCard = ({ project }: { project: Project }) => {
   return (
@@ -17,7 +17,13 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
 const Projects: NextPage = () => {
   const { projects, error, loading } = useProjects();
-  const createProject = useCreateProject();
+
+  const _proj: Project = {
+    name: "My Project",
+    initial_date: "2022-06-09T19:46:47.888Z",
+    final_date: "2022-06-09T19:46:47.888Z",
+    estimated_hours: 0,
+  };
 
   return (
     <div className="page">
@@ -28,7 +34,7 @@ const Projects: NextPage = () => {
         <ProjectCard key={i} project={project} />
       ))}
       <button onClick={() => console.log(projects)}>SHOW</button>
-      <button onClick={() => createProject("FDELU")}>CREATE</button>
+      <button onClick={() => createProject(_proj)}>CREATE</button>
     </div>
   );
 };

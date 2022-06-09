@@ -1,10 +1,10 @@
 export type Task = any;
 
 export type Project = {
-  id: number;
+  id?: number;
   name: string;
   initial_date: string;
   final_date: string;
   estimated_hours: number;
-  tasks: Task[];
+  tasks?: Task[];
 };
