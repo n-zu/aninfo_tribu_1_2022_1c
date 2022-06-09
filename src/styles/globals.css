@@ -19,3 +19,9 @@ a {
   margin-top: 2rem; /* navbar */
   padding: 2rem;
 }
+
+.flexContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

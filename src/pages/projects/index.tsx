@@ -2,39 +2,51 @@ import type { NextPage } from "next";
 import { Project } from "../../services/types";
 
 import { useProjects, createProject } from "../../services/projects";
+import ProjectsList from "../../components/projects/ProjectsList";
 
-const ProjectCard = ({ project }: { project: Project }) => {
-  return (
-    <div>
-      <h3>
-        {project.id} {project.name}
-      </h3>
-      <p>Ini : {project.initial_date}</p>
-      <p>Fin : {project.final_date}</p>
-    </div>
-  );
+const _proj: Project = {
+  name: "My Project",
+  initial_date: "2022-06-09T19:46:47.888Z",
+  final_date: "2022-06-09T19:46:47.888Z",
+  estimated_hours: 0,
 };
 
-const Projects: NextPage = () => {
-  const { projects, error, loading } = useProjects();
+const newProject = () => {
+  const name = prompt("Nombre del Proyecto", "Nuevo Proyecto");
+  createProject({ ..._proj, name: name ?? "Nuevo Proyecto" });
+};
 
-  const _proj: Project = {
-    name: "My Project",
-    initial_date: "2022-06-09T19:46:47.888Z",
-    final_date: "2022-06-09T19:46:47.888Z",
-    estimated_hours: 0,
-  };
+const Bar = () => (
+  <div
+    style={{
+      display: "flex",
+      gap: 10,
+      margin: "10px 0 20px",
+    }}
+  >
+    <input
+      type="text"
+      style={{ width: "100%", height: "2em" }}
+      placeholder="Buscar por nombre"
+    />
+    <button
+      style={{
+        whiteSpace: "nowrap",
+      }}
+      onClick={newProject}
+    >
+      Nuevo Proyecto
+    </button>
+  </div>
+);
+
+const Projects: NextPage = () => {
+  const projectsData = useProjects();
 
   return (
     <div className="page">
-      <h1>Projects Page</h1>
-      {loading ? "LOADING" : ""}
-      {error ? "ERROR" : ""}
-      {projects?.map((project: Project, i: number) => (
-        <ProjectCard key={i} project={project} />
-      ))}
-      <button onClick={() => console.log(projects)}>SHOW</button>
-      <button onClick={() => createProject(_proj)}>CREATE</button>
+      <Bar />
+      <ProjectsList {...projectsData} />
     </div>
   );
 };
