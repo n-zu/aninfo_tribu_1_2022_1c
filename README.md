@@ -1,25 +1,29 @@
 # PSA Frontend
 
-## Disclaimer
+## Links
 
-This is an initial template, technologies are subject to change.
+##### Tribe
+
+- [🗃️ Tribe Drive](https://drive.google.com/drive/u/0/folders/1GHwbWfFqDsOkxhn64ill8LCG2WzmyhM4)
+- [✏️ Lucid Chart](https://lucid.app/lucidchart/5f201368-0dd6-4341-af36-e54b9868a238/edit?page=0_0&invitationId=inv_7b1af707-2002-4ae0-a75b-f3d85616bad3#)
+
+##### Modules
+
+- 👥 Human Resources API
+- [🗒️ Projects API](https://aninfo-projects.herokuapp.com/docs) [[src](https://github.com/NicolasEzequielZulaicaRivera/aninfo_squad_2_2022_1c)]
+- 🔧 Support API
 
 ## Getting Started from Scratch
 
 ```
-$ npm i yarn
+$ npm i yarn -g
 $ yarn
 $ yarn dev
 ```
 
 ## Using typescript
 
-Don't know how to use typescript?
-
-- Don't use it,
-  - you can just name your files with `.js` extension and use normal javascript
-  - or use type `any`
-- Learn it [https://www.typescriptlang.org/](https://www.typescriptlang.org/)
+[https://www.typescriptlang.org/](https://www.typescriptlang.org/)
 
 # Next Template
 
