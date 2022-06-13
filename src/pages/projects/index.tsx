@@ -1,8 +1,11 @@
 import type { NextPage } from "next";
 import { Project } from "../../services/types";
+import { Box, Button, Modal, Typography } from "@material-ui/core";
 
 import { useProjects, createProject } from "../../services/projects";
 import ProjectsList from "../../components/projects/ProjectsList";
+import { useState } from "react";
+import NewProjectModal from "../../components/projects/NewProjectModal";
 
 const _proj: Project = {
   name: "My Project",
@@ -11,12 +14,11 @@ const _proj: Project = {
   estimated_hours: 0,
 };
 
-const newProject = () => {
-  const name = prompt("Nombre del Proyecto", "Nuevo Proyecto");
-  createProject({ ..._proj, name: name ?? "Nuevo Proyecto" });
+type BarProps = {
+  handleNew: () => void;
 };
 
-const Bar = () => (
+const Bar = ({ handleNew }: BarProps) => (
   <div
     style={{
       display: "flex",
@@ -29,24 +31,29 @@ const Bar = () => (
       style={{ width: "100%", height: "2em" }}
       placeholder="Buscar por nombre"
     />
-    <button
+    <Button
       style={{
         whiteSpace: "nowrap",
       }}
-      onClick={newProject}
+      variant="contained"
+      color="primary"
+      onClick={handleNew}
     >
       Nuevo Proyecto
-    </button>
+    </Button>
   </div>
 );
 
 const Projects: NextPage = () => {
   const projectsData = useProjects();
 
+  const [open, setOpen] = useState(false);
+
   return (
     <div className="page">
-      <Bar />
+      <Bar handleNew={() => setOpen(true)} />
       <ProjectsList {...projectsData} />
+      <NewProjectModal open={open} onClose={() => setOpen(false)} />
     </div>
   );
 };

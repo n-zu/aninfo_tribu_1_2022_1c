@@ -1,0 +1,18 @@
+.Label {
+  margin: 10px 0 5px 0;
+  text-transform: capitalize;
+}
+
+.Field {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  outline: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.Error {
+  color: #c22;
+  font-weight: 500;
+}

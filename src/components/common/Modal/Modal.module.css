@@ -1,0 +1,12 @@
+.Modal .Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  pointer-events: none;
+}
+
+.Modal .Container .Paper {
+  padding: 2rem;
+  pointer-events: all;
+}
