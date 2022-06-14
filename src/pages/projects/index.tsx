@@ -8,12 +8,12 @@ import ListBar from "../../components/common/ListBar";
 
 const Projects: NextPage = () => {
   const projectsData = useProjects();
-
+  console.log(projectsData)
   const [open, setOpen] = useState(false);
 
   return (
     <div className="page">
-      <ListBar handleNew={() => setOpen(true)} label="proyecto" />
+      <ListBar handleNew={() => setOpen(true)} label="proyecto" options={projectsData.projects} />
       <ProjectsList {...projectsData} />
       <NewProjectModal open={open} onClose={() => setOpen(false)} />
     </div>

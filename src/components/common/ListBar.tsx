@@ -1,11 +1,14 @@
 import { Button } from "@material-ui/core";
+import AutoComplete from "./AutoComplete";
+import { Options } from "../../services/types";
 
 type BarProps = {
   handleNew: () => void;
   label: string;
+  options?: Options[];
 };
 
-const ListBar = ({ handleNew, label }: BarProps) => {
+const ListBar = ({ handleNew, label, options }: BarProps) => {
   return (
     <div
       style={{
@@ -14,11 +17,7 @@ const ListBar = ({ handleNew, label }: BarProps) => {
         margin: "10px 0 20px",
       }}
     >
-      <input
-        type="text"
-        style={{ width: "100%", height: "2em" }}
-        placeholder="Buscar por nombre"
-      />
+      <AutoComplete options={options}/>
       <Button
         style={{
           whiteSpace: "nowrap",

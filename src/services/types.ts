@@ -15,3 +15,8 @@ export type Project = {
   estimated_hours: number;
   tasks?: Task[];
 };
+
+export type Options = {
+  id?: number;
+  name: string;
+}
