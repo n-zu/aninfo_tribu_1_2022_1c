@@ -1,17 +1,18 @@
-import Modal from "../common/Modal/Modal";
+import Modal from "../../common/Modal/Modal";
 import { Formik, Form } from "formik";
-import FormField from "../common/Form/FormField";
+import FormField from "../../common/Form/FormField";
 import { Button } from "@material-ui/core";
-import { createProject } from "../../services/projects";
+import { createTask } from "../../../services/projects";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 type Props = {
+  projectId: string;
   open: boolean;
   onClose: () => void;
 };
 
-const NewProjectModal = ({ open, onClose }: Props) => {
+const NewTaskModal = ({ projectId, open, onClose }: Props) => {
   const [creating, setCreating] = useState(false);
 
   const initialValues = {
@@ -33,22 +34,22 @@ const NewProjectModal = ({ open, onClose }: Props) => {
   const onSubmit = async (values: any) => {
     setCreating(true);
     try {
-      const newProject = {
+      const newTask = {
         ...values,
         initial_date: new Date(values?.initial_date).toISOString(),
         final_date: new Date(values?.final_date).toISOString(),
       };
-      await createProject(newProject);
-      toast.success("Proyecto creado correctamente");
+      await createTask(projectId, newTask);
+      toast.success("Tarea creada correctamente");
     } catch {
-      toast.error("Error al crear el proyecto");
+      toast.error("Error al crear la tarea");
     }
     setCreating(false);
   };
 
   return (
     <Modal open={open} onClose={onClose}>
-      <h2>Nuevo Proyecto</h2>
+      <h2>Nueva tarea</h2>
       <Formik
         initialValues={initialValues}
         validate={validate}
@@ -58,13 +59,14 @@ const NewProjectModal = ({ open, onClose }: Props) => {
           <Form>
             <div>
               <FormField name="name" />
+              <FormField name="description" />
               <FormField name="initial_date" type="date" />
               <FormField name="final_date" type="date" />
               <FormField name="estimated_hours" type="number" />
             </div>
             <br />
             <Button variant="contained" color="primary" type="submit">
-              Crear Proyecto
+              Crear Tarea
             </Button>
           </Form>
         )}
@@ -73,4 +75,4 @@ const NewProjectModal = ({ open, onClose }: Props) => {
   );
 };
 
-export default NewProjectModal;
+export default NewTaskModal;

@@ -1,5 +1,10 @@
 import { projectsApi, useSWR } from "./requests";
-import { Project } from "./types";
+import { Project, Task } from "./types";
+
+const postHeaders = {
+  "Content-Type": "application/json",
+  Accept: "application/json",
+};
 
 export const projectsFetch = async (url: string, request?: any) => {
   return fetch(projectsApi + url, {
@@ -31,10 +36,15 @@ export const useProject = (projectId: string) => {
 export const createProject = (project: Project) => {
   fetch(projectsApi + "/projects/", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
+    headers: postHeaders,
     body: JSON.stringify(project),
+  });
+};
+
+export const createTask = (projectId: string, task: Task) => {
+  fetch(`${projectsApi}/projects/${projectId}/tasks/`, {
+    method: "POST",
+    headers: postHeaders,
+    body: JSON.stringify(task),
   });
 };

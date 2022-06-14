@@ -1,7 +1,9 @@
-.ProjectsList {
+.ProjectsList,
+.TasksList {
   margin: 10px 0;
 }
 
-.ProjectCard {
+.ProjectCard,
+.TaskCard {
   width: 100%;
 }

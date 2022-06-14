@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Project } from "../../services/types";
+import { zeroPad } from "../../util/util";
 import Card from "../common/Card";
 import styles from "./Projects.module.css";
 
@@ -9,7 +10,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
       <a className={styles.ProjectCard}>
         <Card hover={true}>
           <h3>
-            {project.id} {project.name}
+            {zeroPad(project?.id ?? 0)} - {project.name}
           </h3>
           <p>Inicio : {project.initial_date}</p>
           <p>Fin : {project.final_date}</p>
