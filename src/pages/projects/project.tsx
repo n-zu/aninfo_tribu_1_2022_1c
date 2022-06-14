@@ -29,7 +29,7 @@ const Tasks = ({ projectId, tasks }: TasksProps) => {
   );
 };
 
-const Projects: NextPage = () => {
+const Project: NextPage = () => {
   const router = useRouter();
   const projectId = router?.query?.id as string;
   const { project, error, loading } = useProject(projectId);
@@ -53,4 +53,4 @@ const Projects: NextPage = () => {
   );
 };
 
-export default Projects;
+export default Project;

@@ -41,6 +41,18 @@ export const createProject = (project: Project) => {
   });
 };
 
+export const useTask = (taskId: string) => {
+  const { data, error, isValidating } = useSWR(
+    taskId ? "/tasks/" + taskId : null,
+    projectsFetch
+  );
+  const loading = !data && isValidating;
+
+  const task = data as Task;
+
+  return { task, error, loading };
+};
+
 export const createTask = (projectId: string, task: Task) => {
   fetch(`${projectsApi}/projects/${projectId}/tasks/`, {
     method: "POST",
