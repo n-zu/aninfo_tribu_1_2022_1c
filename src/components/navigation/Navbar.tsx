@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AppBar, Box, Toolbar, Button, Typography } from "@material-ui/core";
 
 import styles from "./Navbar.module.css";
 
@@ -11,13 +12,19 @@ const Navbar = () => {
   ];
 
   return (
-    <div className={styles.Navbar}>
-      {links.map((link) => (
-        <Link href={link.href} key={link.href}>
-          <a>{link.label}</a>
-        </Link>
-      ))}
-    </div>
+    <AppBar>
+      <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+        <Toolbar>
+          {links.map((link) => (
+            <Button key={link.href}>
+              <Link href={link.href}>
+                <Typography style={{ color: "white" }}>{link.label}</Typography>
+              </Link>
+            </Button>
+          ))}
+        </Toolbar>
+      </Box>
+    </AppBar>
   );
 };
 
