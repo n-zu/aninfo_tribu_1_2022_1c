@@ -5,7 +5,7 @@ import { Options } from "../../services/types";
 type BarProps = {
   handleNew: () => void;
   label: string;
-  options?: Options[];
+  options: Options[];
 };
 
 const ListBar = ({ handleNew, label, options }: BarProps) => {
@@ -17,7 +17,7 @@ const ListBar = ({ handleNew, label, options }: BarProps) => {
         margin: "10px 0 20px",
       }}
     >
-      <AutoComplete options={options}/>
+      <AutoComplete options={options} label={label + "s"}/>
       <Button
         style={{
           whiteSpace: "nowrap",

@@ -4,20 +4,26 @@ import { Autocomplete } from '@material-ui/lab';
 import { Options } from "../../services/types";
 
 type BarProps = {
-  options?: Options[];
+  options: Options[];
+  label: string;
 };
 
-export default function AutoComplete({ options }: BarProps) {
+const loadingOptions: Options = {
+  id: 0,
+  name: 'Loading'
+}
+
+export default function AutoComplete({ options, label }: BarProps) {
 
   const [open, setOpen] = React.useState(false);
 
   return (
     <Autocomplete
       id="combo-box-demo"
-      options={options!}
+      options={options || [loadingOptions]}
       getOptionLabel={(option) => option.id + " - " + option.name}
       fullWidth
-      renderInput={(params) => <TextField {...params} label="Proyecto" sx={{}}/>}
+      renderInput={(params) => <TextField {...params} label={label} sx={{}}/>}
       freeSolo
       open={open}
       onInputChange={(_, value) => {
@@ -27,6 +33,7 @@ export default function AutoComplete({ options }: BarProps) {
           if (!open) setOpen(true);
         }
       }}
+      onChange={(event, value) => console.log(value)}
       onClose={() => setOpen(false)}
     />
   );
