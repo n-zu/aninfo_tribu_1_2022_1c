@@ -35,8 +35,8 @@ const NewProjectModal = ({ open, onClose }: Props) => {
     try {
       const newProject = {
         ...values,
-        initial_date: new Date(values?.initial_date).toISOString(),
-        final_date: new Date(values?.final_date).toISOString(),
+        initial_date: new Date(values?.initial_date),
+        final_date: new Date(values?.final_date),
       };
       await createProject(newProject);
       toast.success("Proyecto creado correctamente");

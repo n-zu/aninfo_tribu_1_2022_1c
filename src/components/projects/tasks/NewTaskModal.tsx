@@ -36,8 +36,8 @@ const NewTaskModal = ({ projectId, open, onClose }: Props) => {
     try {
       const newTask = {
         ...values,
-        initial_date: new Date(values?.initial_date).toISOString(),
-        final_date: new Date(values?.final_date).toISOString(),
+        initial_date: new Date(values?.initial_date),
+        final_date: new Date(values?.final_date),
       };
       const res = await createTask(projectId, newTask);
       console.log("res", res);
