@@ -39,7 +39,8 @@ const NewTaskModal = ({ projectId, open, onClose }: Props) => {
         initial_date: new Date(values?.initial_date).toISOString(),
         final_date: new Date(values?.final_date).toISOString(),
       };
-      await createTask(projectId, newTask);
+      const res = await createTask(projectId, newTask);
+      console.log("res", res);
       toast.success("Tarea creada correctamente");
     } catch {
       toast.error("Error al crear la tarea");

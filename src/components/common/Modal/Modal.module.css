@@ -9,4 +9,5 @@
 .Modal .Container .Paper {
   padding: 2rem;
   pointer-events: all;
+  min-width: 600px;
 }

@@ -14,19 +14,21 @@ const ListBar = ({ handleNew, label, options, routeFunction }: BarProps) => {
     <div
       style={{
         display: "flex",
+        alignItems: "flex-end",
         gap: 10,
         margin: "10px 0 20px",
       }}
     >
-      <AutoComplete 
-        options={options} 
-        label={label + "s"} 
+      <AutoComplete
+        options={options}
+        label={"Buscar " + label + "s por nombre"}
         routeFunction={routeFunction}
       />
       <Button
         style={{
           whiteSpace: "nowrap",
-          padding: "0.5em 2.5em",
+          padding: "0 2em",
+          height: "2.5em",
         }}
         variant="contained"
         color="primary"
