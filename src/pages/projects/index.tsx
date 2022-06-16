@@ -12,14 +12,18 @@ const Projects: NextPage = () => {
 
   return (
     <div className="page">
-      <ListBar 
-        handleNew={() => setOpen(true)} 
-        label="proyecto" 
-        options={projectsData.projects} 
-        routeFunction={routeToProject} 
+      <ListBar
+        handleNew={() => setOpen(true)}
+        label="proyecto"
+        options={projectsData.projects}
+        routeFunction={routeToProject}
       />
       <ProjectsList {...projectsData} />
-      <NewProjectModal open={open} onClose={() => setOpen(false)} />
+      <NewProjectModal
+        open={open}
+        onClose={() => setOpen(false)}
+        onCreate={projectsData?.mutate}
+      />
     </div>
   );
 };

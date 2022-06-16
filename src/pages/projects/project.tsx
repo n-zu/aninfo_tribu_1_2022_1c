@@ -12,22 +12,25 @@ import { Task } from "../../services/types";
 type TasksProps = {
   projectId: string;
   tasks: Task[];
+  onCreate: () => void;
 };
-const Tasks = ({ projectId, tasks }: TasksProps) => {
+const Tasks = ({ projectId, tasks, onCreate }: TasksProps) => {
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <ListBar 
-        handleNew={() => setOpen(true)} 
-        label="tarea" options={tasks} 
-        routeFunction={function () { }}
+      <ListBar
+        handleNew={() => setOpen(true)}
+        label="tarea"
+        options={tasks}
+        routeFunction={function () {}}
       />
       <TasksList tasks={tasks} />
       <NewTaskModal
         open={open}
         onClose={() => setOpen(false)}
         projectId={projectId}
+        onCreate={onCreate}
       />
     </>
   );
@@ -36,7 +39,7 @@ const Tasks = ({ projectId, tasks }: TasksProps) => {
 const Project: NextPage = () => {
   const router = useRouter();
   const projectId = router?.query?.id as string;
-  const { project, error, loading } = useProject(projectId);
+  const { project, error, loading, mutate } = useProject(projectId);
 
   return (
     <div className="page">
@@ -50,7 +53,11 @@ const Project: NextPage = () => {
           <p>initial_date {project?.initial_date}</p>
           <p>final_date {project?.final_date}</p>
           <p>estimated_hours {project?.estimated_hours}</p>
-          <Tasks projectId={projectId} tasks={project?.tasks ?? []} />
+          <Tasks
+            projectId={projectId}
+            tasks={project?.tasks ?? []}
+            onCreate={mutate}
+          />
         </>
       )}
     </div>

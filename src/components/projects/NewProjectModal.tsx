@@ -9,9 +9,10 @@ import { toast } from "react-toastify";
 type Props = {
   open: boolean;
   onClose: () => void;
+  onCreate: () => void;
 };
 
-const NewProjectModal = ({ open, onClose }: Props) => {
+const NewProjectModal = ({ open, onClose, onCreate }: Props) => {
   const [creating, setCreating] = useState(false);
 
   const initialValues = {
@@ -33,13 +34,10 @@ const NewProjectModal = ({ open, onClose }: Props) => {
   const onSubmit = async (values: any) => {
     setCreating(true);
     try {
-      const newProject = {
-        ...values,
-        initial_date: new Date(values?.initial_date),
-        final_date: new Date(values?.final_date),
-      };
-      await createProject(newProject);
+      await createProject(values);
       toast.success("Proyecto creado correctamente");
+      onCreate?.();
+      onClose?.();
     } catch {
       toast.error("Error al crear el proyecto");
     }

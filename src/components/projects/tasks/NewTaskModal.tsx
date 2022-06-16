@@ -10,9 +10,10 @@ type Props = {
   projectId: string;
   open: boolean;
   onClose: () => void;
+  onCreate: () => void;
 };
 
-const NewTaskModal = ({ projectId, open, onClose }: Props) => {
+const NewTaskModal = ({ projectId, open, onClose, onCreate }: Props) => {
   const [creating, setCreating] = useState(false);
 
   const initialValues = {
@@ -34,14 +35,10 @@ const NewTaskModal = ({ projectId, open, onClose }: Props) => {
   const onSubmit = async (values: any) => {
     setCreating(true);
     try {
-      const newTask = {
-        ...values,
-        initial_date: new Date(values?.initial_date),
-        final_date: new Date(values?.final_date),
-      };
-      const res = await createTask(projectId, newTask);
-      console.log("res", res);
+      await createTask(projectId, values);
       toast.success("Tarea creada correctamente");
+      onCreate?.();
+      onClose?.();
     } catch {
       toast.error("Error al crear la tarea");
     }

@@ -18,16 +18,19 @@ export const projectsFetch = async (url: string, request?: any) => {
 };
 
 export const useProjects = () => {
-  const { data, error, isValidating } = useSWR("/projects/", projectsFetch);
+  const { data, error, isValidating, ...rest } = useSWR(
+    "/projects/",
+    projectsFetch
+  );
   const loading = !data && isValidating;
 
   const projects = data as Project[];
 
-  return { projects, error, loading };
+  return { projects, error, loading, ...rest };
 };
 
 export const useProject = (projectId: string) => {
-  const { data, error, isValidating } = useSWR(
+  const { data, error, isValidating, ...rest } = useSWR(
     projectId ? "/projects/" + projectId : null,
     projectsFetch
   );
@@ -35,7 +38,7 @@ export const useProject = (projectId: string) => {
 
   const project = data as Project;
 
-  return { project, error, loading };
+  return { project, error, loading, ...rest };
 };
 
 export const createProject = async (project: Project) =>
