@@ -25,7 +25,7 @@ export default function AutoComplete({ options, label, routeFunction }: BarProps
       options={options || [loadingOptions]}
       getOptionLabel={(option) => option.id + " - " + option.name}
       fullWidth
-      renderInput={(params) => <TextField {...params} label={label} sx={{}}/>}
+      renderInput={(params) => <TextField {...params} label={label}/>}
       open={open}
       onInputChange={(_, value) => {
         if (value.length === 0) {

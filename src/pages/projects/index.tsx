@@ -9,7 +9,6 @@ import { routeToProject } from "../../util/util";
 
 const Projects: NextPage = () => {
   const projectsData = useProjects();
-  console.log(projectsData)
   const [open, setOpen] = useState(false);
 
   return (
