@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-
 import { useProjects } from "../../services/projects";
 import ProjectsList from "../../components/projects/ProjectsList";
 import { useState } from "react";

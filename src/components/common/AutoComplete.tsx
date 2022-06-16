@@ -20,6 +20,7 @@ export default function AutoComplete({ options, label, routeFunction }: BarProps
 
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
+  
   return (
     <Autocomplete
       id="combo-box-demo"
