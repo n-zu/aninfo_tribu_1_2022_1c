@@ -6,6 +6,11 @@ const postHeaders = {
   Accept: "application/json",
 };
 
+const checkStatus = (res: Response) => {
+  if (!res.ok) throw new Error(res.statusText);
+  return res;
+};
+
 export const projectsFetch = async (url: string, request?: any) => {
   return fetch(projectsApi + url, {
     ...request,
@@ -33,13 +38,12 @@ export const useProject = (projectId: string) => {
   return { project, error, loading };
 };
 
-export const createProject = (project: Project) => {
-  fetch(projectsApi + "/projects/", {
+export const createProject = async (project: Project) =>
+  await fetch(projectsApi + "/projects/", {
     method: "POST",
     headers: postHeaders,
     body: JSON.stringify(project),
-  });
-};
+  }).then(checkStatus);
 
 export const useTask = (taskId: string) => {
   const { data, error, isValidating } = useSWR(
@@ -53,10 +57,9 @@ export const useTask = (taskId: string) => {
   return { task, error, loading };
 };
 
-export const createTask = (projectId: string, task: Task) => {
-  fetch(`${projectsApi}/projects/${projectId}/tasks/`, {
+export const createTask = async (projectId: string, task: Task) =>
+  await fetch(`${projectsApi}/projects/${projectId}/tasks/`, {
     method: "POST",
     headers: postHeaders,
     body: JSON.stringify(task),
-  });
-};
+  }).then(checkStatus);
