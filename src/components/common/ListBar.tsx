@@ -21,7 +21,7 @@ const ListBar = ({ handleNew, label, options, routeFunction }: BarProps) => {
     >
       <AutoComplete
         options={options}
-        label={"Buscar " + label + "s por nombre"}
+        label={"Buscar " + label}
         routeFunction={routeFunction}
       />
       <Button
@@ -29,6 +29,7 @@ const ListBar = ({ handleNew, label, options, routeFunction }: BarProps) => {
           whiteSpace: "nowrap",
           padding: "0 2em",
           height: "2.5em",
+          minWidth: "10em",
         }}
         variant="contained"
         color="primary"
