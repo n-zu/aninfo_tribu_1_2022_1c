@@ -3,6 +3,9 @@
   border-radius: 4px;
   padding: 3px 10px;
 }
+.InfoCard {
+  width: 100%;
+}
 .Card.hover:hover {
   background-color: #f7f7f7;
 }

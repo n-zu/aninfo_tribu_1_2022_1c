@@ -1,24 +1,6 @@
-import Link from "next/link";
 import { Task } from "../../../services/types";
-import { zeroPad } from "../../../util/util";
-import Card from "../../common/Card";
+import InfoCard from "../../common/Card";
 import styles from "../Projects.module.css";
-
-const TaskCard = ({ task }: { task: Task }) => {
-  return (
-    <Link href={"/projects/task?id=" + task?.id}>
-      <a className={styles.TaskCard}>
-        <Card hover={true}>
-          <h3>
-            {zeroPad(task?.id ?? 0)} - {task.name}
-          </h3>
-          <p>Inicio : {task.initial_date}</p>
-          <p>Fin : {task.final_date}</p>
-        </Card>
-      </a>
-    </Link>
-  );
-};
 
 type TasksListProps = {
   tasks: Task[];
@@ -32,7 +14,7 @@ const TasksList = ({ tasks, error, loading }: TasksListProps) => {
       {loading ? "LOADING" : ""}
       {error ? "ERROR" : ""}
       {tasks?.map((task: Task, i: number) => (
-        <TaskCard key={i} task={task} />
+        <InfoCard key={i} info={task} link="/projects/task?id=" />
       ))}
     </div>
   );

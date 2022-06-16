@@ -1,24 +1,33 @@
 import Link from "next/link";
 import { Project } from "../../services/types";
 import { zeroPad } from "../../util/util";
-import Card from "../common/Card";
+import { Card, CardActionArea, CardContent, Typography } from "@material-ui/core";
 import styles from "./Projects.module.css";
+import InfoCard from "../common/Card"
 
-const ProjectCard = ({ project }: { project: Project }) => {
-  return (
-    <Link href={"/projects/project?id=" + project?.id}>
-      <a className={styles.ProjectCard}>
-        <Card hover={true}>
-          <h3>
-            {zeroPad(project?.id ?? 0)} - {project.name}
-          </h3>
-          <p>Inicio : {project.initial_date}</p>
-          <p>Fin : {project.final_date}</p>
-        </Card>
-      </a>
-    </Link>
-  );
-};
+// const ProjectCard = ({ project }: { project: Project }) => {
+//   return (
+//     <Link href={"/projects/project?id=" + project?.id}>
+//       <a className={styles.ProjectCard}>
+//         <Card style={{padding: 0}}>
+//           <CardActionArea>
+//             <CardContent>
+//               <Typography variant="h6" component="h4" style={{fontWeight: 700}}>
+//                 {zeroPad(project?.id ?? 0)} - {project.name}
+//               </Typography>
+//               <Typography variant="body1" style={{margin: 10}}>
+//                 Inicio : {project.initial_date}
+//               </Typography>
+//               <Typography variant="body1" style={{margin: 10}}>
+//                 Fin : {project.final_date}
+//               </Typography>
+//             </CardContent>
+//           </CardActionArea>
+//         </Card>
+//       </a>
+//     </Link>
+//   );
+// };
 
 type ProjectsListProps = {
   projects: Project[];
@@ -32,7 +41,7 @@ const ProjectsList = ({ projects, error, loading }: ProjectsListProps) => {
       {loading ? "LOADING" : ""}
       {error ? "ERROR" : ""}
       {projects?.map((project: Project, i: number) => (
-        <ProjectCard key={i} project={project} />
+        <InfoCard key={i} info={project} link="/projects/project?id="/>
       ))}
     </div>
   );
