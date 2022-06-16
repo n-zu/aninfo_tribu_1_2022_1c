@@ -5,6 +5,7 @@ import ProjectsList from "../../components/projects/ProjectsList";
 import { useState } from "react";
 import NewProjectModal from "../../components/projects/NewProjectModal";
 import ListBar from "../../components/common/ListBar";
+import { routeToProject } from "../../util/util";
 
 const Projects: NextPage = () => {
   const projectsData = useProjects();
@@ -13,7 +14,12 @@ const Projects: NextPage = () => {
 
   return (
     <div className="page">
-      <ListBar handleNew={() => setOpen(true)} label="proyecto" options={projectsData.projects} />
+      <ListBar 
+        handleNew={() => setOpen(true)} 
+        label="proyecto" 
+        options={projectsData.projects} 
+        routeFunction={routeToProject} 
+      />
       <ProjectsList {...projectsData} />
       <NewProjectModal open={open} onClose={() => setOpen(false)} />
     </div>

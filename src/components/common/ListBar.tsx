@@ -6,9 +6,10 @@ type BarProps = {
   handleNew: () => void;
   label: string;
   options: Options[];
+  routeFunction: Function;
 };
 
-const ListBar = ({ handleNew, label, options }: BarProps) => {
+const ListBar = ({ handleNew, label, options, routeFunction }: BarProps) => {
   return (
     <div
       style={{
@@ -17,7 +18,11 @@ const ListBar = ({ handleNew, label, options }: BarProps) => {
         margin: "10px 0 20px",
       }}
     >
-      <AutoComplete options={options} label={label + "s"}/>
+      <AutoComplete 
+        options={options} 
+        label={label + "s"} 
+        routeFunction={routeFunction}
+      />
       <Button
         style={{
           whiteSpace: "nowrap",

@@ -18,7 +18,11 @@ const Tasks = ({ projectId, tasks }: TasksProps) => {
 
   return (
     <>
-      <ListBar handleNew={() => setOpen(true)} label="tarea" options={tasks} />
+      <ListBar 
+        handleNew={() => setOpen(true)} 
+        label="tarea" options={tasks} 
+        routeFunction={function () { }}
+      />
       <TasksList tasks={tasks} />
       <NewTaskModal
         open={open}

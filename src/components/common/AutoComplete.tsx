@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { TextField, Popper } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import { Autocomplete } from '@material-ui/lab';
 import { Options } from "../../services/types";
+import { useRouter } from 'next/router';
 
 type BarProps = {
   options: Options[];
   label: string;
+  routeFunction: Function;
 };
 
 const loadingOptions: Options = {
@@ -13,10 +15,10 @@ const loadingOptions: Options = {
   name: 'Loading'
 }
 
-export default function AutoComplete({ options, label }: BarProps) {
+export default function AutoComplete({ options, label, routeFunction }: BarProps) {
 
   const [open, setOpen] = React.useState(false);
-
+  const router = useRouter();
   return (
     <Autocomplete
       id="combo-box-demo"
@@ -24,7 +26,6 @@ export default function AutoComplete({ options, label }: BarProps) {
       getOptionLabel={(option) => option.id + " - " + option.name}
       fullWidth
       renderInput={(params) => <TextField {...params} label={label} sx={{}}/>}
-      freeSolo
       open={open}
       onInputChange={(_, value) => {
         if (value.length === 0) {
@@ -33,8 +34,10 @@ export default function AutoComplete({ options, label }: BarProps) {
           if (!open) setOpen(true);
         }
       }}
-      onChange={(event, value) => console.log(value)}
+      onChange={(_, value) => routeFunction(value?.id, router)}
       onClose={() => setOpen(false)}
+      autoHighlight
+      popupIcon={null}
     />
   );
 }
