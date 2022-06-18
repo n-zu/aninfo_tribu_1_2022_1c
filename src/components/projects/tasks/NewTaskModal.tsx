@@ -1,7 +1,7 @@
 import Modal from "../../common/Modal/Modal";
 import { Formik, Form } from "formik";
 import FormField from "../../common/Form/FormField";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import { createTask } from "../../../services/projects";
 import { useState } from "react";
 import { toast } from "react-toastify";

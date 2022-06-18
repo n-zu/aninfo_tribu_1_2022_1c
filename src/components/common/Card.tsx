@@ -2,7 +2,7 @@ import styles from "./Card.module.css";
 import Link from "next/link";
 import { Project, Task } from "../../services/types";
 import { zeroPad } from "../../util/util";
-import { Card, CardActionArea, CardContent, Typography } from "@material-ui/core";
+import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
 
 const InfoCard = ({ info, link }: { info: Project | Task, link: string }) => {
   return (
