@@ -1,24 +1,17 @@
-import { Card, CardContent, Chip, Divider, Stack, Typography, colors, Box, Container, Link } from "@mui/material";
 import type { NextPage } from "next";
-import NextLink, { LinkProps } from "next/link"
+import { State, TicketSummary } from "../../services/support/types";
+import NextLink from "next/link"
 import dayjs from "dayjs";
 import es from "dayjs/locale/es"
 import relativeTime from "dayjs/plugin/relativeTime"
-import React from "react";
-
-type TicketSummary = {
-  id: number,
-  title: String,
-  priority: String,
-  severity: String,
-  expiration: dayjs.Dayjs,
-}
+import { Card, CardContent, Chip, Divider, Stack, Typography, colors, Box, Container, ButtonBase, Button } from "@mui/material";
 
 const tickets: TicketSummary[] = [
   {
     id: 1,
     title: "ERP PSA",
-    expiration: dayjs("2022-6-18").locale(es),
+    state: State.ABIERTO,
+    expirationDate: dayjs("2022-6-18").locale(es),
     priority: "Alto",
     severity: "S1"
   }
@@ -26,37 +19,30 @@ const tickets: TicketSummary[] = [
 
 dayjs.extend(relativeTime)
 
-const CustomNextLink = ({ href, content }: { href: string, content: any }) => (
-  <NextLink href={href} passHref>
-    <Link
-      underline="hover"
-      color="inherit"
-    >
-      {content}
-    </Link>
+const TicketCard = ({ id, title, expirationDate: expiration, priority, severity }: TicketSummary) => (
+  <NextLink href={`/support/${id}`} passHref>
+    <ButtonBase sx={{ width: "100%" }}>
+      <Card sx={{ width: "100%" }}>
+        <CardContent>
+          <Box>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography>{title}</Typography>
+              <Chip label="Abierto" sx={{ backgroundColor: colors.blue[600], color: "white" }} />
+            </Stack>
+          </Box>
+
+          <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem />}>
+            <Typography>Vence en: {expiration.fromNow()}</Typography>
+            <Typography>Prioridad: {priority}</Typography>
+            <Typography>Severidad: {severity}</Typography>
+          </Stack>
+        </CardContent>
+      </Card>
+    </ButtonBase>
   </NextLink>
 )
 
-const TicketCard = ({ id, title, expiration, priority, severity }: TicketSummary) => (
-  <Card>
-    <CardContent>
-      <Box sx={{ paddingRight: "1em" }}>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography>{title}</Typography>
-          <Chip label="Abierto" sx={{ backgroundColor: colors.blue[600], color: "white" }} />
-        </Stack>
-      </Box>
-
-      <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem />}>
-        <Typography>Vence en: {expiration.fromNow()}</Typography>
-        <Typography>Prioridad: {priority}</Typography>
-        <Typography>Severidad: {severity}</Typography>
-      </Stack>
-    </CardContent>
-  </Card>
-)
-
-const Home: NextPage = () => {
+const SupportHome: NextPage = () => {
 
   return (
     <Container className="page">
@@ -68,4 +54,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default SupportHome;
