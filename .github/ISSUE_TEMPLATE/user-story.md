@@ -17,4 +17,4 @@ assignees: ''
 - [ ] CA 2: {criterio_no_mvp}
 **Dado que** {condición}
 **Cuando** {acción}
-**Entonces** {consecuencia}
+**Entonces** {consecuencia} (No MVP)
