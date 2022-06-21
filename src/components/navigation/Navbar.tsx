@@ -13,14 +13,14 @@ const Navbar = () => {
 
   return (
     <AppBar>
-      <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+      <Box sx={{ flexGrow: 1, display: "flex" }}>
         <Toolbar>
           {links.map((link) => (
-            <Button key={link.href}>
-              <Link href={link.href}>
+            <Link key={link.label} href={link.href}>
+              <Button>
                 <Typography style={{ color: "white" }}>{link.label}</Typography>
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           ))}
         </Toolbar>
       </Box>
