@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import { Box, Typography, Button } from "@material-ui/core";
-
 import { useProject } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
@@ -11,6 +10,7 @@ import TasksList from "../../components/projects/tasks/TasksList";
 import { Task } from "../../services/types";
 import Loading from "../../components/common/Loading";
 import ProjectModal from "../../components/projects/ProjectModal";
+import TitledText from "../../components/common/TitledText";
 
 type TasksProps = {
   projectId: string;
@@ -70,15 +70,11 @@ const Project: NextPage = () => {
               Editar Proyecto
             </Button>
           </Box>
-          <Typography variant="body1">
-            Fecha de inicio: {project?.initial_date}
-          </Typography>
-          <Typography variant="body1">
-            Fecha de fin: {project?.final_date}
-          </Typography>
-          <Typography variant="body1">
-            Horas estimadas: {project?.estimated_hours}
-          </Typography>
+          <TitledText title="Fecha de inicio">
+            {project?.initial_date}
+          </TitledText>
+          <TitledText title="Fecha de fin">{project?.final_date}</TitledText>
+          <TitledText title="Descripción">{project?.description}</TitledText>
           <Tasks
             projectId={projectId}
             tasks={project?.tasks ?? []}

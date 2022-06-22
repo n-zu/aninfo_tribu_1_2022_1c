@@ -20,7 +20,7 @@ const ProjectModal = ({ open, onClose, onSave, project }: Props) => {
     name: project?.name ?? "",
     initial_date: project?.initial_date ?? "",
     final_date: project?.final_date ?? "",
-    estimated_hours: project?.estimated_hours ?? 0,
+    description: project?.description ?? "",
   };
 
   const validate = (values: any) => {
@@ -28,7 +28,7 @@ const ProjectModal = ({ open, onClose, onSave, project }: Props) => {
     if (!values.name) errors.name = "Requerido";
     if (!values.initial_date) errors.initial_date = "Requerido";
     if (!values.final_date) errors.final_date = "Requerido";
-    if (!values.estimated_hours) errors.estimated_hours = "Requerido";
+    if (!values.description) errors.description = "Requerido";
     return errors;
   };
 
@@ -66,10 +66,14 @@ const ProjectModal = ({ open, onClose, onSave, project }: Props) => {
         {({ isSubmitting }) => (
           <Form>
             <div>
-              <FormField name="name" />
-              <FormField name="initial_date" type="date" />
-              <FormField name="final_date" type="date" />
-              <FormField name="estimated_hours" type="number" />
+              <FormField name="name" label="Nombre" />
+              <FormField
+                name="initial_date"
+                type="date"
+                label="Fecha de inicio"
+              />
+              <FormField name="final_date" type="date" label="Fecha de fin" />
+              <FormField name="description" label="Descripción" />
             </div>
             <br />
             <Button variant="contained" color="primary" type="submit">

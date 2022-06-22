@@ -3,6 +3,7 @@ import styles from "./Projects.module.css";
 import InfoCard from "../common/Card";
 import Loading from "../common/Loading";
 import { Typography, Box } from "@material-ui/core";
+import Caption from "../common/Caption";
 import { pluralize } from "../../util/util";
 
 type ProjectsListProps = {
@@ -32,6 +33,7 @@ const ProjectsList = ({ projects, error, loading }: ProjectsListProps) => {
           </Box>
         </InfoCard>
       ))}
+      <Caption>{projects?.length ? "" : "No hay proyectos"}</Caption>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
 import Loading from "../../components/common/Loading";
 import TaskModal from "../../components/projects/tasks/TaskModal";
+import TitledText from "../../components/common/TitledText";
 
 const Task: NextPage = () => {
   const router = useRouter();
@@ -38,19 +39,12 @@ const Task: NextPage = () => {
               Editar Tarea
             </Button>
           </Box>
-          <Typography variant="body1">
-            Fecha de inicio: {task?.initial_date}
-          </Typography>
-          <Typography variant="body1">
-            Fecha de fin: {task?.final_date}
-          </Typography>
-          <Typography variant="body1">
-            Horas estimadas: {task?.estimated_hours}
-          </Typography>
-          <Box style={{ marginTop: "10px" }}>
-            <Typography variant="body1">Description</Typography>
-            <Typography variant="body2">{task?.description}</Typography>
-          </Box>
+          <TitledText title="Fecha de inicio">{task?.initial_date}</TitledText>
+          <TitledText title="Fecha de fin">{task?.final_date}</TitledText>
+          <TitledText title="Horas estimadas">
+            {task?.estimated_hours}
+          </TitledText>
+          <TitledText title="Descripción">{task?.description}</TitledText>
           <TaskModal
             open={open}
             onClose={() => setOpen(false)}

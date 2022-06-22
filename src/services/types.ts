@@ -12,7 +12,7 @@ export type Project = {
   name: string;
   initial_date: string;
   final_date: string;
-  estimated_hours: number;
+  description: string;
   tasks?: Task[];
 };
 

@@ -59,11 +59,19 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
         {({ isSubmitting }) => (
           <Form>
             <div>
-              <FormField name="name" />
-              <FormField name="description" />
-              <FormField name="initial_date" type="date" />
-              <FormField name="final_date" type="date" />
-              <FormField name="estimated_hours" type="number" />
+              <FormField name="name" label="Nombre" />
+              <FormField
+                name="initial_date"
+                type="date"
+                label="Fecha de inicio"
+              />
+              <FormField name="final_date" type="date" label="Fecha de fin" />
+              <FormField
+                name="estimated_hours"
+                type="number"
+                label="Horas estimadas"
+              />
+              <FormField name="description" label="Descripción" />
             </div>
             <br />
             <Button variant="contained" color="primary" type="submit">
