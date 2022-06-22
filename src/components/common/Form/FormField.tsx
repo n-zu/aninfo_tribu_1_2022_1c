@@ -28,8 +28,7 @@ const FormField = ({
       type={type ?? "text"}
       placeholder={placeholder}
       list={datalistOptions && `${name}-datalist`}
-      // @ts-ignore
-      as={(type === "select") | selectOptions ? Select : TextField}
+      as={type === "select" || selectOptions ? Select : TextField}
       className={styles.Field}
       label={label ?? name}
       InputLabelProps={type === "date" ? { shrink: true } : undefined}
