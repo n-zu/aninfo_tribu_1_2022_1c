@@ -13,18 +13,20 @@ type TasksListProps = {
 
 const TasksList = ({ tasks, error, loading }: TasksListProps) => {
   return (
-    <div className={styles.TasksList + " flexContainer"}>
+    <>
       {loading && !error ? <Loading /> : ""}
       {error ? (
         <Alert severity="error" style={{ width: "100%" }}>
           No se pudieron cargar las tareas
         </Alert>
       ) : null}
-      {tasks?.map((task: Task, i: number) => (
-        <InfoCard key={i} info={task} link="/projects/task?id=" />
-      ))}
-      <Caption>{tasks?.length === 0 ? "No hay tareas" : ""}</Caption>
-    </div>
+      <div className={styles.TasksList + " flexContainer"}>
+        {tasks?.map((task: Task, i: number) => (
+          <InfoCard key={i} info={task} link="/projects/task?id=" />
+        ))}
+        <Caption>{tasks?.length === 0 ? "No hay tareas" : ""}</Caption>
+      </div>
+    </>
   );
 };
 
