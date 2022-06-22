@@ -1,7 +1,7 @@
 import { projectsApi, useSWR } from "./requests";
 import { Project, Task } from "./types";
 
-const postHeaders = {
+const saveHeaders = {
   "Content-Type": "application/json",
   Accept: "application/json",
 };
@@ -44,12 +44,12 @@ export const useProject = (projectId: string) => {
 export const saveProject = async (project: Project, id?: number) =>
   await fetch(`${projectsApi}/projects/${id ?? ""}`, {
     method: id == null ? "POST" : "PUT",
-    headers: postHeaders,
+    headers: saveHeaders,
     body: JSON.stringify(project),
   }).then(checkStatus);
 
 export const useTask = (taskId: string) => {
-  const { data, error, isValidating } = useSWR(
+  const { data, error, isValidating, ...rest } = useSWR(
     taskId ? "/tasks/" + taskId : null,
     projectsFetch
   );
@@ -57,12 +57,12 @@ export const useTask = (taskId: string) => {
 
   const task = data as Task;
 
-  return { task, error, loading };
+  return { task, error, loading, ...rest };
 };
 
-export const createTask = async (projectId: string, task: Task) =>
-  await fetch(`${projectsApi}/projects/${projectId}/tasks/`, {
-    method: "POST",
-    headers: postHeaders,
+export const saveTask = async (task: Task, projectId?: string, taskId?: number) =>
+  await fetch(projectsApi + (projectId ? `/projects/${projectId}/tasks/` : `/tasks/${taskId}`), {
+    method: projectId ? "POST" : "PUT",
+    headers: saveHeaders,
     body: JSON.stringify(task),
   }).then(checkStatus);

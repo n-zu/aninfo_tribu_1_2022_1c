@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
 import ListBar from "../../components/common/ListBar";
 import { useState } from "react";
-import NewTaskModal from "../../components/projects/tasks/NewTaskModal";
+import TaskModal from "../../components/projects/tasks/TaskModal";
 import TasksList from "../../components/projects/tasks/TasksList";
 import { Task } from "../../services/types";
 import Loading from "../../components/common/Loading";
@@ -29,11 +29,11 @@ const Tasks = ({ projectId, tasks, onCreate }: TasksProps) => {
         routeFunction={function () {}}
       />
       <TasksList tasks={tasks} />
-      <NewTaskModal
+      <TaskModal
         open={open}
         onClose={() => setOpen(false)}
         projectId={projectId}
-        onCreate={onCreate}
+        onSave={onCreate}
       />
     </>
   );

@@ -1,26 +1,28 @@
 import Modal from "../../common/Modal/Modal";
 import { Formik, Form } from "formik";
 import FormField from "../../common/Form/FormField";
-import { Button } from "@material-ui/core";
-import { createTask } from "../../../services/projects";
-import { useState } from "react";
+import { Button, Typography } from "@material-ui/core";
+import { saveTask } from "../../../services/projects";
 import { toast } from "react-toastify";
+import { Task } from "../../../services/types";
 
 type Props = {
-  projectId: string;
+  projectId?: string;
   open: boolean;
   onClose: () => void;
-  onCreate: () => void;
+  onSave: () => void;
+  task?: Task;
 };
 
-const NewTaskModal = ({ projectId, open, onClose, onCreate }: Props) => {
-  const [creating, setCreating] = useState(false);
+const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
+  const creating = task == null;
 
   const initialValues = {
-    name: "",
-    initial_date: "",
-    final_date: "",
-    estimated_hours: 0,
+    name: task?.name ?? "",
+    initial_date: task?.initial_date ?? "",
+    final_date: task?.final_date ?? "",
+    estimated_hours: task?.estimated_hours ?? 0,
+    description: task?.description ?? "",
   };
 
   const validate = (values: any) => {
@@ -33,21 +35,22 @@ const NewTaskModal = ({ projectId, open, onClose, onCreate }: Props) => {
   };
 
   const onSubmit = async (values: any) => {
-    setCreating(true);
     try {
-      await createTask(projectId, values);
-      toast.success("Tarea creada correctamente");
-      onCreate?.();
+      await saveTask(values, projectId, task?.id);
+      toast.success("Tarea guardada correctamente");
+      onSave?.();
       onClose?.();
-    } catch {
-      toast.error("Error al crear la tarea");
+    } catch (e) {
+      console.error(e);
+      toast.error("Error al guardar la tarea");
     }
-    setCreating(false);
   };
 
   return (
     <Modal open={open} onClose={onClose}>
-      <h2>Nueva tarea</h2>
+      <Typography variant="h5">
+        {creating ? "Nueva" : "Editar"} Tarea
+      </Typography>
       <Formik
         initialValues={initialValues}
         validate={validate}
@@ -64,7 +67,7 @@ const NewTaskModal = ({ projectId, open, onClose, onCreate }: Props) => {
             </div>
             <br />
             <Button variant="contained" color="primary" type="submit">
-              Crear Tarea
+              Guardar Tarea
             </Button>
           </Form>
         )}
@@ -73,4 +76,4 @@ const NewTaskModal = ({ projectId, open, onClose, onCreate }: Props) => {
   );
 };
 
-export default NewTaskModal;
+export default TaskModal;

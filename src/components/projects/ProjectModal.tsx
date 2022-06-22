@@ -3,7 +3,6 @@ import { Formik, Form } from "formik";
 import FormField from "../common/Form/FormField";
 import { Button, Typography } from "@material-ui/core";
 import { saveProject } from "../../services/projects";
-import { useState } from "react";
 import { toast } from "react-toastify";
 import { Project } from "../../services/types";
 
