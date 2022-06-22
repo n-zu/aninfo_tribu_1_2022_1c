@@ -11,7 +11,7 @@ const TitledText = ({ title, children }: TitledTextProps) => {
       <Typography variant="overline" style={{ lineHeight: "normal" }}>
         {title}
       </Typography>
-      <Typography variant="body1">
+      <Typography variant="body1" style={{ textAlign: "justify" }}>
         {children !== "" ? children : "-"}
       </Typography>
     </div>

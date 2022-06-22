@@ -12,6 +12,7 @@ type Props = {
     id: string;
     name: string;
   }[];
+  multiline?: boolean;
 };
 
 const FormField = ({
@@ -21,6 +22,7 @@ const FormField = ({
   type,
   datalistOptions,
   selectOptions,
+  ...rest
 }: Props) => {
   const field = (
     <Field
@@ -32,6 +34,7 @@ const FormField = ({
       className={styles.Field}
       label={label ?? name}
       InputLabelProps={type === "date" ? { shrink: true } : undefined}
+      {...rest}
     >
       {selectOptions?.map(({ id, name }, i) => (
         <option key={i} value={id}>
