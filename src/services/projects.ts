@@ -41,9 +41,9 @@ export const useProject = (projectId: string) => {
   return { project, error, loading, ...rest };
 };
 
-export const createProject = async (project: Project) =>
-  await fetch(projectsApi + "/projects/", {
-    method: "POST",
+export const saveProject = async (project: Project, id?: number) =>
+  await fetch(`${projectsApi}/projects/${id ?? ""}`, {
+    method: id == null ? "POST" : "PUT",
     headers: postHeaders,
     body: JSON.stringify(project),
   }).then(checkStatus);

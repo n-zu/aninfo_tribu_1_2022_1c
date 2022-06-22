@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { Box, Typography, Button } from "@material-ui/core";
 
 import { useProject } from "../../services/projects";
 import { useRouter } from "next/router";
@@ -8,6 +9,8 @@ import { useState } from "react";
 import NewTaskModal from "../../components/projects/tasks/NewTaskModal";
 import TasksList from "../../components/projects/tasks/TasksList";
 import { Task } from "../../services/types";
+import Loading from "../../components/common/Loading";
+import ProjectModal from "../../components/projects/ProjectModal";
 
 type TasksProps = {
   projectId: string;
@@ -40,23 +43,52 @@ const Project: NextPage = () => {
   const router = useRouter();
   const projectId = router?.query?.id as string;
   const { project, error, loading, mutate } = useProject(projectId);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="page">
-      {loading ? "LOADING" : ""}
+      {loading ? <Loading /> : ""}
       {error ? "ERROR" : ""}
       {project && (
         <>
-          <h1>
-            {zeroPad(project?.id ?? 0)} - {project?.name}
-          </h1>
-          <p>initial_date {project?.initial_date}</p>
-          <p>final_date {project?.final_date}</p>
-          <p>estimated_hours {project?.estimated_hours}</p>
+          <Box
+            style={{
+              display: "flex",
+              marginTop: "20px",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography variant="h4" style={{ alignSelf: "center" }}>
+              {zeroPad(project?.id ?? 0)} - {project?.name}
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ height: "fit-content" }}
+              onClick={() => setOpen(true)}
+            >
+              Editar Proyecto
+            </Button>
+          </Box>
+          <Typography variant="body1">
+            Fecha de inicio: {project?.initial_date}
+          </Typography>
+          <Typography variant="body1">
+            Fecha de fin: {project?.final_date}
+          </Typography>
+          <Typography variant="body1">
+            Horas estimadas: {project?.estimated_hours}
+          </Typography>
           <Tasks
             projectId={projectId}
             tasks={project?.tasks ?? []}
             onCreate={mutate}
+          />
+          <ProjectModal
+            open={open}
+            onClose={() => setOpen(false)}
+            project={project}
+            onSave={mutate}
           />
         </>
       )}
