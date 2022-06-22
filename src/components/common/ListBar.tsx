@@ -7,9 +7,10 @@ type BarProps = {
   label: string;
   options: Options[];
   routeFunction: Function;
+  create?: boolean;
 };
 
-const ListBar = ({ handleNew, label, options, routeFunction }: BarProps) => {
+const ListBar = ({ handleNew, label, options, routeFunction, create }: BarProps) => {
   return (
     <div
       style={{
@@ -24,7 +25,7 @@ const ListBar = ({ handleNew, label, options, routeFunction }: BarProps) => {
         label={"Buscar " + label}
         routeFunction={routeFunction}
       />
-      <Button
+      {create ? <Button
         style={{
           whiteSpace: "nowrap",
           padding: "0 2em",
@@ -36,7 +37,8 @@ const ListBar = ({ handleNew, label, options, routeFunction }: BarProps) => {
         onClick={handleNew}
       >
         Crear {label}
-      </Button>
+      </Button> : <></>}
+
     </div>
   );
 };
