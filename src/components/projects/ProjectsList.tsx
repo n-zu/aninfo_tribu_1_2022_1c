@@ -54,7 +54,7 @@ function getCollaboratorsCount(project: Project): number {
     project.tasks
       ?.map((task: Task) =>
         task.collaborators
-          .map((c: EmployeeId) => c.id)
+          ?.map((c: EmployeeId) => c.id)
           .concat(task.assigned_employee?.id ?? [])
       )
       .flat()
