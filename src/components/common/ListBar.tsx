@@ -14,7 +14,7 @@ const ListBar = ({ handleNew, label, options, routeFunction }: BarProps) => {
     <div
       style={{
         display: "flex",
-        alignItems: "flex-end",
+        alignItems: "center",
         gap: 10,
         margin: "10px 0 20px",
       }}

@@ -1,4 +1,5 @@
 import { Field, ErrorMessage } from "formik";
+import { TextField, Select, TextFieldProps, SelectProps } from "@mui/material";
 import styles from "./FormField.module.css";
 
 type Props = {
@@ -11,7 +12,9 @@ type Props = {
     id: string;
     name: string;
   }[];
-};
+  multiline?: boolean;
+} & TextFieldProps &
+  SelectProps;
 
 const FormField = ({
   label,
@@ -20,6 +23,7 @@ const FormField = ({
   type,
   datalistOptions,
   selectOptions,
+  ...rest
 }: Props) => {
   const field = (
     <Field
@@ -27,9 +31,11 @@ const FormField = ({
       type={type ?? "text"}
       placeholder={placeholder}
       list={datalistOptions && `${name}-datalist`}
-      // @ts-ignore
-      as={(type === "select") | selectOptions ? "select" : "input"}
+      as={type === "select" || selectOptions ? Select : TextField}
       className={styles.Field}
+      label={label ?? name}
+      InputLabelProps={type === "date" ? { shrink: true } : undefined}
+      {...rest}
     >
       {selectOptions?.map(({ id, name }, i) => (
         <option key={i} value={id}>
@@ -48,15 +54,13 @@ const FormField = ({
   );
 
   return (
-    <>
-      <h3 className={styles.Label}>{label ?? name}</h3>
-
+    <div style={{ marginTop: "15px" }}>
       {field}
 
       <ErrorMessage name={name} component="div" className={styles.Error} />
 
       {datalist}
-    </>
+    </div>
   );
 };
 
