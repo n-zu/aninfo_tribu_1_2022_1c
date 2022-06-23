@@ -1,0 +1,26 @@
+.container {
+    margin:25px;
+    padding: 40px; 
+    display: flex;
+    justify-content: space-between;
+}
+
+.title {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+.subbutton {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.avatar {
+    float: right; 
+    display: flex; 
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+}
