@@ -15,7 +15,7 @@ const TitledText = ({ title, children }: TitledTextProps) => {
         variant="body1"
         style={{ textAlign: "justify", whiteSpace: "pre-line" }}
       >
-        {children !== "" ? children : "-"}
+        {children ? children : "-"}
       </Typography>
     </div>
   );

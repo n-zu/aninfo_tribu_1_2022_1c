@@ -21,7 +21,7 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
     name: task?.name ?? "",
     initial_date: task?.initial_date ?? "",
     final_date: task?.final_date ?? "",
-    estimated_hours: task?.estimated_hours ?? 0,
+    estimated_hours: task?.estimated_hours ?? "",
     description: task?.description ?? "",
   };
 
