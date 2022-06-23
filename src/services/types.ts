@@ -20,6 +20,8 @@ export type Project = {
   final_date: string;
   description: string;
   tasks?: Task[];
+  collaborators_amount?: number;
+  tasks_amount?: number;
 };
 
 export type Options = {
