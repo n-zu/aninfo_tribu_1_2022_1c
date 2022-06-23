@@ -1,5 +1,10 @@
 import { Field, ErrorMessage } from "formik";
-import { TextField, Select } from "@material-ui/core";
+import {
+  TextField,
+  Select,
+  TextFieldProps,
+  SelectProps,
+} from "@material-ui/core";
 import styles from "./FormField.module.css";
 
 type Props = {
@@ -13,7 +18,8 @@ type Props = {
     name: string;
   }[];
   multiline?: boolean;
-};
+} & TextFieldProps &
+  SelectProps;
 
 const FormField = ({
   label,

@@ -73,7 +73,12 @@ const ProjectModal = ({ open, onClose, onSave, project }: Props) => {
                 label="Fecha de inicio"
               />
               <FormField name="final_date" type="date" label="Fecha de fin" />
-              <FormField name="description" label="Descripción" multiline />
+              <FormField
+                name="description"
+                label="Descripción"
+                multiline
+                maxRows={5}
+              />
             </div>
             <br />
             <Button variant="contained" color="primary" type="submit">

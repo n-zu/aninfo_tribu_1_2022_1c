@@ -71,7 +71,12 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
                 type="number"
                 label="Horas estimadas"
               />
-              <FormField name="description" label="Descripción" />
+              <FormField
+                name="description"
+                label="Descripción"
+                multiline
+                maxRows={5}
+              />
             </div>
             <br />
             <Button variant="contained" color="primary" type="submit">
