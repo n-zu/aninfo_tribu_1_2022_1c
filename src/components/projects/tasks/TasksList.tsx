@@ -33,7 +33,7 @@ const TasksList = ({ tasks, error, loading }: TasksListProps) => {
               }}
             >
               <Typography variant="caption">
-                {pluralize("colaborador", task?.collaborators?.length, "es")}
+                {pluralize("colaborador", task?.collaborators ? task?.collaborators?.length : 0, "es")}
               </Typography>
             </Box>
           </InfoCard>
