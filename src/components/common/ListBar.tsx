@@ -10,7 +10,8 @@ type BarProps = {
   create?: boolean;
 };
 
-const ListBar = ({ handleNew, label, options, routeFunction, create }: BarProps) => {
+
+export default function ListBar(props: { handleNew:  () => void; label: string; options: Options[]; routeFunction: Function }) {
   return (
     <div
       style={{
@@ -21,11 +22,10 @@ const ListBar = ({ handleNew, label, options, routeFunction, create }: BarProps)
       }}
     >
       <AutoComplete
-        options={options}
-        label={"Buscar " + label}
-        routeFunction={routeFunction}
-      />
-      {create ? <Button
+        options={props.options}
+        label={"Buscar " + props.label}
+        routeFunction={props.routeFunction} />
+      <Button
         style={{
           whiteSpace: "nowrap",
           padding: "0 2em",
@@ -34,13 +34,70 @@ const ListBar = ({ handleNew, label, options, routeFunction, create }: BarProps)
         }}
         variant="contained"
         color="primary"
-        onClick={handleNew}
+        onClick={props.handleNew}
       >
-        Crear {label}
-      </Button> : <></>}
+        Crear {props.label}
+      </Button>
 
     </div>
   );
-};
+}
 
-export default ListBar;
+export function ListBarRRHH(props: { handleNew:  () => void; label: string; options: Options[]; routeFunction: Function }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "flex-end",
+        gap: 10,
+        margin: "10px 0 20px",
+      }}
+    >
+      <AutoComplete
+        options={props.options}
+        label={"Buscar " + props.label}
+        routeFunction={props.routeFunction} />
+      <Button
+        style={{
+          whiteSpace: "nowrap",
+          padding: "0 2em",
+          height: "2.5em",
+          minWidth: "10em",
+        }}
+        variant="contained"
+        color="primary"
+        onClick={props.handleNew}
+      >
+        Proyectos {props.label}
+      </Button>
+      <Button
+        style={{
+          whiteSpace: "nowrap",
+          padding: "0 2em",
+          height: "2.5em",
+          minWidth: "10em",
+        }}
+        variant="contained"
+        color="primary"
+        onClick={props.handleNew}
+      >
+        Tareas {props.label}
+      </Button>
+      <Button
+        style={{
+          whiteSpace: "nowrap",
+          padding: "0 2em",
+          height: "2.5em",
+          minWidth: "10em",
+        }}
+        variant="contained"
+        color="primary"
+        onClick={props.handleNew}
+      >
+        Recursos {props.label}
+      </Button>
+
+    </div>
+  );
+}
+

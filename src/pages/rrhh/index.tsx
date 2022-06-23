@@ -1,9 +1,8 @@
 import type { NextPage } from "next";
-import ListBar from "../../components/common/ListBar";
+import { ListBarRRHH } from "../../components/common/ListBar";
 import LayoutHomeRRHH from "../../components/rrhh/LayoutHomeRRHH";
 import { useState } from "react";
 import { useProjects } from "../../services/projects";
-import ProjectsList from "../../components/projects/ProjectsList";
 import { routeToProject } from "../../util/util";
 
 
@@ -17,7 +16,7 @@ const Home: NextPage = () => {
   return (
     <div className="page">
       <LayoutHomeRRHH/>
-      <ListBar
+      <ListBarRRHH
         handleNew={() => setOpen(true)}
         label="proyecto"
         options={projectsData.projects}

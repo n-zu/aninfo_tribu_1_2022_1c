@@ -17,7 +17,6 @@ const Projects: NextPage = () => {
         label="proyecto"
         options={projectsData.projects}
         routeFunction={routeToProject}
-        create={true}
       />
       <ProjectsList {...projectsData} />
       <NewProjectModal
