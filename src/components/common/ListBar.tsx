@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import AutoComplete from "./AutoComplete";
 import { Options } from "../../services/types";
 
@@ -14,7 +14,7 @@ const ListBar = ({ handleNew, label, options, routeFunction }: BarProps) => {
     <div
       style={{
         display: "flex",
-        alignItems: "flex-end",
+        alignItems: "center",
         gap: 10,
         margin: "10px 0 20px",
       }}

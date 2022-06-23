@@ -1,10 +1,5 @@
 import { Field, ErrorMessage } from "formik";
-import {
-  TextField,
-  Select,
-  TextFieldProps,
-  SelectProps,
-} from "@material-ui/core";
+import { TextField, Select, TextFieldProps, SelectProps } from "@mui/material";
 import styles from "./FormField.module.css";
 
 type Props = {

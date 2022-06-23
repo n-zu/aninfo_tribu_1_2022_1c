@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Container, Modal as MuiModal, Paper } from "@material-ui/core";
+import { Container, Modal as MuiModal, Paper } from "@mui/material";
 import styles from "./Modal.module.css";
 
 type Props = {

@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { Box, Typography, Button } from "@material-ui/core";
+import { Box, Typography, Button } from "@mui/material";
 import { useProject } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad, routeToTask } from "../../util/util";

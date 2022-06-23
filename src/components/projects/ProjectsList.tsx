@@ -2,7 +2,7 @@ import { Project, Task, EmployeeId } from "../../services/types";
 import styles from "./Projects.module.css";
 import InfoCard from "../common/Card";
 import Loading from "../common/Loading";
-import { Typography, Box } from "@material-ui/core";
+import { Typography, Box } from "@mui/material";
 import Caption from "../common/Caption";
 import { pluralize } from "../../util/util";
 import Alert from "@mui/material/Alert";

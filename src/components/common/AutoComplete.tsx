@@ -1,6 +1,5 @@
 import * as React from "react";
-import { TextField } from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
+import { TextField, Autocomplete } from "@mui/material";
 import { Options } from "../../services/types";
 import { zeroPad } from "../../util/util";
 import { useRouter } from "next/router";
@@ -32,7 +31,9 @@ export default function AutoComplete({
         zeroPad(option?.id ?? 0) + " - " + option.name
       }
       fullWidth
-      renderInput={(params) => <TextField {...params} label={label} />}
+      renderInput={(params) => (
+        <TextField {...params} variant="standard" label={label} />
+      )}
       open={open}
       onInputChange={(_, value) => {
         if (value.length === 0) {

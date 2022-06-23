@@ -9,7 +9,7 @@ import {
   Typography,
   Box,
   Tooltip,
-} from "@material-ui/core";
+} from "@mui/material";
 
 const InfoCard = ({
   info,

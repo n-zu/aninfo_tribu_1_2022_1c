@@ -1,4 +1,4 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, Typography } from "@mui/material";
 import { Task } from "../../../services/types";
 import InfoCard from "../../common/Card";
 import Loading from "../../common/Loading";
@@ -33,7 +33,11 @@ const TasksList = ({ tasks, error, loading }: TasksListProps) => {
               }}
             >
               <Typography variant="caption">
-                {pluralize("colaborador", task?.collaborators ? task?.collaborators?.length : 0, "es")}
+                {pluralize(
+                  "colaborador",
+                  task?.collaborators ? task?.collaborators?.length : 0,
+                  "es"
+                )}
               </Typography>
             </Box>
           </InfoCard>

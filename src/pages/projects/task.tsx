@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useState } from "react";
-import { Box, Typography, Button, Chip, Avatar } from "@material-ui/core";
+import { Box, Typography, Button, Chip, Avatar } from "@mui/material";
 import { useTask, useEmployees } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
