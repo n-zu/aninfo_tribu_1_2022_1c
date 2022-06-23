@@ -17,7 +17,7 @@ const Navbar = () => {
   ];
 
   return (
-    <AppBar sx={{ backgroundColor: colors.indigo[700] }}>
+    <AppBar>
       <Box>
         <Toolbar>
           {links.map((link) => (
