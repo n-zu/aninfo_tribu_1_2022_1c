@@ -30,7 +30,6 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
     if (!values.name) errors.name = "Required";
     if (!values.initial_date) errors.initial_date = "Required";
     if (!values.final_date) errors.final_date = "Required";
-    if (!values.estimated_hours) errors.estimated_hours = "Required";
     return errors;
   };
 
