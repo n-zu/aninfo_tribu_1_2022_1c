@@ -1,12 +1,6 @@
 import type { NextPage } from "next";
 import { useState } from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  Chip,
-  Avatar
-} from "@material-ui/core";
+import { Box, Typography, Button, Chip, Avatar } from "@material-ui/core";
 import { useTask, useEmployees } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
@@ -26,14 +20,14 @@ const Task: NextPage = () => {
   };
 
   const onDeleteColab = (id: number) => {
-    console.log("delete " + id)
-  }
+    console.log("delete " + id);
+  };
   const getEmployeeNameById = (id: number) => {
     const employee = employees?.find((employee: Employee) => {
       return employee.legajo === id;
     });
     return employee?.Nombre + " " + employee?.Apellido;
-  }
+  };
   return (
     <div className="page">
       {loading ? <Loading /> : ""}
@@ -82,15 +76,20 @@ const Task: NextPage = () => {
                 Colaboradores
               </Typography>
               <div>
-                {task?.collaborators?.map((colab: EmployeeId, index: number) => {
-                  const name = getEmployeeNameById(colab.id);
-                  return <Chip 
-                    key={index} 
-                    label={name} 
-                    onDelete={() => onDeleteColab(colab.id)}
-                    avatar={<Avatar>{name[0].toUpperCase()}</Avatar> } 
-                  />
-                })}
+                {task?.collaborators?.map(
+                  (colab: EmployeeId, index: number) => {
+                    const name = getEmployeeNameById(colab.id);
+                    return (
+                      <Chip
+                        key={index}
+                        label={name}
+                        onDelete={() => onDeleteColab(colab.id)}
+                        avatar={<Avatar>{name[0].toUpperCase()}</Avatar>}
+                        style={{ margin: "2px" }}
+                      />
+                    );
+                  }
+                )}
               </div>
             </div>
             <div>
