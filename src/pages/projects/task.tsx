@@ -7,31 +7,33 @@ import {
   Chip,
   Avatar
 } from "@material-ui/core";
-import { useTask } from "../../services/projects";
+import { useTask, useEmployees } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
 import Loading from "../../components/common/Loading";
 import TaskModal from "../../components/projects/tasks/TaskModal";
 import TitledText from "../../components/common/TitledText";
-
-let colabs: string[] = ["roberto", "german", "sergio villagra"];
+import { Employee, EmployeeId } from "../../services/types";
 
 const Task: NextPage = () => {
   const router = useRouter();
   const taskId = router?.query?.id as string;
   const { task, error, loading, mutate } = useTask(taskId);
   const [open, setOpen] = useState(false);
-
-  //const employee = fetch("http://aninfo-resources-external.herokuapp.com/resources/");
-
+  const { employees } = useEmployees();
   const onHours = () => {
-    console.log("employees");
+    console.log(employees);
   };
 
-  const onDeleteColab = (name: String) => {
-    console.log("delete " + name)
+  const onDeleteColab = (id: number) => {
+    console.log("delete " + id)
   }
-
+  const getEmployeeNameById = (id: number) => {
+    const employee = employees?.find((employee: Employee) => {
+      return employee.legajo === id;
+    });
+    return employee?.Nombre + " " + employee?.Apellido;
+  }
   return (
     <div className="page">
       {loading ? <Loading /> : ""}
@@ -80,9 +82,15 @@ const Task: NextPage = () => {
                 Colaboradores
               </Typography>
               <div>
-                {colabs?.map((colab: string, index: number) => (
-                  <Chip key={index} label={colab} onDelete={() => onDeleteColab(colab)} avatar={<Avatar>{colab[0].toUpperCase()}</Avatar> } />
-                ))}
+                {task?.collaborators?.map((colab: EmployeeId, index: number) => {
+                  const name = getEmployeeNameById(colab.id);
+                  return <Chip 
+                    key={index} 
+                    label={name} 
+                    onDelete={() => onDeleteColab(colab.id)}
+                    avatar={<Avatar>{name[0].toUpperCase()}</Avatar> } 
+                  />
+                })}
               </div>
             </div>
             <div>

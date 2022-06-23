@@ -25,4 +25,10 @@ export type Project = {
 export type Options = {
   id?: number;
   name: string;
-}
+};
+
+export type Employee = {
+  legajo: number;
+  Nombre: string;
+  Apellido: string;
+};

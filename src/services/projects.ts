@@ -1,5 +1,5 @@
-import { projectsApi, useSWR } from "./requests";
-import { Project, Task } from "./types";
+import { projectsApi, projectsResourcesApi, useSWR } from "./requests";
+import { Project, Task, Employee } from "./types";
 
 const saveHeaders = {
   "Content-Type": "application/json",
@@ -66,3 +66,24 @@ export const saveTask = async (task: Task, projectId?: string, taskId?: number) 
     headers: saveHeaders,
     body: JSON.stringify(task),
   }).then(checkStatus);
+
+export const employeesFetch = async (url: string, request?: any) => {
+  return fetch(projectsResourcesApi + url, {
+    ...request,
+    headers: {
+      accept: "application/json",
+    }
+  }).then((res) => res.json());
+};
+
+export const useEmployees = () => {
+  const { data, error, isValidating, ...rest } = useSWR(
+    "/resources/",
+    employeesFetch
+  );
+  const loadingEmployee = !data && isValidating;
+
+  const employees = data as Employee[];
+
+  return { employees, error, loadingEmployee, ...rest };
+};
