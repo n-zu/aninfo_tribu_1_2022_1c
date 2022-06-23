@@ -4,10 +4,8 @@ import {
   Box,
   Typography,
   Button,
-  ListItem,
-  ListItemText,
-  IconButton,
-  ListItemIcon,
+  Chip,
+  Avatar
 } from "@material-ui/core";
 import { useTask } from "../../services/projects";
 import { useRouter } from "next/router";
@@ -15,8 +13,8 @@ import { zeroPad } from "../../util/util";
 import Loading from "../../components/common/Loading";
 import TaskModal from "../../components/projects/tasks/TaskModal";
 import TitledText from "../../components/common/TitledText";
-import CloseIcon from "@mui/icons-material/Close";
-const colabs: string[] = ["hola", "german", "asdasdasdasdasdasdasdaszd"];
+
+let colabs: string[] = ["roberto", "german", "sergio villagra"];
 
 const Task: NextPage = () => {
   const router = useRouter();
@@ -25,8 +23,12 @@ const Task: NextPage = () => {
   const [open, setOpen] = useState(false);
 
   const onHours = () => {
-    console.log("cargar horas");
+    console.log("employees");
   };
+
+  const onDeleteColab = (name: String) => {
+    console.log("delete " + name)
+  }
 
   return (
     <div className="page">
@@ -72,27 +74,14 @@ const Task: NextPage = () => {
                 marginBottom: 20,
               }}
             >
-              <>
-                <Typography variant="overline" style={{ lineHeight: "normal" }}>
-                  Colaboradores
-                </Typography>
-                {colabs?.map((colab: string) => (
-                  <ListItem key={colab} divider>
-                    <ListItemText
-                      primary={colab}
-                      primaryTypographyProps={{
-                        style: { whiteSpace: "normal" },
-                      }}
-                      style={{}}
-                    />
-                    <ListItemIcon>
-                      <IconButton aria-label="deleteColaborator">
-                        <CloseIcon />
-                      </IconButton>
-                    </ListItemIcon>
-                  </ListItem>
+              <Typography variant="overline" style={{ lineHeight: "normal" }}>
+                Colaboradores
+              </Typography>
+              <div>
+                {colabs?.map((colab: string, index: number) => (
+                  <Chip key={index} label={colab} onDelete={() => onDeleteColab(colab)} avatar={<Avatar>{colab[0].toUpperCase()}</Avatar> } />
                 ))}
-              </>
+              </div>
             </div>
             <div>
               <Button
