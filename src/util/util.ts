@@ -9,3 +9,17 @@ export const routeToProject = (id : number | null, router : NextRouter) => {
   if (!id) return;
   router.push("/projects/project?id=" + id);
 }
+
+export const routeToTask = (id : number | null, router : NextRouter) => {
+  if (!id) return;
+  router.push("/projects/task?id=" + id);
+}
+
+export const dateDiff = (date1: Date, date2: Date) => {
+  const diff = date1.getTime() - date2.getTime();
+  return Math.round(diff / (1000 * 60 * 60 * 24));
+}
+
+export const pluralize = (noun: string, count?: number, suffix:string = "s") => {
+  return `${count} ${noun}${count !== 1 ? suffix : ''}`;
+}

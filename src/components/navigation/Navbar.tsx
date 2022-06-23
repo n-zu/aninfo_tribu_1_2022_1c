@@ -1,6 +1,12 @@
 import Link from "next/link";
-import { AppBar, Box, Toolbar, Button, Typography, colors } from "@mui/material";
-
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Button,
+  Typography,
+  colors,
+} from "@mui/material";
 
 const Navbar = () => {
   const links = [
@@ -11,7 +17,7 @@ const Navbar = () => {
   ];
 
   return (
-    <AppBar sx={{backgroundColor: colors.indigo[700]}}>
+    <AppBar>
       <Box>
         <Toolbar>
           {links.map((link) => (

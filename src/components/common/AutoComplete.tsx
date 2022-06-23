@@ -31,7 +31,9 @@ export default function AutoComplete({
         zeroPad(option?.id ?? 0) + " - " + option.name
       }
       fullWidth
-      renderInput={(params) => <TextField {...params} label={label} />}
+      renderInput={(params) => (
+        <TextField {...params} variant="standard" label={label} />
+      )}
       open={open}
       onInputChange={(_, value) => {
         if (value.length === 0) {
