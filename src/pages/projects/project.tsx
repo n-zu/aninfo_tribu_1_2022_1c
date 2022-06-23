@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { Box, Typography, Button } from "@material-ui/core";
 import { useProject } from "../../services/projects";
 import { useRouter } from "next/router";
-import { zeroPad } from "../../util/util";
+import { zeroPad, routeToTask } from "../../util/util";
 import ListBar from "../../components/common/ListBar";
 import { useState } from "react";
 import TaskModal from "../../components/projects/tasks/TaskModal";
@@ -26,7 +26,7 @@ const Tasks = ({ projectId, tasks, onCreate }: TasksProps) => {
         handleNew={() => setOpen(true)}
         label="tarea"
         options={tasks}
-        routeFunction={function () {}}
+        routeFunction={routeToTask}
       />
       <TasksList tasks={tasks} />
       <TaskModal

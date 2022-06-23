@@ -1,4 +1,4 @@
-type EmployeeId = {
+export type EmployeeId = {
   id: number;
 }
 
