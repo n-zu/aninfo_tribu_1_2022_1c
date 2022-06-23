@@ -1,4 +1,4 @@
-import { Project } from "../../services/types";
+import { Project, Task, EmployeeId } from "../../services/types";
 import styles from "./Projects.module.css";
 import InfoCard from "../common/Card";
 import Loading from "../common/Loading";
@@ -35,7 +35,9 @@ const ProjectsList = ({ projects, error, loading }: ProjectsListProps) => {
               <Typography variant="caption">
                 {pluralize("tarea", project.tasks?.length)}
               </Typography>
-              <Typography variant="caption">? colaboradores</Typography>
+              <Typography variant="caption">
+                {pluralize("colaborador", getCollaboratorsCount(project), "es")}
+              </Typography>
             </Box>
           </InfoCard>
         ))}
@@ -46,3 +48,15 @@ const ProjectsList = ({ projects, error, loading }: ProjectsListProps) => {
 };
 
 export default ProjectsList;
+
+function getCollaboratorsCount(project: Project): number {
+  return new Set(
+    project.tasks
+      ?.map((task: Task) =>
+        task.collaborators
+          .map((c: EmployeeId) => c.id)
+          .concat(task.assigned_employee?.id ?? [])
+      )
+      .flat()
+  ).size;
+}

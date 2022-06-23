@@ -1,9 +1,11 @@
+import { Box, Typography } from "@material-ui/core";
 import { Task } from "../../../services/types";
 import InfoCard from "../../common/Card";
 import Loading from "../../common/Loading";
 import Caption from "../../common/Caption";
 import Alert from "@mui/material/Alert";
 import styles from "../Projects.module.css";
+import { pluralize } from "../../../util/util";
 
 type TasksListProps = {
   tasks: Task[];
@@ -22,7 +24,19 @@ const TasksList = ({ tasks, error, loading }: TasksListProps) => {
       ) : null}
       <div className={styles.TasksList + " flexContainer"}>
         {tasks?.map((task: Task, i: number) => (
-          <InfoCard key={i} info={task} link="/projects/task?id=" />
+          <InfoCard key={i} info={task} link="/projects/task?id=">
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                textAlign: "right",
+              }}
+            >
+              <Typography variant="caption">
+                {pluralize("colaborador", task?.collaborators?.length, "es")}
+              </Typography>
+            </Box>
+          </InfoCard>
         ))}
         <Caption>{tasks?.length === 0 ? "No hay tareas" : ""}</Caption>
       </div>
