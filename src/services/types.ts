@@ -29,7 +29,7 @@ export type OptionsRegistros = {
   nombre_recurso?: string;
 }
 export type RegistroDeHoras = {
-  codigo_carga?: number;
+  codigo_carga: number;
   nombre_proyecto: string;
   nombre_tarea: string;
   nombre_recurso: string;

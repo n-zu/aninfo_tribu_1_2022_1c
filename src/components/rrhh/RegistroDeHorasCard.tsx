@@ -6,26 +6,18 @@ import { Card, CardActionArea, CardContent, Typography } from "@material-ui/core
 
 const RegistroDeHorasCard = ({ info, link }: { info: RegistroDeHoras, link: string }) => {
   return (
-    <Link href={link + info?.id}>
+    <Link href={link + info?.codigo_carga}>
       <a className={styles.InfoCard}>
         <Card style={{padding: 0}}>
           <CardActionArea>
             <CardContent>
               <Typography variant="h6" component="h4" style={{fontWeight: 700}}>
-                {zeroPad(info?.id ?? 0)}
+                  {zeroPad(info?.codigo_carga ?? 0)}
               </Typography>
-              <Typography variant="body1" style={{margin: 10}}>
-                Proyecto: {info.name}
-              </Typography>
-              <Typography variant="body1" style={{margin: 10}}>
-                Tarea: {info.nombre_tarea}
-              </Typography>
-              <Typography variant="body1" style={{margin: 10}}>
-                Recurso: {info.nombre_recurso}
-              </Typography>
-              {/* <Typography variant="body1" style={{margin: 10}}>
-                Fecha: {info.fecha_trabajada}
-              </Typography> */}
+              <Typography variant="body1" style={{margin: 10}}>Proyecto: {info.nombre_proyecto}</Typography>
+              <Typography variant="body1" style={{margin: 10}}>Tarea: {info.nombre_tarea}</Typography>
+              <Typography variant="body1" style={{margin: 10}}>Recurso: {info.nombre_recurso}</Typography>
+              <Typography variant="body1" style={{margin: 10}}>Fecha: {info.fecha_trabajada}</Typography>
             </CardContent>
           </CardActionArea>
         </Card>
