@@ -1,15 +1,13 @@
 import { Button } from "@material-ui/core";
-import AutoComplete from "./AutoComplete";
-import { Options } from "../../services/types";
+import AutoComplete, { AutoCompleteRecurso } from "./AutoComplete";
+import { Options, OptionsRegistros } from "../../services/types";
 
 type BarProps = {
   handleNew: () => void;
   label: string;
   options: Options[];
   routeFunction: Function;
-  create?: boolean;
 };
-
 
 export default function ListBar(props: { handleNew:  () => void; label: string; options: Options[]; routeFunction: Function }) {
   return (
@@ -43,7 +41,7 @@ export default function ListBar(props: { handleNew:  () => void; label: string; 
   );
 }
 
-export function ListBarRRHH(props: { handleNew:  () => void; label: string; options: Options[]; routeFunction: Function }) {
+export function ListBarRRHH(props: { label: string; options: OptionsRegistros[]; routeFunction: Function }) {
   return (
     <div
       style={{
@@ -53,51 +51,10 @@ export function ListBarRRHH(props: { handleNew:  () => void; label: string; opti
         margin: "10px 0 20px",
       }}
     >
-      <AutoComplete
+      <AutoCompleteRecurso
         options={props.options}
         label={"Buscar " + props.label}
         routeFunction={props.routeFunction} />
-      <Button
-        style={{
-          whiteSpace: "nowrap",
-          padding: "0 2em",
-          height: "2.5em",
-          minWidth: "10em",
-        }}
-        variant="contained"
-        color="primary"
-        onClick={props.handleNew}
-      >
-        Proyectos {props.label}
-      </Button>
-      <Button
-        style={{
-          whiteSpace: "nowrap",
-          padding: "0 2em",
-          height: "2.5em",
-          minWidth: "10em",
-        }}
-        variant="contained"
-        color="primary"
-        onClick={props.handleNew}
-      >
-        Tareas {props.label}
-      </Button>
-      <Button
-        style={{
-          whiteSpace: "nowrap",
-          padding: "0 2em",
-          height: "2.5em",
-          minWidth: "10em",
-        }}
-        variant="contained"
-        color="primary"
-        onClick={props.handleNew}
-      >
-        Recursos {props.label}
-      </Button>
-
     </div>
   );
 }
-

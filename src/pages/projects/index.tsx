@@ -9,7 +9,7 @@ import { routeToProject } from "../../util/util";
 const Projects: NextPage = () => {
   const projectsData = useProjects();
   const [open, setOpen] = useState(false);
-
+ // {console.log(projectsData.projects)}
   return (
     <div className="page">
       <ListBar

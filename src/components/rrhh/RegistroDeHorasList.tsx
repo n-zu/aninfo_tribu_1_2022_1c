@@ -8,8 +8,8 @@ type RegistroDeHorasListProps = {
   error: any;
   loading: boolean;
 };
-
 const RegistroDeHorasList = ({ registrosDeHoras, error, loading }: RegistroDeHorasListProps) => {
+  //{registrosDeHoras? console.log('RegistroDeHorasList Assertion'): console.log("RegistroDeHorasList Fail")}
   return (
     <div className={" flexContainer"}>
       {loading ? "LOADING" : ""}

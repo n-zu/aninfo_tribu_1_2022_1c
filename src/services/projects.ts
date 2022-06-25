@@ -12,6 +12,7 @@ const checkStatus = (res: Response) => {
 };
 
 export const projectsFetch = async (url: string, request?: any) => {
+  {console.log(projectsApi + url)}
   return fetch(projectsApi + url, {
     ...request,
   }).then((res) => res.json());
@@ -26,6 +27,8 @@ export const useProjects = () => {
 
   const projects = data as Project[];
 
+  console.log(error);
+
   return { projects, error, loading, ...rest };
 };
 
@@ -37,6 +40,8 @@ export const useProject = (projectId: string) => {
   const loading = !data && isValidating;
 
   const project = data as Project;
+
+  console.log(error);
 
   return { project, error, loading, ...rest };
 };

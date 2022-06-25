@@ -19,22 +19,20 @@ export type Project = {
 export type Options = {
   id?: number;
   name: string;
+  nombre_tarea?: string;
+  nombre_recurso?: string;
 }
-
-// export type OptionsRegistro = {
-//   codigo_carga?: number;
-//   nombre_proyecto: string;
-//   nombre_tarea: string;
-//   nombre_recurso: string;
-// }
-
+export type OptionsRegistros = {
+  codigo_carga?: number;
+  nombre_proyecto: string;
+  nombre_tarea?: string;
+  nombre_recurso?: string;
+}
 export type RegistroDeHoras = {
-  name: string;
-  // nombre_proyecto: string;
+  codigo_carga?: number;
+  nombre_proyecto: string;
   nombre_tarea: string;
   nombre_recurso: string;
   cantidad: number;
   fecha_trabajada: Date;
-  // codigo_carga?: number;
-  id?: number;
 }
