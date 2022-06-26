@@ -1,9 +1,11 @@
-import { Chip, Container, Stack, Typography, colors, Divider, Box } from "@mui/material";
+import { Chip, Container, Typography, colors, Divider, Box, Stack, Link } from "@mui/material";
 import dayjs from "dayjs";
 import es from "dayjs/locale/es";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { State, Ticket } from "../../services/support/types";
+import { State, Ticket } from "../../../services/support/types";
+import { AiOutlineEdit } from "react-icons/ai"
+import NextLink from "next/link";
 
 const ticket: Ticket = {
     id: 1,
@@ -29,7 +31,14 @@ const TicketScreen: NextPage = () => {
         <Container className="page" >
             <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <h1>#{id} {ticket.title}</h1>
-                <Chip label="Abierto" sx={{ backgroundColor: colors.blue[600], color: "white", padding: "0 1em" }} />
+                <Stack direction="row" alignItems="center" spacing={3}>
+                    <Chip label="Abierto" sx={{ backgroundColor: colors.blue[600], color: "white", padding: "0 1em" }} />
+                    <NextLink href={`/support/${id}/edit`} passHref>
+                        <Link>
+                            <AiOutlineEdit size={25} />
+                        </Link>
+                    </NextLink>
+                </Stack>
             </Stack>
 
             <Stack direction="row">
