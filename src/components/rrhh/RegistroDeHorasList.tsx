@@ -1,6 +1,4 @@
 import { RegistroDeHoras } from "../../services/types";
-import styles from "./RegistroDeHoras.module.css";
-import InfoCard from "../common/Card"
 import RegistroDeHorasCard from "./RegistroDeHorasCard";
 
 type RegistroDeHorasListProps = {
@@ -9,13 +7,13 @@ type RegistroDeHorasListProps = {
   loading: boolean;
 };
 const RegistroDeHorasList = ({ registrosDeHoras, error, loading }: RegistroDeHorasListProps) => {
-  //{registrosDeHoras? console.log('RegistroDeHorasList Assertion'): console.log("RegistroDeHorasList Fail")}
+  console.log(registrosDeHoras);
   return (
     <div className={" flexContainer"}>
       {loading ? "LOADING" : ""}
       {error ? "ERROR" : ""}
       {registrosDeHoras?.map((registro: RegistroDeHoras, i: number) => (
-          <RegistroDeHorasCard key={i} info={registro} link="/CargasDeHoras/registro?id="/>
+          <RegistroDeHorasCard key={i} info={registro} link="/rrhh/registro?id="/>
       ))}
     </div>
   );

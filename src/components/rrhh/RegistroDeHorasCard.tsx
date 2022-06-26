@@ -2,7 +2,7 @@ import styles from "../common/Card.module.css";
 import Link from "next/link";
 import { RegistroDeHoras } from "../../services/types";
 import { zeroPad } from "../../util/util";
-import { Card, CardActionArea, CardContent, Typography } from "@material-ui/core";
+import { Card, CardActionArea, CardContent, Typography }  from '@mui/material';
 
 const RegistroDeHorasCard = ({ info, link }: { info: RegistroDeHoras, link: string }) => {
   return (
@@ -17,7 +17,7 @@ const RegistroDeHorasCard = ({ info, link }: { info: RegistroDeHoras, link: stri
               <Typography variant="body1" style={{margin: 10}}>Proyecto: {info.nombre_proyecto}</Typography>
               <Typography variant="body1" style={{margin: 10}}>Tarea: {info.nombre_tarea}</Typography>
               <Typography variant="body1" style={{margin: 10}}>Recurso: {info.nombre_recurso}</Typography>
-              <Typography variant="body1" style={{margin: 10}}>Fecha: {info.fecha_trabajada}</Typography>
+              <Typography variant="body1" style={{margin: 10}}>Fecha: {info.fecha_trabajada.toString()}</Typography>
             </CardContent>
           </CardActionArea>
         </Card>

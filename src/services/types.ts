@@ -21,13 +21,15 @@ export type Options = {
   name: string;
   nombre_tarea?: string;
   nombre_recurso?: string;
-}
+};
+
 export type OptionsRegistros = {
   codigo_carga?: number;
   nombre_proyecto: string;
   nombre_tarea?: string;
   nombre_recurso?: string;
-}
+};
+
 export type RegistroDeHoras = {
   codigo_carga: number;
   nombre_proyecto: string;
@@ -35,4 +37,10 @@ export type RegistroDeHoras = {
   nombre_recurso: string;
   cantidad: number;
   fecha_trabajada: Date;
-}
+};
+
+export type Recurso = {
+  legajo: number;
+  nombre: string;
+  apellido: string;
+};

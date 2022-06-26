@@ -9,7 +9,7 @@ import RegistroDeHorasList from "../../components/rrhh/RegistroDeHorasList";
 
 const Home: NextPage = () => {
     const registrosData = useRegistrosDeHoras();
-      //{console.log(registrosData)}
+    console.log(registrosData);
       return (
       <div>
         <div className="page">

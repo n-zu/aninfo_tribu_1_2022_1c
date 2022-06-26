@@ -11,7 +11,6 @@ export const routeToProject = (id : number | null, router : NextRouter) => {
 }
 
 export const routeToRegistro = (id : number | null, router : NextRouter) => {
-  console.log("hola routeToRegistro: " + id);
   if (!id) return;
-  router.push("/CargasDeHoras/registro?id=" + id);
+  router.push("/rrhh/registro?id=" + id);
 }
