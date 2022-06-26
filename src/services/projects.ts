@@ -14,7 +14,9 @@ const checkStatus = (res: Response) => {
 export const projectsFetch = async (url: string, request?: any) => {
   return fetch(projectsApi + url, {
     ...request,
-  }).then((res) => res.json());
+  })
+    .then(checkStatus)
+    .then((res) => res.json());
 };
 
 export const useProjects = () => {
@@ -60,19 +62,27 @@ export const useTask = (taskId: string) => {
   return { task, error, loading, ...rest };
 };
 
-export const saveTask = async (task: Task, projectId?: string, taskId?: number) =>
-  await fetch(projectsApi + (projectId ? `/projects/${projectId}/tasks/` : `/tasks/${taskId}`), {
-    method: projectId ? "POST" : "PUT",
-    headers: saveHeaders,
-    body: JSON.stringify(removeEmpty(task)),
-  }).then(checkStatus);
+export const saveTask = async (
+  task: Task,
+  projectId?: string,
+  taskId?: number
+) =>
+  await fetch(
+    projectsApi +
+      (projectId ? `/projects/${projectId}/tasks/` : `/tasks/${taskId}`),
+    {
+      method: projectId ? "POST" : "PUT",
+      headers: saveHeaders,
+      body: JSON.stringify(removeEmpty(task)),
+    }
+  ).then(checkStatus);
 
 export const employeesFetch = async (url: string, request?: any) => {
   return fetch(projectsResourcesApi + url, {
     ...request,
     headers: {
       accept: "application/json",
-    }
+    },
   }).then((res) => res.json());
 };
 
@@ -89,5 +99,10 @@ export const useEmployees = () => {
 };
 
 const removeEmpty = <T>(object: T): T => {
-  return Object.fromEntries(Object.entries(object).map(([key, value]) => [key, value === "" ? null : value])) as T;
-}
+  return Object.fromEntries(
+    Object.entries(object).map(([key, value]) => [
+      key,
+      value === "" ? null : value,
+    ])
+  ) as T;
+};
