@@ -1,18 +1,19 @@
 import { useRegistrosDeHoras } from "../../services/rrhh";
-import { RegistroDeHoras } from "../../services/types";
-import { useState } from "react";
+
 import { ListBarRRHH } from "../../components/common/ListBar";
 import type { NextPage } from "next";
 
 import { routeToRegistro } from "../../util/util";
 import RegistroDeHorasList from "../../components/rrhh/RegistroDeHorasList";
+import MenuHome from "../../components/rrhh/MenuHome";
 
 const Home: NextPage = () => {
     const registrosData = useRegistrosDeHoras();
-    console.log(registrosData);
+    console.log(registrosData.registrosDeHoras);
       return (
       <div>
         <div className="page">
+          <MenuHome/>
           <ListBarRRHH
             label="registros"
             options={registrosData.registrosDeHoras}

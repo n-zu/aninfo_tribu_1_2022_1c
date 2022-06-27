@@ -7,13 +7,12 @@ type RegistroDeHorasListProps = {
   loading: boolean;
 };
 const RegistroDeHorasList = ({ registrosDeHoras, error, loading }: RegistroDeHorasListProps) => {
-  console.log(registrosDeHoras);
   return (
     <div className={" flexContainer"}>
       {loading ? "LOADING" : ""}
       {error ? "ERROR" : ""}
       {registrosDeHoras?.map((registro: RegistroDeHoras, i: number) => (
-          <RegistroDeHorasCard key={i} info={registro} link="/rrhh/registro?id="/>
+          <RegistroDeHorasCard key={i} info={registro} link="/rrhh/registrohoras?id="/>
       ))}
     </div>
   );

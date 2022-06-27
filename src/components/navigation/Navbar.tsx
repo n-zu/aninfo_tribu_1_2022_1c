@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AppBar, Box, Toolbar, Button, Typography } from "@material-ui/core";
+import { AppBar, Box, Toolbar, Button, Typography }  from '@mui/material';
 
 import styles from "./Navbar.module.css";
 

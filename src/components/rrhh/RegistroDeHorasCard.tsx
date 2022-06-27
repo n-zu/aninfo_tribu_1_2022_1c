@@ -5,14 +5,15 @@ import { zeroPad } from "../../util/util";
 import { Card, CardActionArea, CardContent, Typography }  from '@mui/material';
 
 const RegistroDeHorasCard = ({ info, link }: { info: RegistroDeHoras, link: string }) => {
+  console.log(info.id_registro_horas);
   return (
-    <Link href={link + info?.codigo_carga}>
+    <Link href={link + info?.id_registro_horas}>
       <a className={styles.InfoCard}>
         <Card style={{padding: 0}}>
           <CardActionArea>
             <CardContent>
               <Typography variant="h6" component="h4" style={{fontWeight: 700}}>
-                  {zeroPad(info?.codigo_carga ?? 0)}
+                  {zeroPad(info?.id_registro_horas ?? 0)}
               </Typography>
               <Typography variant="body1" style={{margin: 10}}>Proyecto: {info.nombre_proyecto}</Typography>
               <Typography variant="body1" style={{margin: 10}}>Tarea: {info.nombre_tarea}</Typography>

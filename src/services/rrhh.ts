@@ -17,7 +17,7 @@ export const rrhhFetch = async (url: string, request?: any) => {
 
 export const useRegistrosDeHoras = () => {
   const { data, error, isValidating, ...rest } = useSWR(
-    "/CargasDeHoras/",
+    "/rrhh/",
     rrhhFetch
   );
   const loading = !data && isValidating;
@@ -28,14 +28,28 @@ export const useRegistrosDeHoras = () => {
 
 export const useRecursos = () => {
   const { data, error, isValidating, ...rest } = useSWR(
-    "/Recursos/",
+    "/recursos/",
     rrhhFetch
   );
   const loading = !data && isValidating;
 
-  const projects = data as Recurso[];
+  const recursos = data as Recurso[];
 
   console.log(error);
 
-  return { projects, error, loading, ...rest };
+  return { recursos, error, loading, ...rest };
+};
+
+export const useRecurso = (recursoId: string) => {
+  const { data, error, isValidating, ...rest } = useSWR(
+    recursoId ? "/recursos/" + recursoId : null,
+    rrhhFetch
+  );
+  const loading = !data && isValidating;
+
+  const recurso = data as Recurso;
+
+  console.log(error);
+
+  return { recurso, error, loading, ...rest };
 };

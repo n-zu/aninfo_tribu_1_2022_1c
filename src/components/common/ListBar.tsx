@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import { Button }  from '@mui/material';
 import AutoComplete, { AutoCompleteRecurso } from "./AutoComplete";
 import { Options, OptionsRegistros } from "../../services/types";
 

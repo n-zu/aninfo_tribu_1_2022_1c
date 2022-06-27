@@ -40,7 +40,7 @@ const Project: NextPage = () => {
   const router = useRouter();
   const projectId = router?.query?.id as string;
   const { project, error, loading, mutate } = useProject(projectId);
-
+  
   return (
     <div className="page">
       {loading ? "LOADING" : ""}

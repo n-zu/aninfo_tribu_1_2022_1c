@@ -1,6 +1,5 @@
 import * as React from "react";
-import { TextField } from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
+import  {TextField,Autocomplete}  from '@mui/material';
 import { Options, OptionsRegistros } from "../../services/types";
 import { zeroPad } from "../../util/util";
 import { useRouter } from "next/router";
@@ -56,7 +55,7 @@ type BarPropsRegistros = {
 };
 
 const loadingOptionsRecurso: OptionsRegistros = {
-  codigo_carga: 0,
+  id_registro_horas: 0,
   nombre_proyecto: "loading",
   nombre_tarea:"loading",
   nombre_recurso: "loading",
@@ -69,13 +68,12 @@ export function AutoCompleteRecurso({
 }: BarPropsRegistros) {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
-
   return (
     <Autocomplete
       id="combo-box-demo"
-      options={options || [loadingOptions]}
+      options={options || [loadingOptionsRecurso]}
       getOptionLabel={(option) =>
-        zeroPad(option?.codigo_carga ?? 0) + " - " + option.nombre_proyecto + " -" + option.nombre_recurso + " - " + option.nombre_tarea
+        zeroPad(option?.id_registro_horas ?? 0) + " - " + option.nombre_proyecto + " -" + option.nombre_recurso + " - " + option.nombre_tarea
       }
       fullWidth
       renderInput={(params) => <TextField {...params} label={label} />}
@@ -87,7 +85,7 @@ export function AutoCompleteRecurso({
           if (!open) setOpen(true);
         }
       }}
-      onChange={(_, value) => routeFunction(value?.codigo_carga, router)}
+      onChange={(_, value) => routeFunction(value?.id_registro_horas, router)}
       onClose={() => setOpen(false)}
       autoHighlight
       popupIcon={null}
