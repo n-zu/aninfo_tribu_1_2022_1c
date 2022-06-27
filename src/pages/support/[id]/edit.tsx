@@ -35,11 +35,6 @@ const TicketEditScreen: NextPage = () => {
 
     return (
         <Container className="page" >
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <h1>#{id} {ticket.title}</h1>
-                <Chip label="Abierto" sx={{ backgroundColor: colors.blue[600], color: "white", padding: "0 1em" }} />
-            </Stack>
-
             <Formik
                 initialValues={ticket}
                 onSubmit={
@@ -49,6 +44,13 @@ const TicketEditScreen: NextPage = () => {
                 }
             >
                 <Form>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                            <h1>#{id}</h1>
+                            <Field name="title" as={TextField} variant="standard" />
+                        </Stack>
+                    </Stack>
+
                     <Stack direction="row">
                         <Stack direction="column" sx={{ flex: 1 }}>
                             <CustomSelect id="severity" label="Severidad:" options={metadata.severities} />
