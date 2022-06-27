@@ -11,7 +11,7 @@ const tickets: TicketSummary[] = [
     id: 1,
     title: "ERP PSA",
     state: State.ABIERTO,
-    expirationDate: dayjs("2022-6-18").locale(es),
+    expirationDate: dayjs("2022-6-25").locale(es),
     priority: "Alto",
     severity: "S1"
   }
@@ -32,7 +32,7 @@ const TicketCard = ({ id, title, expirationDate: expiration, priority, severity 
           </Box>
 
           <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem />}>
-            <Typography>Vence en: {expiration.fromNow()}</Typography>
+            <Typography>{dayjs() < expiration ? "Vence" : "Venció"} {expiration.fromNow(false)}</Typography>
             <Typography>Prioridad: {priority}</Typography>
             <Typography>Severidad: {severity}</Typography>
           </Stack>
