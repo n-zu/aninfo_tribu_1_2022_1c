@@ -1,7 +1,12 @@
 import Link from "next/link";
-import { AppBar, Box, Toolbar, Button, Typography }  from '@mui/material';
-
-import styles from "./Navbar.module.css";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Button,
+  Typography,
+  colors,
+} from "@mui/material";
 
 const Navbar = () => {
   const links = [
@@ -13,14 +18,14 @@ const Navbar = () => {
 
   return (
     <AppBar>
-      <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
+      <Box>
         <Toolbar>
           {links.map((link) => (
-            <Button key={link.href}>
-              <Link href={link.href}>
-                <Typography style={{ color: "white" }}>{link.label}</Typography>
-              </Link>
-            </Button>
+            <Link key={link.label} href={link.href}>
+              <Button sx={{ ":hover": { background: "#55c" }, py: "1em" }}>
+                <Typography color="white">{link.label}</Typography>
+              </Button>
+            </Link>
           ))}
         </Toolbar>
       </Box>

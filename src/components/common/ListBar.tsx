@@ -1,4 +1,4 @@
-import { Button }  from '@mui/material';
+import { Button } from "@mui/material";
 import AutoComplete, { AutoCompleteRecurso } from "./AutoComplete";
 import { Options, OptionsRegistros } from "../../services/types";
 
@@ -14,7 +14,7 @@ export default function ListBar(props: { handleNew:  () => void; label: string; 
     <div
       style={{
         display: "flex",
-        alignItems: "flex-end",
+        alignItems: "center",
         gap: 10,
         margin: "10px 0 20px",
       }}

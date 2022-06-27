@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useProjects } from "../../services/projects";
 import ProjectsList from "../../components/projects/ProjectsList";
 import { useState } from "react";
-import NewProjectModal from "../../components/projects/NewProjectModal";
+import ProjectModal from "../../components/projects/ProjectModal";
 import ListBar from "../../components/common/ListBar";
 import { routeToProject } from "../../util/util";
 
@@ -19,10 +19,10 @@ const Projects: NextPage = () => {
         routeFunction={routeToProject}
       />
       <ProjectsList {...projectsData} />
-      <NewProjectModal
+      <ProjectModal
         open={open}
         onClose={() => setOpen(false)}
-        onCreate={projectsData?.mutate}
+        onSave={projectsData?.mutate}
       />
     </div>
   );

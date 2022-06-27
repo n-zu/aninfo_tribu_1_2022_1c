@@ -1,13 +1,16 @@
 import type { NextPage } from "next";
-
+import { Box, Typography, Button } from "@mui/material";
 import { useProject } from "../../services/projects";
 import { useRouter } from "next/router";
-import { zeroPad } from "../../util/util";
+import { zeroPad, routeToTask } from "../../util/util";
 import ListBar from "../../components/common/ListBar";
 import { useState } from "react";
-import NewTaskModal from "../../components/projects/tasks/NewTaskModal";
+import TaskModal from "../../components/projects/tasks/TaskModal";
 import TasksList from "../../components/projects/tasks/TasksList";
 import { Task } from "../../services/types";
+import Loading from "../../components/common/Loading";
+import ProjectModal from "../../components/projects/ProjectModal";
+import TitledText from "../../components/common/TitledText";
 
 type TasksProps = {
   projectId: string;
@@ -23,14 +26,14 @@ const Tasks = ({ projectId, tasks, onCreate }: TasksProps) => {
         handleNew={() => setOpen(true)}
         label="tarea"
         options={tasks}
-        routeFunction={function () {}}
+        routeFunction={routeToTask}
       />
       <TasksList tasks={tasks} />
-      <NewTaskModal
+      <TaskModal
         open={open}
         onClose={() => setOpen(false)}
         projectId={projectId}
-        onCreate={onCreate}
+        onSave={onCreate}
       />
     </>
   );
@@ -40,23 +43,48 @@ const Project: NextPage = () => {
   const router = useRouter();
   const projectId = router?.query?.id as string;
   const { project, error, loading, mutate } = useProject(projectId);
-  
+  const [open, setOpen] = useState(false);
+
   return (
     <div className="page">
-      {loading ? "LOADING" : ""}
+      {loading ? <Loading /> : ""}
       {error ? "ERROR" : ""}
       {project && (
         <>
-          <h1>
-            {zeroPad(project?.id ?? 0)} - {project?.name}
-          </h1>
-          <p>initial_date {project?.initial_date}</p>
-          <p>final_date {project?.final_date}</p>
-          <p>estimated_hours {project?.estimated_hours}</p>
+          <Box
+            style={{
+              display: "flex",
+              marginTop: "20px",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography variant="h4" style={{ alignSelf: "center" }}>
+              {zeroPad(project?.id ?? 0)} - {project?.name}
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ height: "fit-content" }}
+              onClick={() => setOpen(true)}
+            >
+              Editar Proyecto
+            </Button>
+          </Box>
+          <TitledText title="Fecha de inicio">
+            {project?.initial_date}
+          </TitledText>
+          <TitledText title="Fecha de fin">{project?.final_date}</TitledText>
+          <TitledText title="Descripción">{project?.description}</TitledText>
           <Tasks
             projectId={projectId}
             tasks={project?.tasks ?? []}
             onCreate={mutate}
+          />
+          <ProjectModal
+            open={open}
+            onClose={() => setOpen(false)}
+            project={project}
+            onSave={mutate}
           />
         </>
       )}
