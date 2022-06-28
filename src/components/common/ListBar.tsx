@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
-import AutoComplete from "./AutoComplete";
-import { Options } from "../../services/types";
+import AutoComplete, { AutoCompleteRecurso } from "./AutoComplete";
+import { Options, OptionsRegistros } from "../../services/types";
 
 type BarProps = {
   handleNew: () => void;
@@ -42,3 +42,21 @@ const ListBar = ({ handleNew, label, options, routeFunction }: BarProps) => {
 };
 
 export default ListBar;
+
+export function ListRegistosBar(props: { label: string; options: OptionsRegistros[]; routeFunction: Function }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "flex-end",
+        gap: 10,
+        margin: "10px 0 20px",
+      }}
+    >
+      <AutoCompleteRecurso
+        options={props.options}
+        label={"Buscar " + props.label}
+        routeFunction={props.routeFunction} />
+    </div>
+  );
+}
