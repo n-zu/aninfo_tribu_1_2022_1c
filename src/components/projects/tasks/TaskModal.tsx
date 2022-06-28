@@ -27,9 +27,13 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
 
   const validate = (values: any) => {
     const errors: any = {};
-    if (!values.name) errors.name = "Required";
-    if (!values.initial_date) errors.initial_date = "Required";
-    if (!values.final_date) errors.final_date = "Required";
+    if (!values.name) errors.name = "Requerido";
+    if (!values.initial_date) errors.initial_date = "Requerido";
+    if (!values.final_date) errors.final_date = "Requerido";
+    if (values.final_date < values.initial_date)
+      errors.final_date =
+        "La fecha de finalización debe ser mayor a la de inicio";
+    if (!values.description) errors.description = "Requerido";
     return errors;
   };
 
