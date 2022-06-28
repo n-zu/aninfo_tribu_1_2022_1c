@@ -28,6 +28,9 @@ const ProjectModal = ({ open, onClose, onSave, project }: Props) => {
     if (!values.name) errors.name = "Requerido";
     if (!values.initial_date) errors.initial_date = "Requerido";
     if (!values.final_date) errors.final_date = "Requerido";
+    if (values.final_date < values.initial_date)
+      errors.final_date =
+        "La fecha de finalización debe ser mayor a la de inicio";
     if (!values.description) errors.description = "Requerido";
     return errors;
   };
