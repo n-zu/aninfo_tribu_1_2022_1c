@@ -8,6 +8,7 @@ type BarProps = {
   options: Options[];
   label: string;
   routeFunction: Function;
+  icon?: React.ReactNode;
 };
 
 const loadingOptions: Options = {
@@ -19,8 +20,10 @@ export default function AutoComplete({
   options,
   label,
   routeFunction,
+  icon = null,
 }: BarProps) {
   const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState(null);
   const router = useRouter();
 
   return (
@@ -42,10 +45,12 @@ export default function AutoComplete({
           if (!open) setOpen(true);
         }
       }}
-      onChange={(_, value) => routeFunction(value?.id, router)}
+      onChange={(_, value) => {setValue(null); routeFunction(value?.id, router);}}
       onClose={() => setOpen(false)}
       autoHighlight
-      popupIcon={null}
+      clearOnEscape
+      value={value}
+      popupIcon={icon}
     />
   );
 }

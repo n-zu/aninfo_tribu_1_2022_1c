@@ -110,6 +110,19 @@ export const deleteCollaborator = async(colabId: number, taskId: string) => {
   ).then(checkStatus);
 }
 
+export const addCollaborator = async(colabId: number, taskId: string) => {
+  console.log("delete path: " + `/tasks/${taskId}/collaborators/`);
+  return await fetch(
+    projectsApi +
+    `/tasks/${taskId}/collaborators/`,
+    {
+      method: "POST",
+      headers: saveHeaders,
+      body: JSON.stringify({employee_id: colabId})
+    }
+  ).then(checkStatus);
+}
+
 const removeEmpty = <T>(object: T): T => {
   return Object.fromEntries(
     Object.entries(object).map(([key, value]) => [

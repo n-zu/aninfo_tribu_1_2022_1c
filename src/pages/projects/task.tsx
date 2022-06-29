@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { useState } from "react";
 import { Box, Typography, Button, Chip, Avatar } from "@mui/material";
-import { useTask, useEmployees, deleteCollaborator } from "../../services/projects";
+import { useTask, useEmployees, deleteCollaborator, addCollaborator } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
 import Loading from "../../components/common/Loading";
@@ -9,6 +9,14 @@ import TaskModal from "../../components/projects/tasks/TaskModal";
 import TitledText from "../../components/common/TitledText";
 import { Employee, EmployeeId } from "../../services/types";
 import { toast } from "react-toastify";
+import AutoComplete from "../../components/common/AutoComplete";
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import AddIcon from '@mui/icons-material/Add';
+
+type Tag = {
+  id: number,
+  name: string
+}
 
 const Task: NextPage = () => {
   const router = useRouter();
@@ -16,11 +24,32 @@ const Task: NextPage = () => {
   const { task, error, loading, mutate } = useTask(taskId);
   const [open, setOpen] = useState(false);
   const { employees } = useEmployees();
+
+  const getEmployeeNameById = (id: number) => {
+    const employee = employees?.find((employee: Employee) => {
+      return employee.legajo === id;
+    });
+    return employee?.Nombre + " " + employee?.Apellido;
+  };
+
+  const getEmployeeList = (colaborators: EmployeeId[], employees: Employee[]) => {
+    const list: Tag[] = employees?.filter(employee => 
+      !colaborators?.some(colab => colab.id == employee.legajo
+    )).map((employee) => ({
+      id: employee.legajo,
+      name: employee.Nombre + " " + employee.Apellido
+    }));
+    return list;
+  };
+
+  const employeeList = getEmployeeList(task?.collaborators, employees);
+
   const onHours = () => {
     console.log(employees);
   };
 
   const onDeleteColab = async(id: number) => {
+    if (!id) return;
     console.log("delete " + id);
     try {
       await deleteCollaborator(id, taskId);
@@ -31,12 +60,20 @@ const Task: NextPage = () => {
       toast.error("Error al eliminar colaborador");
     }
   };
-  const getEmployeeNameById = (id: number) => {
-    const employee = employees?.find((employee: Employee) => {
-      return employee.legajo === id;
-    });
-    return employee?.Nombre + " " + employee?.Apellido;
+
+  const onAddColab = async(id: number) => {
+    console.log("add " + id);
+    if (!id) return;
+    try {
+      await addCollaborator(id, taskId);
+      toast.success("Colaborador agregado correctamente");
+      mutate();
+    } catch (e) {
+      console.error(e);
+      toast.error("Error al agregar colaborador");
+    }
   };
+
   return (
     <div className="page">
       {loading ? <Loading /> : ""}
@@ -84,6 +121,14 @@ const Task: NextPage = () => {
               <Typography variant="overline" style={{ lineHeight: "normal" }}>
                 Colaboradores
               </Typography>
+              <div style={{marginTop: 10, marginBottom: 10, width: "50%"}}>
+                <AutoComplete
+                  label="agregar colaborador"
+                  options={employeeList}
+                  routeFunction={onAddColab}
+                  icon={<AddIcon/>}
+                />
+              </div>
               <div>
                 {task?.collaborators?.map(
                   (colab: EmployeeId, index: number) => {
