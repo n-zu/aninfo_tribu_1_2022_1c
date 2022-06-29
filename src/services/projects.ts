@@ -98,6 +98,18 @@ export const useEmployees = () => {
   return { employees, error, loadingEmployee, ...rest };
 };
 
+export const deleteCollaborator = async(colabId: number, taskId: string) => {
+  console.log("delete path: " + `/tasks/${taskId}/collaborators/${colabId}`);
+  return await fetch(
+    projectsApi +
+    `/tasks/${taskId}/collaborators/${colabId}`,
+    {
+      method: "DELETE",
+      headers: saveHeaders,
+    }
+  ).then(checkStatus);
+}
+
 const removeEmpty = <T>(object: T): T => {
   return Object.fromEntries(
     Object.entries(object).map(([key, value]) => [

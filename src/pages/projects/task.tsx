@@ -1,13 +1,14 @@
 import type { NextPage } from "next";
 import { useState } from "react";
 import { Box, Typography, Button, Chip, Avatar } from "@mui/material";
-import { useTask, useEmployees } from "../../services/projects";
+import { useTask, useEmployees, deleteCollaborator } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
 import Loading from "../../components/common/Loading";
 import TaskModal from "../../components/projects/tasks/TaskModal";
 import TitledText from "../../components/common/TitledText";
 import { Employee, EmployeeId } from "../../services/types";
+import { toast } from "react-toastify";
 
 const Task: NextPage = () => {
   const router = useRouter();
@@ -19,8 +20,16 @@ const Task: NextPage = () => {
     console.log(employees);
   };
 
-  const onDeleteColab = (id: number) => {
+  const onDeleteColab = async(id: number) => {
     console.log("delete " + id);
+    try {
+      await deleteCollaborator(id, taskId);
+      toast.success("Colaborador eliminado correctamente");
+      mutate();
+    } catch (e) {
+      console.error(e);
+      toast.error("Error al eliminar colaborador");
+    }
   };
   const getEmployeeNameById = (id: number) => {
     const employee = employees?.find((employee: Employee) => {
