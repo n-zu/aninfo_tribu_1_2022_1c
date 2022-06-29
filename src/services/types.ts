@@ -1,11 +1,15 @@
 export type EmployeeId = {
   id: number;
-}
+};
 
 export type Task = {
   id?: number;
   name: string;
   description: string;
+  project: {
+    id: number;
+    name: string;
+  };
   initial_date: string;
   final_date: string;
   estimated_hours: number;

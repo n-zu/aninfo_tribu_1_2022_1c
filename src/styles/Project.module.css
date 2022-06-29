@@ -1,0 +1,9 @@
+@keyframes _ProjectSubtitle {
+  to {
+    font-size: 1.5rem;
+    color: #0008;
+  }
+}
+.ProjectSubtitle {
+  animation: _ProjectSubtitle 1s forwards;
+}

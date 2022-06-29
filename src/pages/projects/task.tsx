@@ -1,7 +1,12 @@
 import type { NextPage } from "next";
 import { useState } from "react";
 import { Box, Typography, Button, Chip, Avatar } from "@mui/material";
-import { useTask, useEmployees, deleteCollaborator, addCollaborator } from "../../services/projects";
+import {
+  useTask,
+  useEmployees,
+  deleteCollaborator,
+  addCollaborator,
+} from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
 import Loading from "../../components/common/Loading";
@@ -10,13 +15,15 @@ import TitledText from "../../components/common/TitledText";
 import { Employee, EmployeeId } from "../../services/types";
 import { toast } from "react-toastify";
 import AutoComplete from "../../components/common/AutoComplete";
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
+
+import styles from "../../styles/Project.module.css";
+import Link from "next/link";
 
 type Tag = {
-  id: number,
-  name: string
-}
+  id: number;
+  name: string;
+};
 
 const Task: NextPage = () => {
   const router = useRouter();
@@ -32,13 +39,19 @@ const Task: NextPage = () => {
     return employee?.Nombre + " " + employee?.Apellido;
   };
 
-  const getEmployeeList = (colaborators: EmployeeId[], employees: Employee[]) => {
-    const list: Tag[] = employees?.filter(employee => 
-      !colaborators?.some(colab => colab.id == employee.legajo
-    )).map((employee) => ({
-      id: employee.legajo,
-      name: employee.Nombre + " " + employee.Apellido
-    }));
+  const getEmployeeList = (
+    colaborators: EmployeeId[],
+    employees: Employee[]
+  ) => {
+    const list: Tag[] = employees
+      ?.filter(
+        (employee) =>
+          !colaborators?.some((colab) => colab.id == employee.legajo)
+      )
+      .map((employee) => ({
+        id: employee.legajo,
+        name: employee.Nombre + " " + employee.Apellido,
+      }));
     return list;
   };
 
@@ -48,7 +61,7 @@ const Task: NextPage = () => {
     console.log(employees);
   };
 
-  const onDeleteColab = async(id: number) => {
+  const onDeleteColab = async (id: number) => {
     if (!id) return;
     console.log("delete " + id);
     try {
@@ -61,7 +74,7 @@ const Task: NextPage = () => {
     }
   };
 
-  const onAddColab = async(id: number) => {
+  const onAddColab = async (id: number) => {
     console.log("add " + id);
     if (!id) return;
     try {
@@ -87,9 +100,18 @@ const Task: NextPage = () => {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4" style={{ alignSelf: "center" }}>
-              {zeroPad(task?.id ?? 0)} - {task?.name}
-            </Typography>
+            <div>
+              <Link href={"/projects/project?id=" + task?.project?.id}>
+                <a>
+                  <Typography variant="h4" className={styles.ProjectSubtitle}>
+                    {zeroPad(task?.project?.id ?? 0)} - {task?.project?.name}
+                  </Typography>
+                </a>
+              </Link>
+              <Typography variant="h4">
+                {zeroPad(task?.id ?? 0)} - {task?.name}
+              </Typography>
+            </div>
             <Button
               variant="contained"
               color="primary"
@@ -121,12 +143,12 @@ const Task: NextPage = () => {
               <Typography variant="overline" style={{ lineHeight: "normal" }}>
                 Colaboradores
               </Typography>
-              <div style={{marginTop: 10, marginBottom: 10, width: "50%"}}>
+              <div style={{ marginTop: 10, marginBottom: 10, width: "50%" }}>
                 <AutoComplete
                   label="agregar colaborador"
                   options={employeeList}
                   routeFunction={onAddColab}
-                  icon={<AddIcon/>}
+                  icon={<AddIcon />}
                 />
               </div>
               <div>
