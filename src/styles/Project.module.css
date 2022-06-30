@@ -17,3 +17,10 @@
 .ProjectTitle {
   animation: _ProjectTitle 0.5s forwards;
 }
+
+.dataRow {
+  display: flex;
+}
+.dataRow > div {
+  margin-right: 4em;
+}

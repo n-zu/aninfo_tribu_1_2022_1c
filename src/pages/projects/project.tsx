@@ -81,16 +81,17 @@ const Project: NextPage = () => {
               Editar Proyecto
             </Button>
           </Box>
-          <TitledText title="Fecha de inicio">
-            {project?.initial_date}
-          </TitledText>
-          <TitledText title="Fecha de fin">{project?.final_date}</TitledText>
-          <TitledText title="Descripción">{project?.description}</TitledText>
-          <TitledText title="Horas Estimadas">{estimatedTime}</TitledText>
-          <TitledText title="Horas Trabajadas">
-            {totalTime} ( {((totalTime / estimatedTime) * 100).toPrecision(2)} %
-            )
-          </TitledText>
+          <Box className={styles.dataRow}>
+            <TitledText title="Fecha de inicio">
+              {project?.initial_date}
+            </TitledText>
+            <TitledText title="Fecha de fin">{project?.final_date}</TitledText>
+            <TitledText title="Horas Estimadas">{estimatedTime}</TitledText>
+            <TitledText title="Horas Trabajadas">
+              {totalTime} ( {((totalTime / estimatedTime) * 100).toPrecision(2)}{" "}
+              % )
+            </TitledText>
+          </Box>
           <TitledText title="Descripción">{project?.description}</TitledText>
           <Tasks
             projectId={projectId}

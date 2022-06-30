@@ -132,17 +132,20 @@ const Task: NextPage = () => {
           </Box>
           <div>
             <div>
-              <TitledText title="Fecha de inicio">
-                {task?.initial_date}
-              </TitledText>
-              <TitledText title="Fecha de fin">{task?.final_date}</TitledText>
-              <TitledText title="Horas estimadas">
-                {task?.estimated_hours}
-              </TitledText>
-              <TitledText title="Horas Trabajadas">
-                {totalTime} ({" "}
-                {((totalTime / task?.estimated_hours) * 100).toPrecision(2)} % )
-              </TitledText>
+              <Box className={styles.dataRow}>
+                <TitledText title="Fecha de inicio">
+                  {task?.initial_date}
+                </TitledText>
+                <TitledText title="Fecha de fin">{task?.final_date}</TitledText>
+                <TitledText title="Horas estimadas">
+                  {task?.estimated_hours}
+                </TitledText>
+                <TitledText title="Horas Trabajadas">
+                  {totalTime} ({" "}
+                  {((totalTime / task?.estimated_hours) * 100).toPrecision(2)} %
+                  )
+                </TitledText>
+              </Box>
               <TitledText title="Descripción">{task?.description}</TitledText>
             </div>
             <div
