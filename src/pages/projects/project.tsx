@@ -12,6 +12,8 @@ import Loading from "../../components/common/Loading";
 import ProjectModal from "../../components/projects/ProjectModal";
 import TitledText from "../../components/common/TitledText";
 
+import styles from "../../styles/Project.module.css";
+
 type TasksProps = {
   projectId: string;
   tasks: Task[];
@@ -42,6 +44,7 @@ const Tasks = ({ projectId, tasks, onCreate }: TasksProps) => {
 const Project: NextPage = () => {
   const router = useRouter();
   const projectId = router?.query?.id as string;
+  const lastTask = router?.query?.lastTask as string;
   const { project, error, loading, mutate } = useProject(projectId);
   const { totalTime } = useProjectTRs(parseInt(projectId));
   const [open, setOpen] = useState(false);
@@ -63,7 +66,10 @@ const Project: NextPage = () => {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4" style={{ alignSelf: "center" }}>
+            <Typography
+              variant="h4"
+              className={lastTask ? styles.ProjectTitle : ""}
+            >
               {zeroPad(project?.id ?? 0)} - {project?.name}
             </Typography>
             <Button

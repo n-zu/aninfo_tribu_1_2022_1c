@@ -17,9 +17,9 @@ import { Employee, EmployeeId } from "../../services/types";
 import { toast } from "react-toastify";
 import AutoComplete from "../../components/common/AutoComplete";
 import AddIcon from "@mui/icons-material/Add";
+import Link from "next/link";
 
 import styles from "../../styles/Project.module.css";
-import Link from "next/link";
 
 type Tag = {
   id: number;
@@ -103,7 +103,14 @@ const Task: NextPage = () => {
             }}
           >
             <div>
-              <Link href={"/projects/project?id=" + task?.project?.id}>
+              <Link
+                href={
+                  "/projects/project?id=" +
+                  task?.project?.id +
+                  "&lastTask=" +
+                  taskId
+                }
+              >
                 <a>
                   <Typography variant="h4" className={styles.ProjectSubtitle}>
                     {zeroPad(task?.project?.id ?? 0)} - {task?.project?.name}

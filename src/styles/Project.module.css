@@ -7,3 +7,13 @@
 .ProjectSubtitle {
   animation: _ProjectSubtitle 1s forwards;
 }
+
+@keyframes _ProjectTitle {
+  from {
+    font-size: 1.5rem;
+    color: #0008;
+  }
+}
+.ProjectTitle {
+  animation: _ProjectTitle 0.5s forwards;
+}
