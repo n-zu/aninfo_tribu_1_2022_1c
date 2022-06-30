@@ -5,7 +5,7 @@ import { zeroPad } from "../../util/util";
 import { Card, CardActionArea, CardContent, Typography }  from '@mui/material';
 
 const RegistroCard = ({ info, link }: { info: RegistroDeHoras, link: string }) => {
-  console.log(info.id_registro_horas);
+ 
   return (
     <Link href={link + info?.id_registro_horas}>
       <a className={styles.InfoCard}>
