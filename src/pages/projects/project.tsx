@@ -1,10 +1,10 @@
 import type { NextPage } from "next";
 import { Box, Typography, Button } from "@mui/material";
-import { useProject } from "../../services/projects";
+import { useProject, useProjectTRs } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad, routeToTask } from "../../util/util";
 import ListBar from "../../components/common/ListBar";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import TaskModal from "../../components/projects/tasks/TaskModal";
 import TasksList from "../../components/projects/tasks/TasksList";
 import { Task } from "../../services/types";
@@ -43,7 +43,12 @@ const Project: NextPage = () => {
   const router = useRouter();
   const projectId = router?.query?.id as string;
   const { project, error, loading, mutate } = useProject(projectId);
+  const { totalTime } = useProjectTRs(parseInt(projectId));
   const [open, setOpen] = useState(false);
+
+  const getEstimatedTime = () =>
+    project?.tasks?.reduce((acc, task) => acc + task?.estimated_hours, 0) ?? 0;
+  const estimatedTime = useMemo(getEstimatedTime, [project]);
 
   return (
     <div className="page">
@@ -74,6 +79,12 @@ const Project: NextPage = () => {
             {project?.initial_date}
           </TitledText>
           <TitledText title="Fecha de fin">{project?.final_date}</TitledText>
+          <TitledText title="Descripción">{project?.description}</TitledText>
+          <TitledText title="Horas Estimadas">{estimatedTime}</TitledText>
+          <TitledText title="Horas Trabajadas">
+            {totalTime} ( {((totalTime / estimatedTime) * 100).toPrecision(2)} %
+            )
+          </TitledText>
           <TitledText title="Descripción">{project?.description}</TitledText>
           <Tasks
             projectId={projectId}

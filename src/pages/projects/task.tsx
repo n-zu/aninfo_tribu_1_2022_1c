@@ -6,6 +6,7 @@ import {
   useEmployees,
   deleteCollaborator,
   addCollaborator,
+  useTaskTRs,
 } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
@@ -31,6 +32,7 @@ const Task: NextPage = () => {
   const { task, error, loading, mutate } = useTask(taskId);
   const [open, setOpen] = useState(false);
   const { employees } = useEmployees();
+  const { totalTime } = useTaskTRs(parseInt(taskId));
 
   const getEmployeeNameById = (id: number) => {
     const employee = employees?.find((employee: Employee) => {
@@ -129,6 +131,10 @@ const Task: NextPage = () => {
               <TitledText title="Fecha de fin">{task?.final_date}</TitledText>
               <TitledText title="Horas estimadas">
                 {task?.estimated_hours}
+              </TitledText>
+              <TitledText title="Horas Trabajadas">
+                {totalTime} ({" "}
+                {((totalTime / task?.estimated_hours) * 100).toPrecision(2)} % )
               </TitledText>
               <TitledText title="Descripción">{task?.description}</TitledText>
             </div>
