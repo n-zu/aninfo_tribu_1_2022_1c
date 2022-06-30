@@ -34,7 +34,7 @@ function ProyectoBox(){
         <h2>Seleccionar Proyecto</h2>
         <BoxSelector
           options={projectsData.projects}
-          label="Projects" />
+          />
       </div>
     </>
   )

@@ -37,7 +37,7 @@ export type Employee = {
 
 export type OptionsRegistros = {
   id_registro_horas?: number;
-  nombre_proyecto: string;
+  nombre_proyecto?: string;
   nombre_tarea?: string;
   nombre_recurso?: string;
 };
@@ -52,7 +52,7 @@ export type RegistroDeHoras = {
 };
 
 export type Recurso = {
-  legajo: number;
-  nombre: string;
-  apellido: string;
+  id?: number;
+  name?: string;
+  lastname?: string;
 };
