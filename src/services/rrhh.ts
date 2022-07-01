@@ -52,8 +52,6 @@ export const useRecursos = () => {
 
   const recursos = data as Recurso[];
 
-  console.log(error);
-
   return { recursos, error, loading, ...rest };
 };
 
@@ -65,9 +63,7 @@ export const useRecurso = (recursoId: string) => {
   const loading = !data && isValidating;
 
   const recurso = data as Recurso;
-
-  console.log(error);
-
+  
   return { recurso, error, loading, ...rest };
 };
 

@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import { useProject } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
+import { useRecurso } from "../../services/rrhh";
 
 
 const cte = {
@@ -14,7 +15,7 @@ const cte = {
 const Recurso: NextPage = () => {
   const router = useRouter();
   const recursoId = router?.query?.id as string;
-  //const { recurso, error, loading, mutate } = useRecurso(recursoId);
+  const { recurso, error, loading, mutate } = useRecurso(recursoId);
 
   console.log("ID REGISTRO");
   console.log(cte);

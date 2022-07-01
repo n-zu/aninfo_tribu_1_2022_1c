@@ -12,7 +12,7 @@ const RegistrosList = ({ registrosDeHoras, error, loading }: RegistroDeHorasList
       {loading ? "LOADING" : ""}
       {error ? "ERROR" : ""}
       {registrosDeHoras?.map((registro: RegistroDeHoras, i: number) => (
-          <RegistroCard key={i} info={registro} link="/rrhh/registrohoras?id="/>
+        <RegistroCard key={i} info={registro} link="/rrhh/registrohoras?id="/>
       ))}
     </div>
   );

@@ -1,12 +1,18 @@
-import { Autocomplete, TabClassKey, TextField } from '@mui/material'
+import { Autocomplete, TextField } from '@mui/material'
 import React from 'react'
 import { useProject, useTask } from '../../services/projects';
 import { useRecurso } from '../../services/rrhh';
-import { EmployeeId, Options, OptionsRegistros, Project, Recurso, Task } from '../../services/types'
+import { Options, Project, Recurso, Task } from '../../services/types'
 import { zeroPad } from '../../util/util';
-import AutoComplete from '../common/AutoComplete'
 
-export default function BoxSelector(props:{options:Project[],label?:string}) {
+export default function BoxSelector(
+    props:{
+        options:Project[],
+        label?:string, 
+        defaultProject?: Project,
+        defaultTask?: Task,
+        defaultRecurso?: Recurso        
+    }) {
     
     const [projectValue, setProjetc] = React.useState<Options | null>();
     const [inputProject, setInputProject] = React.useState('');
@@ -17,12 +23,12 @@ export default function BoxSelector(props:{options:Project[],label?:string}) {
 
     const { project } = useProject((projectValue?.id ?? null) as unknown as string);
     const { task } = useTask((tasksValue?.id ?? null) as unknown as string);
-    {project && console.log(project.tasks ?? []);}
-    {console.log("TASK " + task?.collaborators);}
+
     return (
         <>
         <Box options = {props.options} 
         label={"Proyectos"}
+        defaultValue={props.defaultProject ?? null}
         setValue= {setProjetc}
         setInputValue= {setInputProject}
         value={projectValue ?? null}
@@ -32,14 +38,16 @@ export default function BoxSelector(props:{options:Project[],label?:string}) {
         <Box options={project?.tasks ?? []} 
         label={"Tareas"}
         setValue= {setTasks}
+        defaultValue={props.defaultTask ?? null}
         setInputValue= {setInputTask}
         value={tasksValue ?? null}
         inputValue={inputTask }
         disabled={true}/>
 
-        <RecursoBox options={task?.collaborators ?? []} 
+        <RecursoBox options={task?.collaborators as Recurso[] ?? []} 
         label={"Recursos"}
         setValue= {setRecurso}
+        defaultValue={props.defaultRecurso ?? null}
         setInputValue= {setInputRecurso}
         value={recursoValue ?? null}
         inputValue={inputRecurso }
@@ -53,6 +61,7 @@ function Box(props: {
     options:Options[], 
     label:string,
     setValue: Function,
+    defaultValue?: Options | null,
     setInputValue:Function,
     value:Options | null,
     inputValue:string,
@@ -63,6 +72,7 @@ function Box(props: {
         <Autocomplete
             id="controllable-states-demo"
             value={props.value ?? undefined}
+            defaultValue={props.defaultValue ?? undefined}
             disabled = {(props.options?.length === 0 && props.disabled)? true: false}
             options={props.options}
             onChange={(event: any, newOption: Options | null | undefined) => {
@@ -73,15 +83,16 @@ function Box(props: {
                 props.setInputValue(newInputValue);
             } }
             sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label={props.label}/>}
+            renderInput={(params) => <TextField {...params} label={props.defaultValue?.name}/>}
             getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} />
     </>);
 }
 
-function RecursoBox(props: {
+function RecursoBox (props: {
     options:Recurso[], 
     label:string,
     setValue: Function,
+    defaultValue: Recurso | null,
     setInputValue:Function,
     value:Recurso | null,
     inputValue:string,

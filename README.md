@@ -9,7 +9,7 @@
 
 ##### Modules
 
-- [👥 Human Resources API](https://squad1-rrhh.herokuapp.com/docs) [[src](https://www.google.com/)]
+- [👥 Human Resources API](https://squad1-rrhh.herokuapp.com/docs) [[src](https://github.com/squad120221c/squad_1_2022_1c)]
 - [🗒️ Projects API](https://aninfo-projects.herokuapp.com/docs) [[src](https://github.com/NicolasEzequielZulaicaRivera/aninfo_squad_2_2022_1c)]
 - 🔧 Support API [[src](https://github.com/josuebouchard/squad_3_2022_1c)]
 

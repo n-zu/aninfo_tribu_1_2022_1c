@@ -21,10 +21,6 @@ const Home: NextPage = () => {
           options={registrosData.registrosDeHoras}
           routeFunction={routeToRegistro}/>
       <RegistrosList {...registrosData}/>
-      <RegistroModal
-        open={open}
-        onClose={() => setOpen(false)}
-      />
     </div>
   </div>
 ) 
