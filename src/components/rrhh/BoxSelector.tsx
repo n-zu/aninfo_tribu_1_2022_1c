@@ -1,10 +1,9 @@
-import { Autocomplete, TabClassKey, TextField } from '@mui/material'
+import { Autocomplete, TextField } from '@mui/material'
 import React from 'react'
 import { useProject, useTask } from '../../services/projects';
 import { useRecurso } from '../../services/rrhh';
-import { EmployeeId, Options, OptionsRegistros, Project, Recurso, Task } from '../../services/types'
+import { Options, Project, Recurso } from '../../services/types'
 import { zeroPad } from '../../util/util';
-import AutoComplete from '../common/AutoComplete'
 
 export default function BoxSelector(props:{options:Project[],label?:string}) {
     
@@ -17,8 +16,7 @@ export default function BoxSelector(props:{options:Project[],label?:string}) {
 
     const { project } = useProject((projectValue?.id ?? null) as unknown as string);
     const { task } = useTask((tasksValue?.id ?? null) as unknown as string);
-    {project && console.log(project.tasks ?? []);}
-    {console.log("TASK " + task?.collaborators);}
+
     return (
         <>
         <Box options = {props.options} 
@@ -37,7 +35,7 @@ export default function BoxSelector(props:{options:Project[],label?:string}) {
         inputValue={inputTask }
         disabled={true}/>
 
-        <RecursoBox options={task?.collaborators ?? []} 
+        <RecursoBox options={task?.collaborators as Recurso[] ?? []} 
         label={"Recursos"}
         setValue= {setRecurso}
         setInputValue= {setInputRecurso}
@@ -78,7 +76,7 @@ function Box(props: {
     </>);
 }
 
-function RecursoBox(props: {
+function RecursoBox (props: {
     options:Recurso[], 
     label:string,
     setValue: Function,

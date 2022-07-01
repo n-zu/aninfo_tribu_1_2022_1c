@@ -37,22 +37,25 @@ export type Employee = {
 
 export type OptionsRegistros = {
   id_registro_horas?: number;
-  nombre_proyecto?: string;
-  nombre_tarea?: string;
-  nombre_recurso?: string;
+  nombre_proyecto: string;
+  nombre_tarea: string;
+  nombre_recurso: string;
 };
 
 export type RegistroDeHoras = {
-  id_registro_horas: number;
+  id_registro_horas?: number;
   nombre_proyecto: string;
   nombre_tarea: string;
   nombre_recurso: string;
   cantidad: number;
   fecha_trabajada: Date;
-};
+  id_proyecto: number,
+  id_tarea: number,
+  id_recurso: number,
 
+};
 export type Recurso = {
   id?: number;
-  name?: string;
-  lastname?: string;
+  name: string;
+  lastname: string;
 };

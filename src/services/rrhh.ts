@@ -28,6 +28,18 @@ export const useRegistrosDeHoras = () => {
   return { registrosDeHoras, error, loading, ...rest };
 };
 
+export const useRegistroDeHoras = (registroId: string) => {
+  const { data, error, isValidating, ...rest } = useSWR(
+    registroId ? "/rrhh/registro/" + registroId : null,
+    rrhhFetch
+  );
+  const loading = !data && isValidating;
+
+  const registro = data as RegistroDeHoras;
+
+  return { registro, error, loading, ...rest };
+};
+
 export const useRecursos = () => {
   const { data, error, isValidating, ...rest } = useSWR(
     "/recursos/",
@@ -36,8 +48,6 @@ export const useRecursos = () => {
   const loading = !data && isValidating;
 
   const recursos = data as Recurso[];
-
-  console.log(error);
 
   return { recursos, error, loading, ...rest };
 };
@@ -50,8 +60,6 @@ export const useRecurso = (recursoId: string) => {
   const loading = !data && isValidating;
 
   const recurso = data as Recurso;
-
-  console.log(error);
-
+  
   return { recurso, error, loading, ...rest };
 };
