@@ -23,3 +23,8 @@ export const dateDiff = (date1: Date, date2: Date) => {
 export const pluralize = (noun: string, count?: number, suffix:string = "s") => {
   return `${count} ${noun}${count !== 1 ? suffix : ''}`;
 }
+
+export const routeToRegistro = (id : number | null, router : NextRouter) => {
+  if (!id) return;
+  router.push("/rrhh/registro?id=" + id);
+}
