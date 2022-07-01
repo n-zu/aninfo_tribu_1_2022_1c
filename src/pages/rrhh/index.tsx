@@ -11,7 +11,6 @@ import { useProjects } from "../../services/projects";
 const Home: NextPage = () => {
   const registrosData = useRegistrosDeHoras();
   const [open, setOpen] = useState(false);
-  const projectsData = useProjects();
   return (
   <div>
     <div className="page">
@@ -21,47 +20,13 @@ const Home: NextPage = () => {
           options={registrosData.registrosDeHoras}
           routeFunction={routeToRegistro}/>
       <RegistrosList {...registrosData}/>
+      <RegistroModal
+        open={open}
+        onClose={() => setOpen(false)}
+        onSave={registrosData?.mutate}
+      />
     </div>
   </div>
 ) 
 }; 
 export default Home;
-/*
-class errorBack extends React.Component{
-  static state: any;
-  static setState(unError: { error: unknown; }) {
-    this.state = unError;
-  }
-}
-*/
-/*
-const Home: NextPage = () => {
-    const registrosData = useRegistrosDeHoras();
-  
-    try {
-      registrosData.registrosDeHoras.detail;
-    } catch (error) {
-      errorBack.setState({ error });
-    };
-
-    if (errorBack.state.error) {
-      return (
-      <div className="page" style={{textAlign: 'center',width: '100%',height: '100%',alignItems:'center'}}> 
-        <h1>No hay cargas de horas registradas</h1>
-      </div>
-      )
-    }
-    return (
-    <div>
-      <div className="page">
-        <MenuHome/>
-        <ListRegistosBar
-            label="registros"
-            options={registrosData.registrosDeHoras}
-            routeFunction={routeToRegistro} /><RegistrosList {...registrosData} 
-        />
-      </div>
-    </div>
-  ) 
-};
-*/

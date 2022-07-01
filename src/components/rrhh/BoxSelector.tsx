@@ -1,9 +1,12 @@
-import { Autocomplete, TextField } from '@mui/material'
+import { Autocomplete, Button, TextField } from '@mui/material'
 import React from 'react'
 import { useProject, useTask } from '../../services/projects';
 import { useRecurso } from '../../services/rrhh';
 import { Options, Project, Recurso, Task } from '../../services/types'
 import { zeroPad } from '../../util/util';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import { Formik } from 'formik';
+
 
 export default function BoxSelector(
     props:{
@@ -11,7 +14,11 @@ export default function BoxSelector(
         label?:string, 
         defaultProject?: Project,
         defaultTask?: Task,
-        defaultRecurso?: Recurso,
+        defaultRecurso?: Recurso
+        page?:boolean;   
+        setProyecto:Function;
+        setTarea: Function ;
+        setRecurso: Function ;     
     }) {
     
     const [projectValue, setProjetc] = React.useState<Options | null>();
@@ -23,9 +30,14 @@ export default function BoxSelector(
 
     const { project } = useProject((projectValue?.id ?? null) as unknown as string);
     const { task } = useTask((tasksValue?.id ?? null) as unknown as string);
+    
+    props.setProyecto(projectValue ?? null);
+    props.setTarea(tasksValue);
+    props.setRecurso(recursoValue);
 
     return (
         <>
+        <h3>Seleccionar Proyecto</h3>
         <Box options = {props.options} 
         label={"Proyectos"}
         defaultValue={props.defaultProject ?? null}
@@ -33,8 +45,10 @@ export default function BoxSelector(
         setInputValue= {setInputProject}
         value={projectValue ?? null}
         inputValue={inputProject }
-        disabled={false}/>
+        disabled={false}
+        page= {props.page ?? false}/>
 
+        <h3>Seleccionar Tarea</h3>
         <Box options={project?.tasks ?? []} 
         label={"Tareas"}
         setValue= {setTasks}
@@ -42,8 +56,10 @@ export default function BoxSelector(
         setInputValue= {setInputTask}
         value={tasksValue ?? null}
         inputValue={inputTask }
-        disabled={true}/>
+        disabled={true}
+        page= {props.page ?? false}/>
 
+        <h3>Seleccionar Recurso</h3>
         <RecursoBox options={task?.collaborators as Recurso[] ?? []} 
         label={"Recursos"}
         setValue= {setRecurso}
@@ -52,6 +68,7 @@ export default function BoxSelector(
         value={recursoValue ?? null}
         inputValue={inputRecurso }
         disabled={true}
+        page= {props.page ?? false}
         />
         </>
       );
@@ -66,6 +83,7 @@ export function Box(props: {
     value:Options | null,
     inputValue:string,
     disabled:boolean,
+    page: boolean
     }){
     return (
     <>
@@ -82,7 +100,7 @@ export function Box(props: {
             onInputChange={(event, newInputValue) => {
                 props.setInputValue(newInputValue);
             } }
-            sx={{ width: "100%" }}
+            sx={{ width: "100%"}}
             renderInput={(params) => <TextField {...params} label={props.defaultValue?.name}/>}
             getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} />
     </>);
@@ -97,6 +115,7 @@ export function RecursoBox (props: {
     value:Recurso | null,
     inputValue:string,
     disabled:boolean,
+    page: boolean
     }){
    const {recurso} = useRecurso(props.value as unknown as string);
    props.setValue(recurso);
@@ -114,9 +133,10 @@ export function RecursoBox (props: {
             onInputChange={(event, newInputValue) => {
                 props.setInputValue(newInputValue);
             } }
-            sx={{ width: "100%" }}
+            sx={{ width: "100%"}}
             renderInput={(params) => <TextField {...params} label={props.label}/>}
-            getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + (option?.name??'') +" - " + option?.lastname??''} />
+            getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + (option?.name??'') +" - " + option?.lastname??''} 
+            />
     </>);
 }
 
