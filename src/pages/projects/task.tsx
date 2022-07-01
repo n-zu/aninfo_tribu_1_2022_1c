@@ -36,9 +36,9 @@ const Task: NextPage = () => {
 
   const getEmployeeNameById = (id: number) => {
     const employee = employees?.find((employee: Employee) => {
-      return employee.legajo === id;
+      return employee.id === id;
     });
-    return employee?.Nombre + " " + employee?.Apellido;
+    return employee?.name + " " + employee?.lastname;
   };
 
   const getEmployeeList = (
@@ -47,12 +47,11 @@ const Task: NextPage = () => {
   ) => {
     const list: Tag[] = employees
       ?.filter(
-        (employee) =>
-          !colaborators?.some((colab) => colab.id == employee.legajo)
+        (employee) => !colaborators?.some((colab) => colab.id == employee.id)
       )
       .map((employee) => ({
-        id: employee.legajo,
-        name: employee.Nombre + " " + employee.Apellido,
+        id: employee.id,
+        name: employee.name + " " + employee.lastname,
       }));
     return list;
   };

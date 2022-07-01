@@ -83,17 +83,19 @@ export const employeesFetch = async (url: string, request?: any) => {
     headers: {
       accept: "application/json",
     },
-  }).then((res) => res.json());
+  })
+    .then(checkStatus)
+    .then((res) => res.json());
 };
 
 export const useEmployees = () => {
   const { data, error, isValidating, ...rest } = useSWR(
-    "/resources/",
+    "/recursos/",
     employeesFetch
   );
   const loadingEmployee = !data && isValidating;
 
-  const employees = data as Employee[];
+  const employees = error ? [] : (data as Employee[]);
 
   return { employees, error, loadingEmployee, ...rest };
 };

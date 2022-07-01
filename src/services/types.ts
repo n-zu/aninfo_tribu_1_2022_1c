@@ -34,7 +34,7 @@ export type Options = {
 };
 
 export type Employee = {
-  legajo: number;
-  Nombre: string;
-  Apellido: string;
+  id: number;
+  name: string;
+  lastname: string;
 };
