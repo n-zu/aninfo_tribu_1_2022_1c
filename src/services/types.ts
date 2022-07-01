@@ -51,6 +51,17 @@ export type RegistroDeHoras = {
   fecha_trabajada: Date;
 };
 
+export type Registro = {
+  nombre_proyecto: string;
+  nombre_tarea: string;
+  nombre_recurso: string;
+  id_proyecto: string;
+  id_tarea: string;
+  id_recurso: string;
+  cantidad: number;
+  fecha_trabajada: Date;
+};
+
 export type Recurso = {
   id?: number;
   name?: string;
