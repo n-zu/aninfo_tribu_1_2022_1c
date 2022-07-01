@@ -11,7 +11,7 @@ export default function BoxSelector(
         label?:string, 
         defaultProject?: Project,
         defaultTask?: Task,
-        defaultRecurso?: Recurso        
+        defaultRecurso?: Recurso,
     }) {
     
     const [projectValue, setProjetc] = React.useState<Options | null>();
@@ -57,7 +57,7 @@ export default function BoxSelector(
       );
 };
 
-function Box(props: {
+export function Box(props: {
     options:Options[], 
     label:string,
     setValue: Function,
@@ -82,17 +82,17 @@ function Box(props: {
             onInputChange={(event, newInputValue) => {
                 props.setInputValue(newInputValue);
             } }
-            sx={{ width: 300 }}
+            sx={{ width: "100%" }}
             renderInput={(params) => <TextField {...params} label={props.defaultValue?.name}/>}
             getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} />
     </>);
 }
 
-function RecursoBox (props: {
+export function RecursoBox (props: {
     options:Recurso[], 
     label:string,
     setValue: Function,
-    defaultValue: Recurso | null,
+    defaultValue?: Recurso | null,
     setInputValue:Function,
     value:Recurso | null,
     inputValue:string,
@@ -114,7 +114,7 @@ function RecursoBox (props: {
             onInputChange={(event, newInputValue) => {
                 props.setInputValue(newInputValue);
             } }
-            sx={{ width: 300 }}
+            sx={{ width: "100%" }}
             renderInput={(params) => <TextField {...params} label={props.label}/>}
             getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + (option?.name??'') +" - " + option?.lastname??''} />
     </>);
