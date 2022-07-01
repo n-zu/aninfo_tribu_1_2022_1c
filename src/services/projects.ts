@@ -1,4 +1,4 @@
-import { projectsApi, projectsResourcesApi, rrhhApi, useSWR } from "./requests";
+import { projectsApi, rrhhApi, useSWR } from "./requests";
 import { Project, Task, Employee } from "./types";
 
 const saveHeaders = {
@@ -77,29 +77,6 @@ export const saveTask = async (
     }
   ).then(checkStatus);
 
-export const employeesFetch = async (url: string, request?: any) => {
-  return fetch(projectsResourcesApi + url, {
-    ...request,
-    headers: {
-      accept: "application/json",
-    },
-  })
-    .then(checkStatus)
-    .then((res) => res.json());
-};
-
-export const useEmployees = () => {
-  const { data, error, isValidating, ...rest } = useSWR(
-    "/recursos/",
-    employeesFetch
-  );
-  const loadingEmployee = !data && isValidating;
-
-  const employees = error ? [] : (data as Employee[]);
-
-  return { employees, error, loadingEmployee, ...rest };
-};
-
 export const deleteCollaborator = async (colabId: number, taskId: string) => {
   console.log("delete path: " + `/tasks/${taskId}/collaborators/${colabId}`);
   return await fetch(
@@ -130,13 +107,23 @@ const removeEmpty = <T>(object: T): T => {
 };
 
 export const rrhhFetch = async (url: string, request?: any) => {
-  return (
-    fetch(rrhhApi + url, {
-      ...request,
-    })
-      // .then(checkStatus)
-      .then((res) => res.json())
+  return fetch(rrhhApi + url, {
+    ...request,
+  })
+    .then(checkStatus)
+    .then((res) => res.json());
+};
+
+export const useEmployees = () => {
+  const { data, error, isValidating, ...rest } = useSWR(
+    "/recursos/",
+    rrhhFetch
   );
+  const loadingEmployee = !data && isValidating;
+
+  const employees = error ? [] : (data as Employee[]);
+
+  return { employees, error, loadingEmployee, ...rest };
 };
 
 // FIXME: Remove this when the API is ready
