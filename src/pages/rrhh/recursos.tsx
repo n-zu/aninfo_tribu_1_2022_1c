@@ -12,8 +12,7 @@ const Recursos: NextPage = () => {
     console.log(recursosData.recursos);
   return (
     <div className="page">
-        <h1>Recursos</h1>
-        <h2>Seleccione un recurso para cargar horas</h2>
+        <h1>Lista de Recursos</h1>
         {/*<RecursosList {...recursosData}/>*/}
         <ListRecursosBar
            label="recursos"

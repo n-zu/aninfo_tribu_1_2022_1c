@@ -10,7 +10,7 @@ const ModificacionHoras = (props: {registro: Registro}) => {
     const {task} = useTask(props.registro.id_tarea)
     const {recurso} = useRecurso(props.registro.id_recurso)
     const {projects} = useProjects()
-
+    console.log(project);
     return (
         <div className='page'>
             <h1>Modificación de horas</h1> 

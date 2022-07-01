@@ -17,45 +17,15 @@ import { Recurso } from '../../services/types';
 
 function Row(props: { row: Recurso }) {
   const { row } = props;
-  const [open, setOpen] = React.useState(false);
 
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
+        <TableCell align="center" component="th" scope="row">
+          {row.id}
         </TableCell>
-        <TableCell component="th" scope="row">
-          {row.name}
-        </TableCell>
-        <TableCell align="right">{row.name}</TableCell>
-        <TableCell align="right">{row.lastname}</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Descripcion
-              </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Año Ingreso</TableCell>
-                    <TableCell>Personalidad</TableCell>
-                  </TableRow>
-                </TableHead>
-                
-              </Table>
-            </Box>
-          </Collapse>
-        </TableCell>
+        <TableCell align="center">{row.name}</TableCell>
+        <TableCell align="center">{row.lastname}</TableCell>
       </TableRow>
     </React.Fragment>
   );
@@ -68,14 +38,13 @@ export default function
     loading: boolean;
   }){
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{width: "100%", justifyContent: "center"}}>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
-            <TableCell />
-            <TableCell>Legajo</TableCell>
-            <TableCell align="right">Nombre</TableCell>
-            <TableCell align="right">Apellido</TableCell>
+            <TableCell align="center">Legajo</TableCell>
+            <TableCell align="center">Nombre</TableCell>
+            <TableCell align="center">Apellido</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

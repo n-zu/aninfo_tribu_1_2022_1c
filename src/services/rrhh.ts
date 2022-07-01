@@ -7,8 +7,13 @@ const saveHeaders = {
 };
 const header = new Headers({ "Access-Control-Allow-Origin": "*" });
 
+const checkStatus = (res: Response) => {
+  if (!res.ok) throw new Error(res.statusText);
+  return res;
+};
+
 export const rrhhFetch = async (url: string, request?: any) => {
-  {console.log(rrhhApi + url)}
+  
   return await fetch(rrhhApi + url,{
     header: header,
     ...request,
@@ -82,3 +87,10 @@ const removeEmpty = <T>(object: T): T => {
     ])
   ) as T;
 };
+
+export const saveRegistro = async (registro: Registro) =>
+  await fetch(`${rrhhApi}/rrhh/`, {
+    method:"POST",
+    headers: saveHeaders,
+    body: JSON.stringify(removeEmpty(registro)),
+  }).then(checkStatus);
