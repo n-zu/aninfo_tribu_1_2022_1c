@@ -4,7 +4,7 @@ import { capitalize } from "../../util/util";
 const getColor = (state: string) => {
   if (state.startsWith("cancelad")) return colors.orange[600];
   if (state.startsWith("bloquead")) return colors.red[600];
-  if (state.startsWith("iniciad")) return colors.green[600];
+  if (state.startsWith("finalizad")) return colors.green[600];
   if (state === "en progreso") return colors.blue[600];
   return colors.grey[600];
 };

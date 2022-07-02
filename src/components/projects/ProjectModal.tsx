@@ -10,7 +10,7 @@ import { capitalize } from "../../util/util";
 export const PROJECT_STATES = [
   "cancelado",
   "bloqueado",
-  "iniciado",
+  "en progreso",
   "finalizado",
   "sin iniciar",
 ];
