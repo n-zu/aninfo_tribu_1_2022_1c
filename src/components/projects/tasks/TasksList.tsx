@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { Task } from "../../../services/types";
-import InfoCard from "../../common/Card";
+import InfoCard from "../Card";
 import Loading from "../../common/Loading";
 import Caption from "../../common/Caption";
 import Alert from "@mui/material/Alert";

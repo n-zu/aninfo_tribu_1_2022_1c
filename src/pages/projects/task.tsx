@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import AutoComplete from "../../components/common/AutoComplete";
 import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
+import StateChip from "../../components/projects/StateChip";
 
 import styles from "../../styles/Project.module.css";
 
@@ -116,9 +117,18 @@ const Task: NextPage = () => {
                   </Typography>
                 </a>
               </Link>
-              <Typography variant="h4">
-                {zeroPad(task?.id ?? 0)} - {task?.name}
-              </Typography>
+
+              <Box
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="h4" style={{ marginRight: "15px" }}>
+                  {zeroPad(task?.id ?? 0)} - {task?.name}
+                </Typography>
+                <StateChip state={task?.state} />
+              </Box>
             </div>
             <Button
               variant="contained"

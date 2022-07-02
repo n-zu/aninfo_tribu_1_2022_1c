@@ -10,7 +10,6 @@ import { capitalize } from "../../../util/util";
 export const TASK_STATES = [
   "cancelada",
   "bloqueada",
-  "iniciada",
   "en progreso",
   "finalizada",
   "sin iniciar",

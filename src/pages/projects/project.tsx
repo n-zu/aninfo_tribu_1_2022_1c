@@ -11,6 +11,7 @@ import { Task } from "../../services/types";
 import Loading from "../../components/common/Loading";
 import ProjectModal from "../../components/projects/ProjectModal";
 import TitledText from "../../components/common/TitledText";
+import StateChip from "../../components/projects/StateChip";
 
 import styles from "../../styles/Project.module.css";
 
@@ -66,12 +67,21 @@ const Project: NextPage = () => {
               justifyContent: "space-between",
             }}
           >
-            <Typography
-              variant="h4"
-              className={lastTask ? styles.ProjectTitle : ""}
+            <Box
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
             >
-              {zeroPad(project?.id ?? 0)} - {project?.name}
-            </Typography>
+              <Typography
+                variant="h4"
+                className={lastTask ? styles.ProjectTitle : ""}
+                style={{ marginRight: "15px" }}
+              >
+                {zeroPad(project?.id ?? 0)} - {project?.name}
+              </Typography>
+              <StateChip state={project?.state} />
+            </Box>
             <Button
               variant="contained"
               color="primary"

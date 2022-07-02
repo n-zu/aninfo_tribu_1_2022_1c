@@ -1,6 +1,6 @@
 import { Project, Task, EmployeeId } from "../../services/types";
 import styles from "./Projects.module.css";
-import InfoCard from "../common/Card";
+import InfoCard from "./Card";
 import Loading from "../common/Loading";
 import { Typography, Box } from "@mui/material";
 import Caption from "../common/Caption";

@@ -1,4 +1,4 @@
-import styles from "./Card.module.css";
+import styles from "../common/Card.module.css";
 import Link from "next/link";
 import { Project, Task } from "../../services/types";
 import { zeroPad, dateDiff, pluralize } from "../../util/util";
@@ -10,6 +10,7 @@ import {
   Box,
   Tooltip,
 } from "@mui/material";
+import StateChip from "./StateChip";
 
 const InfoCard = ({
   info,
@@ -34,14 +35,23 @@ const InfoCard = ({
         <Card style={{ padding: 0 }}>
           <CardActionArea>
             <CardContent>
-              <Typography
-                variant="h6"
-                component="h4"
-                style={{ fontWeight: 700, textOverflow: "ellipsis" }}
-                noWrap
+              <Box
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
               >
-                {zeroPad(info?.id ?? 0)} - {info.name}
-              </Typography>
+                <Typography
+                  variant="h6"
+                  component="h4"
+                  style={{ fontWeight: 700, textOverflow: "ellipsis" }}
+                  noWrap
+                >
+                  {zeroPad(info?.id ?? 0)} - {info.name}
+                </Typography>
+                <StateChip state={info.state} />
+              </Box>
               <Box
                 style={{
                   display: "flex",
