@@ -1,5 +1,5 @@
+import { useState, useMemo } from "react";
 import type { NextPage } from "next";
-import { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { useTask, useTaskTRs } from "../../services/projects";
 import { useRouter } from "next/router";
@@ -10,7 +10,7 @@ import TitledText from "../../components/common/TitledText";
 import Link from "next/link";
 import StateChip from "../../components/projects/StateChip";
 import styles from "../../styles/Project.module.css";
-import Collaborators from "../../components/projects/Collaborators";
+import Collaborators from "../../components/projects/tasks/Collaborators";
 
 const Task: NextPage = () => {
   const router = useRouter();
@@ -22,6 +22,14 @@ const Task: NextPage = () => {
   const onHours = () => {
     console.log("Cargar horas");
   };
+
+  const worked_hours = useMemo(() => {
+    if (!task?.estimated_hours) return `${totalTime} (no hay estimación)`;
+
+    return `${totalTime} (${((totalTime / task?.estimated_hours) * 100).toFixed(
+      0
+    )}% de las estimadas)`;
+  }, [totalTime, task?.estimated_hours]);
 
   return (
     <div className="page">
@@ -83,11 +91,7 @@ const Task: NextPage = () => {
                 <TitledText title="Horas estimadas">
                   {task?.estimated_hours}
                 </TitledText>
-                <TitledText title="Horas Trabajadas">
-                  {totalTime} ({" "}
-                  {((totalTime / task?.estimated_hours) * 100).toPrecision(2)} %
-                  )
-                </TitledText>
+                <TitledText title="Horas Trabajadas">{worked_hours}</TitledText>
               </Box>
               <TitledText title="Descripción">{task?.description}</TitledText>
             </div>

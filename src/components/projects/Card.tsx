@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import styles from "../common/Card.module.css";
 import Link from "next/link";
 import { Project, Task } from "../../services/types";
-import { zeroPad, dateDiff, pluralize } from "../../util/util";
+import { zeroPad } from "../../util/util";
 import {
   Card,
   CardActionArea,

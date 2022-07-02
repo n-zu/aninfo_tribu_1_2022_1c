@@ -1,12 +1,12 @@
 import { Typography, Chip, Avatar } from "@mui/material";
-import AutoComplete from "../../components/common/AutoComplete";
+import AutoComplete from "../../common/AutoComplete";
 import AddIcon from "@mui/icons-material/Add";
-import { Task, Employee, EmployeeId } from "../../services/types";
+import { Task, Employee, EmployeeId } from "../../../services/types";
 import {
   useEmployees,
   deleteCollaborator,
   addCollaborator,
-} from "../../services/projects";
+} from "../../../services/projects";
 import { toast } from "react-toastify";
 
 type Props = {

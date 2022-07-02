@@ -6,6 +6,7 @@ import { saveProject } from "../../services/projects";
 import { toast } from "react-toastify";
 import { Project } from "../../services/types";
 import { capitalize } from "../../util/util";
+import FinishedWarning from "./FinishedWarning";
 
 // el orden en el que aparecen los estados acá
 // se usa para ordenarlos en la lista
@@ -79,7 +80,7 @@ const ProjectModal = ({ open, onClose, onSave, project }: Props) => {
         validate={validate}
         onSubmit={onSubmit}
       >
-        {({ setFieldValue }) => (
+        {({ setFieldValue, values }) => (
           <Form>
             <div>
               <FormField name="name" label="Nombre" />
@@ -105,6 +106,7 @@ const ProjectModal = ({ open, onClose, onSave, project }: Props) => {
               />
             </div>
             <br />
+            <FinishedWarning tasks={project?.tasks} state={values?.state} />
             <Button variant="contained" color="primary" type="submit">
               Guardar Proyecto
             </Button>
