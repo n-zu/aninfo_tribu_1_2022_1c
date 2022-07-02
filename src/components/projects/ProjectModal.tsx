@@ -27,6 +27,7 @@ const ProjectModal = ({ open, onClose, onSave, project }: Props) => {
 
   const initialValues = {
     name: project?.name ?? "",
+    state: project?.state ?? null,
     initial_date: project?.initial_date ?? "",
     final_date: project?.final_date ?? "",
     description: project?.description ?? "",
@@ -35,6 +36,7 @@ const ProjectModal = ({ open, onClose, onSave, project }: Props) => {
   const validate = (values: any) => {
     const errors: any = {};
     if (!values.name) errors.name = "Requerido";
+    if (!values.state) errors.state = "Requerido";
     if (!values.initial_date) errors.initial_date = "Requerido";
     if (!values.final_date) errors.final_date = "Requerido";
     if (values.final_date < values.initial_date)
