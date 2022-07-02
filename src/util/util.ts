@@ -24,6 +24,10 @@ export const pluralize = (noun: string, count?: number, suffix:string = "s") => 
   return `${count} ${noun}${count !== 1 ? suffix : ''}`;
 }
 
+export const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export const routeToRegistro = (id : number | null, router : NextRouter) => {
   if (!id) return;
   router.push("/rrhh/registro?id=" + id);

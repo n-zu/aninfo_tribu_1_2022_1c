@@ -1,5 +1,5 @@
 import { Field, ErrorMessage } from "formik";
-import { TextField, Select, TextFieldProps, SelectProps } from "@mui/material";
+import { TextField, Autocomplete as AutoMui } from "@mui/material";
 import styles from "./FormField.module.css";
 
 type Props = {
@@ -8,13 +8,10 @@ type Props = {
   placeholder?: string;
   type?: string;
   datalistOptions?: string[];
-  selectOptions?: {
-    id: string;
-    name: string;
-  }[];
   multiline?: boolean;
-} & TextFieldProps &
-  SelectProps;
+  setFieldValue?: (name: string, value: any) => void;
+  [x: string]: any;
+};
 
 const FormField = ({
   label,
@@ -22,27 +19,23 @@ const FormField = ({
   placeholder,
   type,
   datalistOptions,
-  selectOptions,
+  setFieldValue,
   ...rest
 }: Props) => {
+  if (type == "date") rest.InputLabelProps = { shrink: true };
+  if (type == "autocomplete") rest.setFieldValue = setFieldValue;
+
   const field = (
     <Field
       name={name}
       type={type ?? "text"}
       placeholder={placeholder}
       list={datalistOptions && `${name}-datalist`}
-      as={type === "select" || selectOptions ? Select : TextField}
+      as={type === "autocomplete" ? AutoComplete : TextField}
       className={styles.Field}
       label={label ?? name}
-      InputLabelProps={type === "date" ? { shrink: true } : undefined}
       {...rest}
-    >
-      {selectOptions?.map(({ id, name }, i) => (
-        <option key={i} value={id}>
-          {name}
-        </option>
-      ))}
-    </Field>
+    />
   );
 
   const datalist = datalistOptions && (
@@ -61,6 +54,16 @@ const FormField = ({
 
       {datalist}
     </div>
+  );
+};
+
+const AutoComplete = ({ setFieldValue, ...params }: any) => {
+  return (
+    <AutoMui
+      renderInput={(props) => <TextField label={params.label} {...props} />}
+      {...params}
+      onChange={(_, value) => setFieldValue(params.name, value)}
+    />
   );
 };
 

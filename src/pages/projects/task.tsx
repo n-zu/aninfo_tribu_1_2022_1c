@@ -160,7 +160,7 @@ const Task: NextPage = () => {
               </Typography>
               <div style={{ marginTop: 10, marginBottom: 10, width: "50%" }}>
                 <AutoComplete
-                  label="agregar colaborador"
+                  label="Agregar colaborador"
                   options={employeeList}
                   routeFunction={onAddColab}
                   icon={<AddIcon />}

@@ -4,6 +4,7 @@ export type EmployeeId = {
 
 export type Task = {
   id?: number;
+  state: string;
   name: string;
   description: string;
   project: {
@@ -19,6 +20,7 @@ export type Task = {
 
 export type Project = {
   id?: number;
+  state: string;
   name: string;
   initial_date: string;
   final_date: string;

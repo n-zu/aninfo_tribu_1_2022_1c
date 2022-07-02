@@ -5,6 +5,16 @@ import { Button, Typography } from "@mui/material";
 import { saveProject } from "../../services/projects";
 import { toast } from "react-toastify";
 import { Project } from "../../services/types";
+import { capitalize } from "../../util/util";
+
+export const PROJECT_STATES = [
+  "cancelado",
+  "bloqueado",
+  "iniciado",
+  "en progreso",
+  "finalizado",
+  "sin iniciar",
+];
 
 type Props = {
   open: boolean;
@@ -66,10 +76,18 @@ const ProjectModal = ({ open, onClose, onSave, project }: Props) => {
         validate={validate}
         onSubmit={onSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ setFieldValue }) => (
           <Form>
             <div>
               <FormField name="name" label="Nombre" />
+              <FormField
+                name="state"
+                label="Estado"
+                type="autocomplete"
+                options={PROJECT_STATES}
+                getOptionLabel={capitalize}
+                setFieldValue={setFieldValue}
+              />
               <FormField
                 name="initial_date"
                 type="date"
