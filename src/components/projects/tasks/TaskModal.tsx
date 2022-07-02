@@ -45,8 +45,10 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
     if (!values.final_date) errors.final_date = "Requerido";
     if (values.final_date < values.initial_date)
       errors.final_date =
-        "La fecha de finalizacicharAtón debe ser mayor a la de inicio";
+        "La fecha de finalización debe ser mayor a la de inicio";
     if (!values.description) errors.description = "Requerido";
+    if (values.estimated_hours && values.estimated_hours < 0)
+      errors.estimated_hours = "Debe ser mayor o igual a 0";
     return errors;
   };
 

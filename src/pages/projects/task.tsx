@@ -1,92 +1,26 @@
 import type { NextPage } from "next";
 import { useState } from "react";
-import { Box, Typography, Button, Chip, Avatar } from "@mui/material";
-import {
-  useTask,
-  useEmployees,
-  deleteCollaborator,
-  addCollaborator,
-  useTaskTRs,
-} from "../../services/projects";
+import { Box, Typography, Button } from "@mui/material";
+import { useTask, useTaskTRs } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
 import Loading from "../../components/common/Loading";
 import TaskModal from "../../components/projects/tasks/TaskModal";
 import TitledText from "../../components/common/TitledText";
-import { Employee, EmployeeId } from "../../services/types";
-import { toast } from "react-toastify";
-import AutoComplete from "../../components/common/AutoComplete";
-import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
 import StateChip from "../../components/projects/StateChip";
-
 import styles from "../../styles/Project.module.css";
-
-type Tag = {
-  id: number;
-  name: string;
-};
+import Collaborators from "../../components/projects/Collaborators";
 
 const Task: NextPage = () => {
   const router = useRouter();
   const taskId = router?.query?.id as string;
   const { task, error, loading, mutate } = useTask(taskId);
   const [open, setOpen] = useState(false);
-  const { employees } = useEmployees();
   const { totalTime } = useTaskTRs(parseInt(taskId));
 
-  const getEmployeeNameById = (id: number) => {
-    const employee = employees?.find((employee: Employee) => {
-      return employee.id === id;
-    });
-    return employee?.name + " " + employee?.lastname;
-  };
-
-  const getEmployeeList = (
-    colaborators: EmployeeId[],
-    employees: Employee[]
-  ) => {
-    const list: Tag[] = employees
-      ?.filter(
-        (employee) => !colaborators?.some((colab) => colab.id == employee.id)
-      )
-      .map((employee) => ({
-        id: employee.id,
-        name: employee.name + " " + employee.lastname,
-      }));
-    return list;
-  };
-
-  const employeeList = getEmployeeList(task?.collaborators, employees);
-
   const onHours = () => {
-    console.log(employees);
-  };
-
-  const onDeleteColab = async (id: number) => {
-    if (!id) return;
-    console.log("delete " + id);
-    try {
-      await deleteCollaborator(id, taskId);
-      toast.success("Colaborador eliminado correctamente");
-      mutate();
-    } catch (e) {
-      console.error(e);
-      toast.error("Error al eliminar colaborador");
-    }
-  };
-
-  const onAddColab = async (id: number) => {
-    console.log("add " + id);
-    if (!id) return;
-    try {
-      await addCollaborator(id, taskId);
-      toast.success("Colaborador agregado correctamente");
-      mutate();
-    } catch (e) {
-      console.error(e);
-      toast.error("Error al agregar colaborador");
-    }
+    console.log("Cargar horas");
   };
 
   return (
@@ -157,42 +91,7 @@ const Task: NextPage = () => {
               </Box>
               <TitledText title="Descripción">{task?.description}</TitledText>
             </div>
-            <div
-              style={{
-                width: "100%",
-                padding: 2,
-                marginTop: 20,
-                marginBottom: 20,
-              }}
-            >
-              <Typography variant="overline" style={{ lineHeight: "normal" }}>
-                Colaboradores
-              </Typography>
-              <div style={{ marginTop: 10, marginBottom: 10, width: "50%" }}>
-                <AutoComplete
-                  label="Agregar colaborador"
-                  options={employeeList}
-                  routeFunction={onAddColab}
-                  icon={<AddIcon />}
-                />
-              </div>
-              <div>
-                {task?.collaborators?.map(
-                  (colab: EmployeeId, index: number) => {
-                    const name = getEmployeeNameById(colab.id);
-                    return (
-                      <Chip
-                        key={index}
-                        label={name}
-                        onDelete={() => onDeleteColab(colab.id)}
-                        avatar={<Avatar>{name[0].toUpperCase()}</Avatar>}
-                        style={{ margin: "2px" }}
-                      />
-                    );
-                  }
-                )}
-              </div>
-            </div>
+            {task ? <Collaborators task={task} mutate={mutate} /> : null}
             <div>
               <Button
                 variant="contained"
