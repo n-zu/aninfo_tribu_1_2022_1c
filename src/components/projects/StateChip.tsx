@@ -25,7 +25,6 @@ const StateChip = ({ state }: Props) => {
       size="small"
     />
   );
-  s;
 };
 
 export default StateChip;
