@@ -7,12 +7,14 @@ import { toast } from "react-toastify";
 import { Task } from "../../../services/types";
 import { capitalize } from "../../../util/util";
 
+// el orden en el que aparecen los estados acá
+// se usa para ordenarlos en la lista
 export const TASK_STATES = [
-  "cancelada",
   "bloqueada",
   "en progreso",
-  "finalizada",
   "sin iniciar",
+  "finalizada",
+  "cancelada",
 ];
 
 type Props = {

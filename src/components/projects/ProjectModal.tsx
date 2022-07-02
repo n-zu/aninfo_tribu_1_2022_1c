@@ -7,12 +7,14 @@ import { toast } from "react-toastify";
 import { Project } from "../../services/types";
 import { capitalize } from "../../util/util";
 
+// el orden en el que aparecen los estados acá
+// se usa para ordenarlos en la lista
 export const PROJECT_STATES = [
-  "cancelado",
   "bloqueado",
   "en progreso",
-  "finalizado",
   "sin iniciar",
+  "finalizado",
+  "cancelado",
 ];
 
 type Props = {

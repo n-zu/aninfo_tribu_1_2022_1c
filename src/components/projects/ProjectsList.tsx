@@ -6,6 +6,7 @@ import { Typography, Box } from "@mui/material";
 import Caption from "../common/Caption";
 import { pluralize } from "../../util/util";
 import Alert from "@mui/material/Alert";
+import { PROJECT_STATES } from "./ProjectModal";
 
 type ProjectsListProps = {
   projects: Project[];
@@ -23,7 +24,7 @@ const ProjectsList = ({ projects, error, loading }: ProjectsListProps) => {
         </Alert>
       ) : null}
       <div className={styles.ProjectsList + " flexContainer"}>
-        {projects?.map((project: Project, i: number) => (
+        {projects?.sort(sortFn).map((project: Project, i: number) => (
           <InfoCard key={i} info={project} link="/projects/project?id=">
             <Box
               style={{
@@ -46,5 +47,9 @@ const ProjectsList = ({ projects, error, loading }: ProjectsListProps) => {
     </>
   );
 };
+
+function sortFn(a: Project, b: Project) {
+  return PROJECT_STATES.indexOf(a.state) - PROJECT_STATES.indexOf(b.state);
+}
 
 export default ProjectsList;

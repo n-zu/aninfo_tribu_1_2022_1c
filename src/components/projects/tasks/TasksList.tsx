@@ -6,6 +6,7 @@ import Caption from "../../common/Caption";
 import Alert from "@mui/material/Alert";
 import styles from "../Projects.module.css";
 import { pluralize } from "../../../util/util";
+import { TASK_STATES } from "./TaskModal";
 
 type TasksListProps = {
   tasks: Task[];
@@ -23,7 +24,7 @@ const TasksList = ({ tasks, error, loading }: TasksListProps) => {
         </Alert>
       ) : null}
       <div className={styles.TasksList + " flexContainer"}>
-        {tasks?.map((task: Task, i: number) => (
+        {tasks?.sort(sortFn).map((task: Task, i: number) => (
           <InfoCard key={i} info={task} link="/projects/task?id=">
             <Box
               style={{
@@ -47,5 +48,9 @@ const TasksList = ({ tasks, error, loading }: TasksListProps) => {
     </>
   );
 };
+
+function sortFn(a: Task, b: Task) {
+  return TASK_STATES.indexOf(a.state) - TASK_STATES.indexOf(b.state);
+}
 
 export default TasksList;
