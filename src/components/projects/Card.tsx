@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import styles from "../common/Card.module.css";
 import Link from "next/link";
 import { Project, Task } from "../../services/types";
@@ -10,7 +11,12 @@ import {
   Box,
   Tooltip,
 } from "@mui/material";
+import relativeTime from "dayjs/plugin/relativeTime";
+import dayjs from "dayjs";
+import es from "dayjs/locale/es";
 import StateChip from "./StateChip";
+
+dayjs.extend(relativeTime);
 
 const InfoCard = ({
   info,
@@ -21,13 +27,12 @@ const InfoCard = ({
   link: string;
   children?: React.ReactNode;
 }) => {
-  let daysToEnd = dateDiff(new Date(info.final_date), new Date());
-
-  let finishString = "";
-  if (daysToEnd > 0) finishString = `${pluralize("día", daysToEnd)} restantes`;
-  else if (daysToEnd < 0)
-    finishString = `finalizado hace ${pluralize("día", Math.abs(daysToEnd))}`;
-  else finishString = "finaliza hoy";
+  const finishString = useMemo(() => {
+    const today = new Date();
+    const prefix =
+      today.toISOString() > info.final_date ? "finalizado " : "finaliza ";
+    return prefix + dayjs(info.final_date).locale(es).from(today);
+  }, [info.final_date]);
 
   return (
     <Link href={link + info?.id}>
