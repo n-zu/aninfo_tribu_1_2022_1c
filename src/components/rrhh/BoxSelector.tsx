@@ -38,7 +38,8 @@ export default function BoxSelector(
     return (
         <>
         <h3>Seleccionar Proyecto</h3>
-        <Box options = {props.options} 
+        <Box 
+        options = {props.options} 
         label={"Proyectos"}
         defaultValue={props.defaultProject ?? null}
         setValue= {setProjetc}

@@ -2,6 +2,7 @@ import { Typography } from "@mui/material";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Loading from "../../components/common/Loading";
+import { CargaHoras } from "../../components/rrhh/Prueba";
 import ModificacionHoras from "../../components/rrhh/ModificacionHoras";
 import { useRecursos, useRegistro, useRegistrosDeHoras } from "../../services/rrhh";
 
@@ -48,7 +49,10 @@ const RegistroHoras: NextPage = () => {
         </div>
       }  */}
         {
-          registro && <ModificacionHoras registro={registro}/>
+          // registro && <ModificacionHoras registro={registro}/>
+        }
+        {
+          <CargaHoras registro={registro} />
         }
        </div>
     );

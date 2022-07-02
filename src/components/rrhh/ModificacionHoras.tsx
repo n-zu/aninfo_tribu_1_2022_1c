@@ -7,7 +7,6 @@ import { Autocomplete, Button, TextField } from '@mui/material'
 import { zeroPad } from '../../util/util';
 import { Form, Formik } from 'formik'
 import FormField from '../common/Form/FormField'
-import { toast } from 'react-toastify'
 import { useRouter } from "next/router";
 
 const ModificacionHoras = (props: {registro: Registro}) => {
@@ -15,53 +14,69 @@ const ModificacionHoras = (props: {registro: Registro}) => {
     const {project} = useProject(props.registro.id_proyecto)
     const {task} = useTask(props.registro.id_tarea)
     const {recurso} = useRecurso(props.registro.id_recurso)
-    const {projects} = useProjects()
+    const projects = useProjects()
+
+    const [projectValue, setProjetc] = useState<Options | null>();
+    const [inputProject, setInputProject] = useState('');
 
     const router = useRouter();
     const registroId = router?.query?.id as string;
 
     const initialValues = {
+        proyecto: null,
+        recurso: null,
         fecha: props.registro.fecha_trabajada,
         cantidad_horas: props.registro.cantidad,
     };
     
     const validate = (values: any) => {
     const errors: any = {};
+    if (!values.recurso) errors.recurso = "Requerido";
     if (!values.fecha) errors.fecha = "Requerido";
+    if (!values.cantidad_horas) errors.cantidad_horas = "Requerido";
     return errors;
     };
 
     const onSubmit = async (values: any) => {
     try {
-        // console.log(props.registro)
-        // console.log(values)
         await updateRegistro(values, registroId);
-        toast.success("Proyecto guardado correctamente");
     } catch (e) {
         console.error(e);
-        toast.error("Error al guardar proyecto");
     }
     };
 
+    // console.log(initialValues.proyecto)
+
     return (
         <div className='page'>
-            <h1>Modificación de horas</h1> 
-            <BoxSelector 
-                label={"Proyecto"} 
-                options={projects}
-                defaultProject={project}
-                defaultTask={task}
-                defaultRecurso={recurso}
-            />
 
         <Formik
             initialValues={initialValues}
             validate={validate}
             onSubmit={onSubmit}
             >
-            {({ isSubmitting }) => (
+            {({ handleChange, values, setFieldValue }) => (
             <Form>
                 <div>           
+                    <h3>Seleccionar Proyecto</h3>
+                    <Autocomplete
+                    options={projects.projects as Options[]}
+                    getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} 
+                    onChange={(event, newOption) => {
+                        setFieldValue("proyecto", newOption);
+                    } }
+                    renderInput={(params) => (
+                    <TextField 
+                        {...params} 
+                        onChange={handleChange}
+                        margin="normal"
+                        label="Proyecto"
+                        fullWidth
+                        value={values?.proyecto}
+                    />
+                    )}
+                    />                  
+
                     <h3>Seleccionar fecha</h3>
                     <FormField
                     name="fecha"
@@ -169,8 +184,8 @@ function Box(props: {
             id="controllable-states-demo"
             value={props.value ?? undefined}
             defaultValue={props.defaultValue ?? undefined}
-            disabled = {(props.options?.length === 0 && props.disabled)? true: false}
             options={props.options}
+            disabled = {(props.options?.length === 0 && props.disabled)? true: false}
             onChange={(event: any, newOption: Options | null | undefined) => {
                 props.setValue(newOption);
             } }
