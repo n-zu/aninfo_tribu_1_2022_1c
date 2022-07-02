@@ -1,10 +1,10 @@
-import { Chip, Container, Typography, colors, Divider, Box, Stack, TextField, Button, FormLabel, Select, MenuItem } from "@mui/material";
+import { Chip, Container, Typography, Divider, Box, Stack, TextField, Button, FormLabel, Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 import { Field, Form, Formik } from "formik";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { FunctionComponent } from "react";
-import { State } from "../../../services/support/types";
+import { State } from "@services/support/types";
 
 const ticket = {
     id: 1,

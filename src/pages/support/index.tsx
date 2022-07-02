@@ -1,57 +1,43 @@
-import type { NextPage } from "next";
-import { State, TicketSummary } from "../../services/support/types";
-import NextLink from "next/link"
-import dayjs from "dayjs";
-import es from "dayjs/locale/es"
-import relativeTime from "dayjs/plugin/relativeTime"
-import { Card, CardContent, Chip, Divider, Stack, Typography, colors, Box, Container, ButtonBase, Button } from "@mui/material";
+import { NextPage } from "next";
+import Link from 'next/link';
+import { Button, Card, CardActions, CardContent, Container, Typography } from "@mui/material";
+import useSWR from "swr";
 
-const tickets: TicketSummary[] = [
-  {
-    id: 1,
-    title: "ERP PSA",
-    state: State.ABIERTO,
-    expirationDate: dayjs("2022-6-25").locale(es),
-    priority: "Alto",
-    severity: "S1"
-  }
-];
+const supportFetcher = (resource: string) => fetch('https://squad320221c-production.up.railway.app' + resource).then(res => res.json())
 
-dayjs.extend(relativeTime)
+type ProjectVersion = {
+  id: number,
+  name: string
+}
 
-const TicketCard = ({ id, title, expirationDate: expiration, priority, severity }: TicketSummary) => (
-  <NextLink href={`/support/${id}`} passHref>
-    <ButtonBase sx={{ width: "100%" }}>
-      <Card sx={{ width: "100%" }}>
+type Project = {
+  id: number,
+  name: string,
+  versions: ProjectVersion[]
+}
+
+const SupportProject: NextPage = () => {
+  const { data, error } = useSWR<Project[]>('/products', supportFetcher);
+
+  return <Container className="page">
+    <h1>Proyectos</h1>
+
+    {data?.map(product => (
+      <Card key={product.id} style={{ marginTop: "1em" }}>
         <CardContent>
-          <Box>
-            <Stack direction="row" justifyContent="space-between">
-              <Typography>{title}</Typography>
-              <Chip label="Abierto" sx={{ backgroundColor: colors.blue[600], color: "white" }} />
-            </Stack>
-          </Box>
-
-          <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem />}>
-            <Typography>{dayjs() < expiration ? "Vence" : "Venció"} {expiration.fromNow(false)}</Typography>
-            <Typography>Prioridad: {priority}</Typography>
-            <Typography>Severidad: {severity}</Typography>
-          </Stack>
+          <Typography variant="h6">{product.name}</Typography>
         </CardContent>
+        <CardActions>
+          {product.versions.map(version => (
+            <Link key={version.id} href={`/support/${version.id}/tickets`}>
+              <Button>{version.name}</Button>
+            </Link>
+          ))}
+        </CardActions>
       </Card>
-    </ButtonBase>
-  </NextLink>
-)
+    ))}
 
-const SupportHome: NextPage = () => {
+  </Container>
+}
 
-  return (
-    <Container className="page">
-      <h1>Tickets de soporte</h1>
-      {tickets.map((ticket) =>
-        <TicketCard key={ticket.id} {...ticket} />
-      )}
-    </Container >
-  );
-};
-
-export default SupportHome;
+export default SupportProject;

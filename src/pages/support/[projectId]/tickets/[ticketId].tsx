@@ -3,9 +3,7 @@ import dayjs from "dayjs";
 import es from "dayjs/locale/es";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { State, Ticket } from "../../../services/support/types";
-import { AiOutlineEdit } from "react-icons/ai"
-import NextLink from "next/link";
+import { State, Ticket } from "@services/support/types";
 
 const ticket: Ticket = {
     id: 1,
@@ -25,20 +23,13 @@ const ticket: Ticket = {
 
 const TicketScreen: NextPage = () => {
     const router = useRouter();
-    const { id } = router.query;
+    const { projectId, ticketId } = router.query;
 
     return (
         <Container className="page" >
             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <h1>#{id} {ticket.title}</h1>
-                <Stack direction="row" alignItems="center" spacing={3}>
-                    <Chip label="Abierto" sx={{ backgroundColor: colors.blue[600], color: "white", padding: "0 1em" }} />
-                    <NextLink href={`/support/${id}/edit`} passHref>
-                        <Link>
-                            <AiOutlineEdit size={25} />
-                        </Link>
-                    </NextLink>
-                </Stack>
+                <h1>#{ticketId} {ticket.title}</h1>
+                <Chip label="Abierto" sx={{ backgroundColor: colors.blue[600], color: "white", padding: "0 1em" }} />
             </Stack>
 
             <Stack direction="row">
