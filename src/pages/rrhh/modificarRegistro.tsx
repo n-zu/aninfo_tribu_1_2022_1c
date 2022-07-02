@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Loading from "../../components/common/Loading";
 import ModificacionHoras from "../../components/rrhh/ModificacionHoras";
-import { CargaHoras } from "../../components/rrhh/Prueba";
 import { useRegistro } from "../../services/rrhh";
 
 
