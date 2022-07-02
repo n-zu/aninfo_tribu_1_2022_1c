@@ -24,8 +24,6 @@ const TicketCard = ({ id, title, expirationDate: expiration, priority, severity 
   const router = useRouter();
   const { projectId } = router.query;
 
-  console.log(projectId)
-
   return <NextLink href={`/support/${projectId}/tickets/${id}`} passHref>
     <ButtonBase sx={{ width: "100%" }}>
       <Card sx={{ width: "100%" }}>
