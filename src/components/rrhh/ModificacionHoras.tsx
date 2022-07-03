@@ -12,7 +12,6 @@ import { toast } from 'react-toastify';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-
 const validationSchema = yup.object({
     nombre_proyecto: yup
     .string()
