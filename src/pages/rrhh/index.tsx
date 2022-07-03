@@ -49,11 +49,18 @@ const Home: NextPage = () => {
                   //@ts-ignore
                   project_id: cargarEn?.split("-")[0],
                   //@ts-ignore
-                  task_id: cargarEn?.split("-")[1],
+                  project_name: cargarEn?.split("-")[1],
+                  //@ts-ignore
+                  task_id: cargarEn?.split("-")[2],
+                  //@ts-ignore
+                  task_name: cargarEn?.split("-")[3],
                 }
               : {}
           }
-          onClose={() => setOpen(false)}
+          onClose={() => {
+            setOpen(false);
+            router.replace("/rrhh", undefined, { shallow: true });
+          }}
           onSave={registrosData?.mutate}
         />
       </div>

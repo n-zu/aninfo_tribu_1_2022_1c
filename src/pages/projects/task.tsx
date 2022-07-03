@@ -107,7 +107,16 @@ const Task: NextPage = () => {
             </Box>
             <div>
               <Link
-                href={"/rrhh?cargarEn=" + task?.project?.id + "-" + task?.id}
+                href={
+                  "/rrhh?cargarEn=" +
+                  task?.project?.id +
+                  "-" +
+                  task?.project?.name +
+                  "-" +
+                  task?.id +
+                  "-" +
+                  task?.name
+                }
                 style={
                   !task?.project?.id || !task?.id
                     ? {

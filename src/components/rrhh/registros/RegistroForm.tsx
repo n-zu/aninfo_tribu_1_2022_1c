@@ -34,14 +34,30 @@ export default function RegistroForm(props: {
   onClose?: Function;
   setDisabled?: Function;
   defaultValues: {
-    project: number;
-    task: number;
+    project_id: number;
+    project_name: string;
+    task_id: number;
+    task_name: string;
   };
 }) {
   const { recursos } = useRecursos();
   const { projects, error, loading } = useProjects();
-  const [projectValue, setProject] = useState<Options | null>();
-  const [tasksValue, setTasks] = useState<Options | null>();
+  const [projectValue, setProject] = useState<Options | null>(
+    props?.defaultValues?.project_id
+      ? {
+          id: props.defaultValues.project_id,
+          name: props.defaultValues.project_name,
+        }
+      : null
+  );
+  const [tasksValue, setTasks] = useState<Options | null>(
+    props?.defaultValues?.task_id
+      ? {
+          id: props.defaultValues.task_id,
+          name: props.defaultValues.task_name,
+        }
+      : null
+  );
   const [recursoValue, setRecurso] = useState<Recurso | null>();
   const { project } = useProject(
     (projectValue?.id ?? null) as unknown as string
@@ -62,17 +78,18 @@ export default function RegistroForm(props: {
     }) ?? [];
 
   const initialValues = {
-    nombre_proyecto: projectValue?.name,
-    nombre_tarea: tasksValue?.name,
+    nombre_proyecto: props?.defaultValues?.project_name ?? projectValue?.name,
+    nombre_tarea: props?.defaultValues?.task_name ?? tasksValue?.name,
     nombre_recurso: " ",
-    id_proyecto: projectValue?.id,
-    id_tarea: tasksValue?.id,
+    id_proyecto: props?.defaultValues?.project_id ?? projectValue?.id,
+    id_tarea: props?.defaultValues?.task_id ?? tasksValue?.id,
     id_recurso: recursoValue?.id,
     cantidad: " ",
     fecha_trabajada: today,
   };
 
   const onSubmit = async (values: any) => {
+    toast.info("Cargando...");
     try {
       await saveRegistro(values as unknown as Registro);
       toast.success("Registros de horas guardado correctamente");
@@ -108,7 +125,7 @@ export default function RegistroForm(props: {
                   setFieldValue("nombre_proyecto", newOption?.name);
                   setFieldValue("id_proyecto", newOption?.id);
                 }}
-                disabled={loading}
+                disabled={loading || !!values?.id_tarea}
                 renderInput={(params) => (
                   <TextField {...params} label={"Proyectos"} />
                 )}
@@ -116,6 +133,7 @@ export default function RegistroForm(props: {
                 getOptionLabel={(option) =>
                   zeroPad(option?.id ?? 0) + " - " + option?.name ?? ""
                 }
+                defaultValue={projectValue}
               />
               <ErrorMessage
                 name={"nombre_proyecto"}
@@ -127,7 +145,7 @@ export default function RegistroForm(props: {
             <div>
               <Autocomplete
                 sx={{ width: "100%", marginTop: "10px" }}
-                options={project?.tasks ?? []}
+                options={project?.tasks ?? (tasksValue ? [tasksValue] : [])}
                 disabled={loading || !values.id_proyecto}
                 onChange={(event: any, newOption: Options | null) => {
                   setTasks(newOption);
@@ -140,6 +158,7 @@ export default function RegistroForm(props: {
                 getOptionLabel={(option) =>
                   zeroPad(option?.id ?? 0) + " - " + option?.name ?? ""
                 }
+                defaultValue={tasksValue}
               />
               <ErrorMessage
                 name={"nombre_tarea"}
