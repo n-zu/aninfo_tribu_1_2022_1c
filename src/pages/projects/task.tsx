@@ -73,14 +73,52 @@ const Task: NextPage = () => {
                 <StateChip state={task?.state} />
               </Box>
             </div>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ height: "fit-content" }}
-              onClick={() => setOpen(true)}
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+              }}
             >
-              Editar Tarea
-            </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ height: "fit-content" }}
+                onClick={() => setOpen(true)}
+              >
+                Editar Tarea
+              </Button>
+              <Link
+                href={
+                  "/rrhh?cargarEn=" +
+                  task?.project?.id +
+                  "-" +
+                  task?.project?.name +
+                  "-" +
+                  task?.id +
+                  "-" +
+                  task?.name
+                }
+                style={
+                  !task?.project?.id || !task?.id
+                    ? {
+                        pointerEvents: "none",
+                      }
+                    : {}
+                }
+              >
+                <a>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ height: "fit-content" }}
+                    onClick={onHours}
+                    disabled={!task?.project?.id || !task?.id}
+                  >
+                    Cargar horas
+                  </Button>
+                </a>
+              </Link>
+            </div>
           </Box>
           <div>
             <div>
@@ -96,6 +134,7 @@ const Task: NextPage = () => {
               </Box>
               <TitledText title="Descripción">{task?.description}</TitledText>
             </div>
+
             <Box
               style={{
                 display: "flex",
@@ -105,16 +144,6 @@ const Task: NextPage = () => {
               {task ? <Collaborators task={task} mutate={mutate} /> : null}
               {task?.id ? <AssociatedTickets taskId={task.id} /> : null}
             </Box>
-            <div>
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ height: "fit-content" }}
-                onClick={onHours}
-              >
-                Cargar horas
-              </Button>
-            </div>
           </div>
           <TaskModal
             open={open}
