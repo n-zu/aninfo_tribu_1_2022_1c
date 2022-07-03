@@ -73,39 +73,20 @@ const Task: NextPage = () => {
                 <StateChip state={task?.state} />
               </Box>
             </div>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ height: "fit-content" }}
-              onClick={() => setOpen(true)}
-            >
-              Editar Tarea
-            </Button>
-          </Box>
-          <div>
-            <div>
-              <Box className={styles.dataRow}>
-                <TitledText title="Fecha de inicio">
-                  {task?.initial_date}
-                </TitledText>
-                <TitledText title="Fecha de fin">{task?.final_date}</TitledText>
-                <TitledText title="Horas estimadas">
-                  {task?.estimated_hours}
-                </TitledText>
-                <TitledText title="Horas Trabajadas">{worked_hours}</TitledText>
-              </Box>
-              <TitledText title="Descripción">{task?.description}</TitledText>
-            </div>
-            <Box
+            <div
               style={{
                 display: "flex",
-                justifyContent: "space-between",
+                gap: "10px",
               }}
             >
-              {task ? <Collaborators task={task} mutate={mutate} /> : null}
-              {task?.id ? <AssociatedTickets taskId={task.id} /> : null}
-            </Box>
-            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ height: "fit-content" }}
+                onClick={() => setOpen(true)}
+              >
+                Editar Tarea
+              </Button>
               <Link
                 href={
                   "/rrhh?cargarEn=" +
@@ -138,6 +119,31 @@ const Task: NextPage = () => {
                 </a>
               </Link>
             </div>
+          </Box>
+          <div>
+            <div>
+              <Box className={styles.dataRow}>
+                <TitledText title="Fecha de inicio">
+                  {task?.initial_date}
+                </TitledText>
+                <TitledText title="Fecha de fin">{task?.final_date}</TitledText>
+                <TitledText title="Horas estimadas">
+                  {task?.estimated_hours}
+                </TitledText>
+                <TitledText title="Horas Trabajadas">{worked_hours}</TitledText>
+              </Box>
+              <TitledText title="Descripción">{task?.description}</TitledText>
+            </div>
+
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              {task ? <Collaborators task={task} mutate={mutate} /> : null}
+              {task?.id ? <AssociatedTickets taskId={task.id} /> : null}
+            </Box>
           </div>
           <TaskModal
             open={open}
