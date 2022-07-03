@@ -47,7 +47,7 @@ const TicketEditScreen: NextPage = () => {
                     <Stack direction="row" justifyContent="space-between" alignItems="center">
                         <Stack direction="row" alignItems="center" spacing={2}>
                             <h1>#{id}</h1>
-                            <Field name="title" as={TextField} variant="standard" />
+                            <Field name="title" as={TextField} variant="standard" InputProps={{sx: {fontSize: "2em"}}} />
                         </Stack>
                     </Stack>
 
