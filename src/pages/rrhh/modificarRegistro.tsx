@@ -17,7 +17,11 @@ const ModificarRegistro: NextPage = () => {
       {loading ? <Loading /> : ""}
       {error ? "ERROR" : ""}
       <h1>Modificar registro - {registroId}</h1>
-      { registro && <ModificacionHoras defaultRegistro={registro} registroId={registroId} /> }
+      { registro && 
+      <ModificacionHoras 
+      defaultRegistro={registro} 
+      registroId={registroId} 
+      /> }
     </div>
     );
 };

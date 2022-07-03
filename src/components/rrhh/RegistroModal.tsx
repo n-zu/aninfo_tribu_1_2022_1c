@@ -14,7 +14,7 @@ const RegistroModal = ({ open, onClose, onSave, registro }: Props) => {
 
   return(
     <Modal open={open} onClose={onClose}>
-      <RegistroForm/>
+      <RegistroForm onClose={onClose} onSave = {onSave}/>
     </Modal>);
 };
 

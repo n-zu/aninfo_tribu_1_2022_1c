@@ -1,12 +1,15 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Autocomplete, Button , TextField} from "@mui/material";
+import { Alert, Autocomplete, Button , TextField} from "@mui/material";
 import { useProject, useProjects, useTask } from '../../services/projects';
 import { Options, Project, Recurso, Registro, Task } from '../../services/types';
 import { zeroPad } from '../../util/util';
 import { removeRegistro, saveRegistro, updateRegistro, useRecurso } from '../../services/rrhh';
 import { useState } from 'react'
+import Loading from '../common/Loading';
+import { toast } from 'react-toastify';
+import Router from 'next/router';
 
 const validationSchema = yup.object({
     nombre_proyecto: yup
@@ -26,12 +29,26 @@ const validationSchema = yup.object({
     .required('Requerido'),
 });
 
-export default function RegistroForm(props:{defaultRegistro : Registro, registroId: string}){
+
+var p1 = new Promise(function(resolve, reject) {
+    resolve('Success!');
+    // or
+    // reject ("Error!");
+  });
+  
+  p1.then(function(value) {
+    console.log(value); // Success!
+  }, function(reason) {
+    console.log(reason); // Error!
+  });
+
+export default function RegistroForm(props:{defaultRegistro : Registro, registroId: string, loadingRegistro?: boolean}){
 
     // const defaultProject : Options = useProject(props.defaultRegistro.id_proyecto).project as Options
     // const defaultTask : Options = useTask(props.defaultRegistro.id_tarea).task as Options
     // const defaultRecurso : Options = useRecurso(props.defaultRegistro.id_recurso).recurso as Options
     const defaultProject = useProject(props.defaultRegistro.id_proyecto).project
+    const loadingProject = useProject(props.defaultRegistro.id_proyecto).loading
     const defaultTask = useTask(props.defaultRegistro.id_tarea).task
     const defaultRecurso = useRecurso(props.defaultRegistro.id_recurso).recurso
     
@@ -39,10 +56,10 @@ export default function RegistroForm(props:{defaultRegistro : Registro, registro
     const [tasksValue,setTasks] = useState<Options | null>(defaultTask);
     const [recursoValue,setRecurso] = useState<Options | null>(defaultRecurso);
 
-    const {projects} = useProjects();
+    const {projects,error,loading} = useProjects();
     const { project } = useProject((projectValue?.id ?? null) as unknown as string);
     const { task } = useTask((tasksValue?.id ?? null) as unknown as string);
-    const date = '2020-01-01' as unknown as Date;
+    const date = props.defaultRegistro.fecha_trabajada;
 
     const formik = useFormik({
         initialValues: {
@@ -56,15 +73,23 @@ export default function RegistroForm(props:{defaultRegistro : Registro, registro
             fecha_trabajada: date,
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-            console.log(values)
-            updateRegistro(values as unknown as Registro, props.registroId)
+        onSubmit: async (values) => {
+            try{
+                updateRegistro(values as unknown as Registro, props.registroId);
+                toast.success("Registro successfully updated");
+            }
+            catch(err) {    
+                console.error(err);
+                toast.error("ErrorMessage successfully updated")
+            }
         },
     });
 
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
+        {loading  && !error ? <Loading /> : 
+        <>
         <div 
         style={{display:"flex", flexDirection:"column", gap:"20px"}}
         >
@@ -76,6 +101,7 @@ export default function RegistroForm(props:{defaultRegistro : Registro, registro
                 formik.values.nombre_proyecto = newOption?.name;
                 formik.values.id_proyecto = newOption?.id;
             }}
+            disabled= {loading }
             defaultValue={defaultProject}
             renderInput={(params) => <TextField {...params} label={"Proyectos"}/>}
             options={projects} 
@@ -87,6 +113,7 @@ export default function RegistroForm(props:{defaultRegistro : Registro, registro
             sx={{ width: "100%"}}
             defaultValue={defaultTask}
             options={project?.tasks ?? []} 
+            disabled= {loading}
             onChange={(event: any, newOption: Options | null) => {
                 setTasks(newOption);
                 formik.values.id_tarea = newOption?.id;
@@ -99,6 +126,7 @@ export default function RegistroForm(props:{defaultRegistro : Registro, registro
             <div>
             <Autocomplete
             defaultValue={defaultRecurso}
+            disabled= {loading}
             options={task?.collaborators as Recurso[] ?? []}
             onChange={(event: any, newOption: Recurso | null) => {
                 setRecurso(newOption);
@@ -129,7 +157,6 @@ export default function RegistroForm(props:{defaultRegistro : Registro, registro
                 id="fecha_trabajada"
                 type="date"
                 defaultValue={props.defaultRegistro.fecha_trabajada}
-                value={formik.values.fecha_trabajada}
                 onChange={formik.handleChange}
                 error={formik.touched.cantidad && Boolean(formik.errors.cantidad)}
                 helperText={formik.touched.cantidad && formik.errors.cantidad}
@@ -141,19 +168,37 @@ export default function RegistroForm(props:{defaultRegistro : Registro, registro
                 <Button 
                 style={{width:"25%", borderColor:"black" , color:"white", backgroundColor:"red"}} 
                 variant="outlined"
-                onClick={() => {
-                    removeRegistro(props.registroId)
+                onClick={(event) => {
+                    //removeRegistro(props.registroId)
+                    try{
+                            console.log("que onda" + props.registroId);
+                            removeRegistro(props.registroId)
+                            const v =  toast.success("Registro deleted successfully")
+                            console.log(v);
+                            }
+                    catch(err) {    
+                            console.error(err);
+                            toast.error("ErrorMessage deleted successfully")
+                        }
+                    
                 }}>
                 Eliminar
                 </Button>
                 <Button 
                 style={{width:"25%", borderColor:"black" , color:"white", backgroundColor:"green"}} 
-                type="submit" 
+                type="submit"
                 variant="contained">
                 Actualizar
                 </Button>
             </div>
         </div>
+        </> }
+        {error ? (
+        <Alert severity="error" style={{ width: "100%" }}>
+          No se pudieron cargar los proyectos
+        </Alert>
+      ) : null}
+       
       </form>
     </div>
   );

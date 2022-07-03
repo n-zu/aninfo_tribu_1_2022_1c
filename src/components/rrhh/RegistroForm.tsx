@@ -1,13 +1,15 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Autocomplete, Button , TextField} from "@mui/material";
+import { Alert, Autocomplete, Button , TextField} from "@mui/material";
 import { useProject, useProjects, useTask } from '../../services/projects';
 import { Options, Recurso, Registro } from '../../services/types';
 import { zeroPad } from '../../util/util';
 import styles from "./Formulario.module.css";
 import { saveRegistro } from '../../services/rrhh';
 import { useState } from 'react'
+import { toast } from 'react-toastify';
+import Loading from '../common/Loading';
 
 const validationSchema = yup.object({
     nombre_proyecto: yup
@@ -27,15 +29,17 @@ const validationSchema = yup.object({
     .required('Requerido'),
 });
 
-export default function RegistroForm(){
+export default function RegistroForm(props:{onSave?: Function,onClose?: Function, setDisabled?: Function}){
 
-    const {projects} = useProjects();
+    const {projects, error,loading} = useProjects();
     const [projectValue, setProjetc] = useState<Options | null>();
     const [tasksValue,setTasks] = useState<Options | null>();
     const [recursoValue,setRecurso] = useState<Recurso | null>();
     const { project } = useProject((projectValue?.id ?? null) as unknown as string);
     const { task } = useTask((tasksValue?.id ?? null) as unknown as string);
+    const [disable,setDisable] = useState<boolean >(true);
     const date = '2020-01-01' as unknown as Date;
+
 
     const formik = useFormik({
         initialValues: {
@@ -49,19 +53,29 @@ export default function RegistroForm(){
             fecha_trabajada: date,
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-          console.log(values);
-          saveRegistro(values as unknown as Registro)
+        onSubmit: async (values) => {
+          try{
+            await saveRegistro(values as unknown as Registro);
+            toast.success("Registros de horas guardado correctamente");
+            props.onSave?.();
+            props.onClose?.();
+          }catch(err){  
+            console.error(err);
+            toast.error("Error: Registro de horas invalido");
+          }
         },
     });
   
-  console.log("FORMIK"+formik.values);
-
+  console.log("LOADING: "+loading);
   return (
     <div>
+      {error ? (
+        <Alert severity="error" style={{ width: "100%" }}>
+          No se pudieron cargar los proyectos
+        </Alert>
+      ) : null}
       <form className={styles.formulario} onSubmit={formik.handleSubmit} >
         <h3>Nuevo Registro de horas</h3>
-        
         <div>
           <Autocomplete
           sx={{ width: "100%"}}
@@ -70,6 +84,7 @@ export default function RegistroForm(){
               formik.values.nombre_proyecto = newOption?.name;
               formik.values.id_proyecto = newOption?.id;
           }}
+          disabled= {loading}
           renderInput={(params) => <TextField {...params} label={"Proyectos"}/>}
           options={projects} 
           getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} />
@@ -79,6 +94,7 @@ export default function RegistroForm(){
           <Autocomplete
           sx={{ width: "100%"}}
           options={project?.tasks ?? []}
+          disabled= {loading}
           onChange={(event: any, newOption: Options | null) => {
               setTasks(newOption);
               formik.values.id_tarea = newOption?.id;
@@ -96,6 +112,7 @@ export default function RegistroForm(){
               formik.values.id_recurso = newOption?.id;
               // formik.values.nombre_recurso = newOption?.name;
           } }
+          disabled= {loading}
           sx={{ width: "100%"}}
           renderInput={(params) => <TextField {...params} label={"Recursos"}/>}
           getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} />
@@ -127,14 +144,18 @@ export default function RegistroForm(){
             sx={{ width: "100%"}}
           />
         </div>
-       
-        <Button 
-          variant="contained"
-          color="primary"
-          size="medium"
-          type="submit">
-          Cargar
-        </Button>
+        <div style={{display: "flex", flexDirection: "column",justifyContent: "space-between"}}>
+          <Button 
+            variant="contained"
+            color="primary"
+            size="medium"
+            type="submit"
+            sx={{ marginBottom: "0.5rem"}}
+          >
+            Cargar
+          </Button>
+          {loading && !error ? <Loading /> : <></> }
+        </div>
       </form>
     </div>
   );
