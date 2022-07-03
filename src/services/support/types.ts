@@ -22,18 +22,13 @@ export enum State {
 
 export type Ticket = {
   id: number;
-  title: string;
   state: State;
+  title: string;
+  description: string;
   severity: string;
   priority: string;
-  responsible: string; //TODO: revisar
-  creationDate: Dayjs;
-  expirationDate: Dayjs;
-  lastEditionDate: Dayjs;
-  description: string;
+  responsible: number[]; //TODO: revisar
+  creationDate: string; // datetime
+  deadline: string; // datetime
+  lastEditionDate: string; // datetime
 };
-
-export type TicketSummary = Pick<
-  Ticket,
-  "id" | "title" | "state" | "priority" | "severity" | "expirationDate"
->;
