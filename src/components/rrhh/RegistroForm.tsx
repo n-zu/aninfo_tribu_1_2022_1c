@@ -10,6 +10,7 @@ import { saveRegistro } from '../../services/rrhh';
 import { useState } from 'react'
 import { toast } from 'react-toastify';
 import Loading from '../common/Loading';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
 
 const validationSchema = yup.object({
     nombre_proyecto: yup
@@ -151,6 +152,7 @@ export default function RegistroForm(props:{onSave?: Function,onClose?: Function
             size="medium"
             type="submit"
             sx={{ marginBottom: "0.5rem"}}
+            startIcon= {<SaveAltIcon />}
           >
             Cargar
           </Button>

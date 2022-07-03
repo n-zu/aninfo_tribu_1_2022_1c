@@ -1,6 +1,5 @@
 import { Recurso } from "../../services/types";
 import styles from "../projects/Projects.module.css";
-import InfoCard from "../common/Card"
 import RecursoCard from "./RecursoCard";
 
 type RecursosListProps = {

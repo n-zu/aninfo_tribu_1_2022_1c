@@ -1,6 +1,5 @@
 import React from 'react'
 import Button from '@mui/material/Button';
-import { useProjects } from '../../services/projects';
 
 export default function MenuHome(props: { handleNew: () => void }){
   return <div style={{ padding: '10px', display: 'flex',justifyContent: 'space-between'}}>

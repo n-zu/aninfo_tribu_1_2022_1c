@@ -3,13 +3,15 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Alert, Autocomplete, Button , TextField} from "@mui/material";
 import { useProject, useProjects, useTask } from '../../services/projects';
-import { Options, Project, Recurso, Registro, Task } from '../../services/types';
+import { Options, Recurso, Registro } from '../../services/types';
 import { zeroPad } from '../../util/util';
-import { removeRegistro, saveRegistro, updateRegistro, useRecurso } from '../../services/rrhh';
+import { removeRegistro, updateRegistro, useRecurso } from '../../services/rrhh';
 import { useState } from 'react'
 import Loading from '../common/Loading';
 import { toast } from 'react-toastify';
-import Router from 'next/router';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import DeleteIcon from '@mui/icons-material/Delete';
+import styles from "./Formulario.module.css";
 
 const validationSchema = yup.object({
     nombre_proyecto: yup
@@ -168,6 +170,7 @@ export default function RegistroForm(props:{defaultRegistro : Registro, registro
                 <Button 
                 style={{width:"25%", borderColor:"black" , color:"white", backgroundColor:"red"}} 
                 variant="outlined"
+                startIcon= {<DeleteIcon />}
                 onClick={(event) => {
                     //removeRegistro(props.registroId)
                     try{
@@ -185,9 +188,11 @@ export default function RegistroForm(props:{defaultRegistro : Registro, registro
                 Eliminar
                 </Button>
                 <Button 
-                style={{width:"25%", borderColor:"black" , color:"white", backgroundColor:"green"}} 
+                style={{width:"25%"}} 
                 type="submit"
-                variant="contained">
+                variant="contained"
+                startIcon= {<SaveAltIcon />}
+                >
                 Actualizar
                 </Button>
             </div>
