@@ -1,6 +1,5 @@
 import React from "react";
 import { ErrorMessage, Form, Formik, useFormik } from "formik";
-import * as yup from "yup";
 import { Alert, Autocomplete, Button, TextField } from "@mui/material";
 import styles from "./Formulario.module.css";
 import { useState } from "react";
@@ -27,7 +26,6 @@ const validate = (values: any) => {
   if (!values.fecha_trabajada) errors.fecha_trabajada = "Requerido";
   if (values.fecha_trabajada > today)
     errors.fecha_trabajada = "La fecha de finalización debe ser mayor a hoy";
-  console.log(errors);
   return errors;
 };
 
@@ -95,7 +93,7 @@ export default function RegistroForm(props: {
         validate={validate}
         onSubmit={onSubmit}
       >
-        {({ setFieldValue }) => (
+        {({ setFieldValue, values }) => (
           <Form>
             <h3>Nuevo Registro de horas</h3>
             <div>
@@ -126,7 +124,7 @@ export default function RegistroForm(props: {
               <Autocomplete
                 sx={{ width: "100%", marginTop: "10px" }}
                 options={project?.tasks ?? []}
-                disabled={loading}
+                disabled={loading || !values.id_proyecto}
                 onChange={(event: any, newOption: Options | null) => {
                   setTasks(newOption);
                   setFieldValue("id_tarea", newOption?.id);
@@ -154,7 +152,7 @@ export default function RegistroForm(props: {
                   setFieldValue("id_recurso", newOption?.id);
                   // formik.values.nombre_recurso = newOption?.name;
                 }}
-                disabled={loading}
+                disabled={loading || !values.id_tarea}
                 sx={{ width: "100%", marginTop: "10px" }}
                 renderInput={(params) => (
                   <TextField {...params} label={"Recursos"} />
