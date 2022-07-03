@@ -29,8 +29,7 @@ const InfoCard = ({
 }) => {
   const finishString = useMemo(() => {
     const today = new Date();
-    const prefix =
-      today.toISOString() > info.final_date ? "finalizado " : "finaliza ";
+    const prefix = "fecha de finalización ";
     return prefix + dayjs(info.final_date).locale(es).from(today);
   }, [info.final_date]);
 
