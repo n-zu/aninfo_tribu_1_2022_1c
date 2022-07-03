@@ -7,8 +7,13 @@ const saveHeaders = {
 };
 const header = new Headers({ "Access-Control-Allow-Origin": "*" });
 
+const checkStatus = (res: Response) => {
+  if (!res.ok) throw new Error(res.statusText);
+  return res;
+};
+
 export const rrhhFetch = async (url: string, request?: any) => {
-  {console.log(rrhhApi + url)}
+  
   return await fetch(rrhhApi + url,{
     header: header,
     ...request,
@@ -38,8 +43,6 @@ export const useRegistro = (registroId: string) => {
 
   const registro = data as Registro;
 
-  console.log(error);
-
   return { registro, error, loading, ...rest };
 };
 
@@ -67,7 +70,7 @@ export const useRecurso = (recursoId: string) => {
   return { recurso, error, loading, ...rest };
 };
 
-export const updateRegistro = async (registro: RegistroDeHoras, registroId?: string) =>
+export const updateRegistro = async (registro: Registro, registroId?: string) =>
 await fetch(`${rrhhApi}/rrhh/${registroId ?? ""}`, {
   method: "PUT",
   headers: saveHeaders,
@@ -82,3 +85,16 @@ const removeEmpty = <T>(object: T): T => {
     ])
   ) as T;
 };
+
+export const saveRegistro = async (registro: Registro) =>
+  await fetch(`${rrhhApi}/rrhh/`, {
+    method:"POST",
+    headers: saveHeaders,
+    body: JSON.stringify(removeEmpty(registro)),
+  }).then(checkStatus);
+
+export const removeRegistro = async (registroId: string) =>
+  await fetch(`${rrhhApi}/rrhh/${registroId ?? ""}`, {
+    method: "DELETE",
+    headers: saveHeaders,
+  });
