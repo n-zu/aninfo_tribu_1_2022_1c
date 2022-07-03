@@ -26,5 +26,5 @@ export const pluralize = (noun: string, count?: number, suffix:string = "s") => 
 
 export const routeToRegistro = (id : number | null, router : NextRouter) => {
   if (!id) return;
-  router.push("/rrhh/registro?id=" + id);
+  router.push("/rrhh/modificarRegistro?id=" + id);
 }

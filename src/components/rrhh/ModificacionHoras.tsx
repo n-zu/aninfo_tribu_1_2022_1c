@@ -11,6 +11,7 @@ import Loading from '../common/Loading';
 import { toast } from 'react-toastify';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useRouter } from 'next/router';
 
 const validationSchema = yup.object({
     nombre_proyecto: yup
@@ -49,6 +50,8 @@ export default function RegistroForm(props:{defaultRegistro : Registro, registro
     const { project } = useProject((projectValue?.id ?? null) as unknown as string);
     const { task } = useTask((tasksValue?.id ?? null) as unknown as string);
     const date = props.defaultRegistro.fecha_trabajada;
+
+    const router = useRouter();
 
     const formik = useFormik({
         initialValues: {
@@ -159,16 +162,15 @@ export default function RegistroForm(props:{defaultRegistro : Registro, registro
                 variant="outlined"
                 startIcon= {<DeleteIcon />}
                 onClick={(event) => {
-                    //removeRegistro(props.registroId)
                     try{
-                            removeRegistro(props.registroId)
-                            toast.success("Registro deleted successfully")
-                            }
+                        removeRegistro(props.registroId)
+                        toast.success("Registro deleted successfully")
+                        router.push("/rrhh/")
+                    }
                     catch(err) {    
-                            console.error(err);
-                            toast.error("ErrorMessage deleted successfully")
-                        }
-                    
+                        console.error(err);
+                        toast.error("ErrorMessage deleted successfully")
+                    } 
                 }}>
                 Eliminar
                 </Button>
