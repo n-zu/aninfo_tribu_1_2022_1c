@@ -6,6 +6,6 @@
 .InfoCard {
   width: 100%;
 }
-.Card.hover:hover {
+.hover:hover {
   background-color: #f7f7f7;
 }

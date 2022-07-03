@@ -1,11 +1,16 @@
 export type EmployeeId = {
   id: number;
-}
+};
 
 export type Task = {
   id?: number;
+  state: string;
   name: string;
   description: string;
+  project: {
+    id: number;
+    name: string;
+  };
   initial_date: string;
   final_date: string;
   estimated_hours: number;
@@ -15,6 +20,7 @@ export type Task = {
 
 export type Project = {
   id?: number;
+  state: string;
   name: string;
   initial_date: string;
   final_date: string;
@@ -26,13 +32,13 @@ export type Project = {
 
 export type Options = {
   id?: number;
-  name: string;
+  name?: string;
 };
 
 export type Employee = {
-  legajo: number;
-  Nombre: string;
-  Apellido: string;
+  id: number;
+  name: string;
+  lastname: string;
 };
 
 export type OptionsRegistros = {
@@ -49,9 +55,9 @@ export type RegistroDeHoras = {
   nombre_recurso: string;
   cantidad: number;
   fecha_trabajada: Date;
-  id_proyecto: number,
-  id_tarea: number,
-  id_recurso: number,
+  id_proyecto: number;
+  id_tarea: number;
+  id_recurso: number;
 };
 
 export type Registro = {

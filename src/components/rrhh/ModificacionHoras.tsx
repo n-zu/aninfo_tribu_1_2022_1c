@@ -1,210 +1,224 @@
-import React from 'react'
-import { useProject, useProjects, useTask } from '../../services/projects'
-import { useRecurso } from '../../services/rrhh'
-import { Registro } from '../../services/types'
-import BoxSelector from './BoxSelector'
+import React from "react";
+import { useFormik } from "formik";
+import { Alert, Autocomplete, Button, TextField } from "@mui/material";
+import { useProject, useProjects, useTask } from "../../services/projects";
+import { Options, Recurso, Registro } from "../../services/types";
+import { zeroPad } from "../../util/util";
+import {
+  removeRegistro,
+  updateRegistro,
+  useRecurso,
+} from "../../services/rrhh";
+import { useState } from "react";
+import Loading from "../common/Loading";
+import { toast } from "react-toastify";
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import DeleteIcon from "@mui/icons-material/Delete";
+import dayjs from "dayjs";
 
-const ModificacionHoras = (props: {registro: Registro}) => {
-  
-    const {project} = useProject(props.registro.id_proyecto)
-    const {task} = useTask(props.registro.id_tarea)
-    const {recurso} = useRecurso(props.registro.id_recurso)
-    const {projects} = useProjects()
+const today = dayjs().format("YYYY-MM-DD");
 
-    return (
-        <div className='page'>
-            <h1>Modificación de horas</h1> 
-            <BoxSelector 
-                label={"Proyecto"} 
-                options={projects}
-                defaultProject={project}
-                defaultTask={task}
-                defaultRecurso={recurso}
-            />
-        </div>
-    )
+const validate = (values: any) => {
+  const errors: any = {};
+  if (!values.nombre_proyecto) errors.nombre_proyecto = "Requerido";
+  if (!values.nombre_tarea) errors.nombre_tarea = "Requerido";
+  if (!values.nombre_recurso) errors.nombre_recurso = "Requerido";
+  if (!values.cantidad) errors.cantidad = "Requerido";
+  if (!values.fecha_trabajada) errors.fecha_trabajada = "Requerido";
+  if (values.fecha_trabajada > today)
+    errors.fecha_trabajada =
+      "La fecha de finalización debe ser mayor a la de inicio";
+  return errors;
+};
+
+export default function RegistroForm(props: {
+  defaultRegistro: Registro;
+  registroId: string;
+  loadingRegistro?: boolean;
+}) {
+  // const defaultProject : Options = useProject(props.defaultRegistro.id_proyecto).project as Options
+  // const defaultTask : Options = useTask(props.defaultRegistro.id_tarea).task as Options
+  // const defaultRecurso : Options = useRecurso(props.defaultRegistro.id_recurso).recurso as Options
+  const defaultProject = useProject(props.defaultRegistro.id_proyecto).project;
+  const loadingProject = useProject(props.defaultRegistro.id_proyecto).loading;
+  const defaultTask = useTask(props.defaultRegistro.id_tarea).task;
+  const defaultRecurso = useRecurso(props.defaultRegistro.id_recurso).recurso;
+
+  const [projectValue, setProject] = useState<Options | null>(defaultProject);
+  const [tasksValue, setTasks] = useState<Options | null>(defaultTask);
+  const [recursoValue, setRecurso] = useState<Options | null>(defaultRecurso);
+
+  const { projects, error, loading } = useProjects();
+  const { project } = useProject(
+    (projectValue?.id ?? null) as unknown as string
+  );
+  const { task } = useTask((tasksValue?.id ?? null) as unknown as string);
+  const date = props.defaultRegistro.fecha_trabajada;
+
+  const formik = useFormik({
+    initialValues: {
+      nombre_proyecto: projectValue?.name,
+      nombre_tarea: tasksValue?.name,
+      nombre_recurso: recursoValue?.name,
+      id_proyecto: projectValue?.id,
+      id_tarea: tasksValue?.id,
+      id_recurso: recursoValue?.id,
+      cantidad: " ",
+      fecha_trabajada: date,
+    },
+    validate: validate,
+    onSubmit: async (values) => {
+      try {
+        updateRegistro(values as unknown as Registro, props.registroId);
+        toast.success("Registro successfully updated");
+      } catch (err) {
+        console.error(err);
+        toast.error("ErrorMessage successfully updated");
+      }
+    },
+  });
+
+  return (
+    <div>
+      <form onSubmit={formik.handleSubmit}>
+        {loading && !error ? (
+          <Loading />
+        ) : (
+          <>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+            >
+              <div>
+                <Autocomplete
+                  sx={{ width: "100%" }}
+                  onChange={(event: any, newOption: Options | null) => {
+                    setProject(newOption);
+                    formik.values.nombre_proyecto = newOption?.name;
+                    formik.values.id_proyecto = newOption?.id;
+                  }}
+                  disabled={loading}
+                  defaultValue={defaultProject}
+                  renderInput={(params) => (
+                    <TextField {...params} label={"Proyectos"} />
+                  )}
+                  options={projects}
+                  getOptionLabel={(option) =>
+                    zeroPad(option?.id ?? 0) + " - " + option?.name ?? ""
+                  }
+                />
+              </div>
+
+              <div>
+                <Autocomplete
+                  sx={{ width: "100%" }}
+                  defaultValue={defaultTask}
+                  options={project?.tasks ?? []}
+                  disabled={loading}
+                  onChange={(event: any, newOption: Options | null) => {
+                    setTasks(newOption);
+                    formik.values.id_tarea = newOption?.id;
+                    formik.values.nombre_tarea = newOption?.name;
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} label={"Tareas"} />
+                  )}
+                  getOptionLabel={(option) =>
+                    zeroPad(option?.id ?? 0) + " - " + option?.name ?? ""
+                  }
+                />
+              </div>
+
+              <div>
+                <Autocomplete
+                  defaultValue={defaultRecurso}
+                  disabled={loading}
+                  options={(task?.collaborators as Recurso[]) ?? []}
+                  onChange={(event: any, newOption: Recurso | null) => {
+                    setRecurso(newOption);
+                    formik.values.id_recurso = newOption?.id;
+                    formik.values.nombre_recurso = newOption?.name;
+                  }}
+                  sx={{ width: "100%" }}
+                  renderInput={(params) => (
+                    <TextField {...params} label={"Recursos"} />
+                  )}
+                  getOptionLabel={(option) =>
+                    zeroPad(option?.id ?? 0) + " - " + option?.name ?? ""
+                  }
+                />
+              </div>
+
+              <div>
+                <TextField
+                  fullWidth
+                  id="cantidad"
+                  type="number"
+                  name="cantidad"
+                  label="Cantidad"
+                  defaultValue={props.defaultRegistro.cantidad}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.cantidad && Boolean(formik.errors.cantidad)
+                  }
+                  helperText={formik.touched.cantidad && formik.errors.cantidad}
+                />
+              </div>
+
+              <div>
+                <TextField
+                  id="fecha_trabajada"
+                  type="date"
+                  defaultValue={props.defaultRegistro.fecha_trabajada}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.cantidad && Boolean(formik.errors.cantidad)
+                  }
+                  helperText={formik.touched.cantidad && formik.errors.cantidad}
+                  sx={{ width: "100%" }}
+                />
+              </div>
+
+              <div style={{ display: "flex", justifyContent: "space-around" }}>
+                <Button
+                  style={{
+                    width: "25%",
+                    borderColor: "black",
+                    color: "white",
+                    backgroundColor: "red",
+                  }}
+                  variant="outlined"
+                  startIcon={<DeleteIcon />}
+                  onClick={(event) => {
+                    //removeRegistro(props.registroId)
+                    try {
+                      removeRegistro(props.registroId);
+                      toast.success("Registro deleted successfully");
+                    } catch (err) {
+                      console.error(err);
+                      toast.error("ErrorMessage deleted successfully");
+                    }
+                  }}
+                >
+                  Eliminar
+                </Button>
+                <Button
+                  style={{ width: "25%" }}
+                  type="submit"
+                  variant="contained"
+                  startIcon={<SaveAltIcon />}
+                >
+                  Actualizar
+                </Button>
+              </div>
+            </div>
+          </>
+        )}
+        {error ? (
+          <Alert severity="error" style={{ width: "100%" }}>
+            No se pudieron cargar los proyectos
+          </Alert>
+        ) : null}
+      </form>
+    </div>
+  );
 }
-
-export default ModificacionHoras
-// import { Autocomplete, useMediaQuery } from '@mui/material'
-// import Button from '@mui/material/Button';
-// import { useProject, useTask } from '../../services/projects';
-// import { updateRegistro, useRecurso, useRegistro } from '../../services/rrhh';
-// import { Options, Project, Recurso } from '../../services/types'
-// import { zeroPad } from '../../util/util';
-// import FormField from "../../components/common/Form/FormField";
-// import { Formik, Form } from "formik";
-// import * as React from 'react';
-// import TextField from '@mui/material/TextField';
-// import { toast } from 'react-toastify';
-// import { useRouter } from "next/router";
-
-// export default function BoxSelector(props:{options:Project[],label?:string}) {
-    
-//     const [projectValue, setProjetc] = React.useState<Options | null>();
-//     const [inputProject, setInputProject] = React.useState('');
-//     const [tasksValue,setTasks] = React.useState<Options | null>();
-//     const [inputTask, setInputTask] = React.useState('');
-//     const [recursoValue,setRecurso] = React.useState<Recurso | null>();
-//     const [inputRecurso, setInputRecurso] = React.useState('');
-
-//     const { project } = useProject((projectValue?.id ?? null) as unknown as string);
-//     const { task } = useTask((tasksValue?.id ?? null) as unknown as string);
-//     {project && console.log(project.tasks ?? []);}
-//     {console.log("TASK " + task?.collaborators);}
-
-//     const router = useRouter();
-//     const registroId = router.query.id as string
-//     const { registro } = useRegistro(registroId)
-
-//     console.log(registro.id_proyecto)
-//     console.log(registro)
-
-//     // 
-//     const initialValues = {
-//         // fecha: registro?.fecha_trabajada ?? "",
-//         // cantidad_horas: registro?.cantidad_horas ?? "",
-//     };
-    
-//     const validate = (values: any) => {
-//     const errors: any = {};
-    
-//     return errors;
-//     };
-
-//     const onSubmit = async (values: any) => {
-//     try {
-//         // await updateRegistro(registro, registroId);
-//         toast.success("Tarea guardada correctamente");
-//     } catch (e) {
-//         console.error(e);
-//         toast.error("Error al guardar la tarea");
-//     }
-//     };
-//     // 
-
-//     return (
-//         <>
-//         <h3> Seleccionar Proyecto </h3>
-//         <Box options = {props.options} 
-//         label={registro.nombre_proyecto}
-//         setValue= {setProjetc}
-//         setInputValue= {setInputProject}
-//         value={projectValue ?? null}
-//         inputValue={inputProject}
-//         disabled={false}/>
-
-//         <h3>Seleccionar tarea </h3>
-//         <Box options={project?.tasks ?? []} 
-//         label={"Tareas"}
-//         setValue= {setTasks}
-//         setInputValue= {setInputTask}
-//         value={tasksValue ?? null}
-//         inputValue={inputTask }
-//         disabled={true}/>
-
-//         <h3>Seleccionar recurso</h3>
-//         <RecursoBox options={task?.collaborators ?? []} 
-//         label={"Recursos"}
-//         setValue= {setRecurso}
-//         setInputValue= {setInputRecurso}
-//         value={recursoValue ?? null}
-//         inputValue={inputRecurso }
-//         disabled={true}/>
-        
-//         <Formik
-//         initialValues={initialValues}
-//         validate={validate}
-//         onSubmit={onSubmit}
-//         >
-//         {({ isSubmitting }) => (
-//           <Form>
-//             <div>           
-//                 <h3>Seleccionar fecha</h3>
-//                 <FormField
-//                 name="fecha"
-//                 type="date"
-//                 label="Fecha trabajada"
-//                 />
-
-//                 <h3>Seleccionar cantidad horas</h3>
-//                 <FormField
-//                 name="cantidad_horas"
-//                 type="int"
-//                 label="Cantidad horas"
-//                 />
-//             </div>
-//         <br />
-//           </Form>
-//         )}
-//       </Formik>
-
-//         <br /><br />
-//         <div style={{display:"flex", justifyContent: "space-around"}}>
-//             <Button style={{width:"25%", borderColor:"black" , color:"white", backgroundColor:"red"}} type="submit" variant="outlined" href='rrhh/recursos'>Eliminar</Button>
-//             <Button style={{width:"25%", borderColor:"black" , color:"white", backgroundColor:"green"}} type="submit" variant="outlined" href='rrhh/recursos'>Actualizar</Button>
-//         </div>
-//         </>
-//       );
-// };
-
-// function Box(props: {
-//     options:Options[], 
-//     label:string,
-//     setValue: Function,
-//     setInputValue:Function,
-//     value:Options | null,
-//     inputValue:string,
-//     disabled:boolean,
-//     }){
-//     return (
-//     <>
-//         <Autocomplete
-//             id="controllable-states-demo"
-//             value={props.value ?? undefined}
-//             disabled = {(props.options?.length === 0 && props.disabled)? true: false}
-//             options={props.options}
-//             onChange={(event: any, newOption: Options | null | undefined) => {
-//                 props.setValue(newOption);
-//             } }
-//             inputValue={props.inputValue}
-//             onInputChange={(event, newInputValue) => {
-//                 props.setInputValue(newInputValue);
-//             } }
-//             sx={{ width: "100%" }}
-//             renderInput={(params) => <TextField {...params} label={props.label}/>}
-//             getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} />
-//     </>);
-// }
-
-// function RecursoBox(props: {
-//     options:Recurso[], 
-//     label:string,
-//     setValue: Function,
-//     setInputValue:Function,
-//     value:Recurso | null,
-//     inputValue:string,
-//     disabled:boolean,
-//     }){
-//    const {recurso} = useRecurso(props.value as unknown as string);
-//    props.setValue(recurso);
-//     return (
-//     <>
-//         <Autocomplete
-//             id="controllable-states-demo"
-//             value={props.value ?? undefined}
-//             disabled = {(props.options?.length === 0 && props.disabled)? true: false}
-//             options={props.options}
-//             onChange={(event: any, newOption: Recurso | null | undefined) => {
-//                 props.setValue(newOption);
-//             } }
-//             inputValue={props.inputValue}
-//             onInputChange={(event, newInputValue) => {
-//                 props.setInputValue(newInputValue);
-//             } }
-//             sx={{ width: "100%"}}
-//             renderInput={(params) => <TextField {...params} label={props.label}/>}
-//             getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + (option?.name??'') +" - " + option?.lastname??''} />
-//     </>);
-// }
-
