@@ -15,10 +15,7 @@ export type Product = {
 
 // Tickets
 
-export enum State {
-  ABIERTO,
-  CERRADO,
-}
+export type State = "Abierto" | "Cerrado"
 
 export type Ticket = {
   id: number;
