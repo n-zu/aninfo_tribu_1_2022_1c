@@ -5,8 +5,8 @@ import Image from "next/image";
 const Navbar = () => {
   const links = [
     { href: "/rrhh", label: "rrhh" },
-    { href: "/projects", label: "projects" },
-    { href: "/support", label: "support" },
+    { href: "/projects", label: "proyectos" },
+    { href: "/support", label: "soporte" },
   ];
 
   return (

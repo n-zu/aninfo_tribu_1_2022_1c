@@ -1,8 +1,12 @@
-import { Card } from "@mui/material";
+import { Card, Box } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-
+import { SvgIcon } from "@mui/material";
+//https://mui.com/material-ui/material-icons/?theme=Outlined
+import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
+import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
+import BugReportOutlinedIcon from "@mui/icons-material/BugReportOutlined";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
@@ -25,48 +29,71 @@ const Home: NextPage = () => {
         una única herramienta
       </p>
       <div>
-        <Link href="/rrhh">
-          <a>
-            <Card className={styles.HomeCard}>
-              <h1>Recursos Humanos</h1>
-              <ul>
-                <li>Carga de horas a los proyectos.</li>
-                <li>
-                  Reporte de recursos utilizados por proyecto y horas dedicadas
-                  a soporte.
-                </li>
-                <li>Gestión de recursos para cada proyecto.</li>
-              </ul>
-            </Card>
-          </a>
-        </Link>
-        <Link href="/projects">
-          <a>
-            <Card className={styles.HomeCard}>
-              <h1>Proyectos</h1>
-              <ul>
-                <li>Gestión de proyectos, fases, iteraciones y tareas.</li>
-                <li>Gestión y visibilidad de Riesgos.</li>
-                <li>Asignaciones de tareas a desarrolladores.</li>
-              </ul>
-            </Card>
-          </a>
-        </Link>
-        <Link href="/support">
-          <a>
-            <Card className={styles.HomeCard}>
-              <h1>Soporte</h1>
-              <ul>
-                <li>
-                  Gestión de tickets, para facilitar el registro y resolución de
-                  problemas
-                </li>
-              </ul>
-            </Card>
-          </a>
-        </Link>
+        <HomeCard
+          title="Recursos humanos"
+          items={[
+            "Carga de horas a los proyectos",
+            "Reporte de recursos utilizados por proyecto y horas dedicadas a soporte",
+            "Gestión de recursos para cada proyecto",
+          ]}
+          href="/rrhh"
+          Icon={HailOutlinedIcon}
+        />
+        <HomeCard
+          title="Proyectos"
+          items={[
+            "Gestión de proyectos, fases, iteraciones y tareas",
+            "Gestión y visibilidad de Riesgos",
+            "Asignaciones de tareas a desarrolladores",
+          ]}
+          href="/projects"
+          Icon={AssignmentOutlinedIcon}
+        />
+        <HomeCard
+          title="Soporte"
+          items={["Gestión de tickets"]}
+          href="/support"
+          Icon={BugReportOutlinedIcon}
+        />
       </div>
     </div>
+  );
+};
+
+type HomeCardProps = {
+  title: string;
+  items: string[];
+  href: string;
+  Icon: typeof SvgIcon;
+};
+
+const HomeCard = ({ title, items, href, Icon }: HomeCardProps) => {
+  return (
+    <Link href={href}>
+      <a>
+        <Card className={styles.HomeCard}>
+          <Box
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              minHeight: 155,
+              paddingRight: "5%",
+            }}
+          >
+            <div style={{ width: "100%" }}>
+              <h1>{title}</h1>
+              <ul>
+                {items.map((item: string) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <Icon sx={{ fontSize: 100, alignSelf: "center" }} />
+          </Box>
+        </Card>
+      </a>
+    </Link>
   );
 };
 
