@@ -32,7 +32,7 @@ export type Project = {
 
 export type Options = {
   id?: number;
-  name: string;
+  name?: string;
 };
 
 export type Employee = {
@@ -55,9 +55,9 @@ export type RegistroDeHoras = {
   nombre_recurso: string;
   cantidad: number;
   fecha_trabajada: Date;
-  id_proyecto: number,
-  id_tarea: number,
-  id_recurso: number,
+  id_proyecto: number;
+  id_tarea: number;
+  id_recurso: number;
 };
 
 export type Registro = {
