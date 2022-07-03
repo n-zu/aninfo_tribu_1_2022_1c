@@ -11,6 +11,7 @@ import Link from "next/link";
 import StateChip from "../../components/projects/StateChip";
 import styles from "../../styles/Project.module.css";
 import Collaborators from "../../components/projects/tasks/Collaborators";
+import AssociatedTickets from "../../components/projects/tasks/AssociatedTickets";
 
 const Task: NextPage = () => {
   const router = useRouter();
@@ -95,7 +96,15 @@ const Task: NextPage = () => {
               </Box>
               <TitledText title="Descripción">{task?.description}</TitledText>
             </div>
-            {task ? <Collaborators task={task} mutate={mutate} /> : null}
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              {task ? <Collaborators task={task} mutate={mutate} /> : null}
+              {task?.id ? <AssociatedTickets taskId={task.id} /> : null}
+            </Box>
             <div>
               <Button
                 variant="contained"

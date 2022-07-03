@@ -75,16 +75,15 @@ const Collaborators = ({ task, mutate }: Props) => {
   return (
     <div
       style={{
-        width: "100%",
-        padding: 2,
-        marginTop: 20,
-        marginBottom: 20,
+        flex: 1,
+        padding: 30,
+        paddingLeft: 0,
       }}
     >
       <Typography variant="overline" style={{ lineHeight: "normal" }}>
         Colaboradores
       </Typography>
-      <div style={{ marginTop: 10, marginBottom: 10, width: "50%" }}>
+      <div style={{ marginTop: 10, marginBottom: 10, width: "100%" }}>
         <AutoComplete
           label="Agregar colaborador"
           options={employeeList}

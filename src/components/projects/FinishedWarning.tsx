@@ -35,7 +35,7 @@ const FinishedWarning = ({ tasks, state }: Props) => {
           }
           placement="right"
           style={{
-            width: "fit-content",
+            width: "100%",
             height: "fit-content",
             alignSelf: "flex-end",
           }}
