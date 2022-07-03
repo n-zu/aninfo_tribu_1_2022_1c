@@ -1,148 +1,160 @@
-import React from 'react'
-import { useState } from 'react'
-import { useProject, useProjects, useTask } from '../../services/projects'
-import { updateRegistro, useRecurso } from '../../services/rrhh'
-import { Options, Project, Recurso, Registro, Task } from '../../services/types'
-import { Autocomplete, Button, TextField } from '@mui/material'
+import React from 'react';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { Autocomplete, Button , TextField} from "@mui/material";
+import { useProject, useProjects, useTask } from '../../services/projects';
+import { Options, Project, Recurso, Registro, Task } from '../../services/types';
 import { zeroPad } from '../../util/util';
-import { Form, Formik } from 'formik'
-import FormField from '../common/Form/FormField'
-import { useRouter } from 'next/router'
+import { removeRegistro, saveRegistro, updateRegistro, useRecurso } from '../../services/rrhh';
+import { useState } from 'react'
 
-const ModificacionHoras = (props: {registro: Registro}) => {
+const validationSchema = yup.object({
+    nombre_proyecto: yup
+    .string()
+    .required('Requerido'),
+    nombre_tarea: yup
+    .string()
+    .required('Requerido'),
+    nombre_recurso: yup
+    .string()
+    .required('Requerido'),
+    cantidad: yup
+    .string()
+    .required('Requerido'),
+    fecha_trabajada: yup
+    .string()
+    .required('Requerido'),
+});
 
-    const {project} = useProject(props.registro.id_proyecto)
-    const {task} = useTask(props.registro.id_tarea)
-    const {recurso} = useRecurso(props.registro.id_recurso)
-    const projects = useProjects()
+export default function RegistroForm(props:{defaultRegistro : Registro, registroId: string}){
 
-    const router = useRouter();
-    const registroId = router?.query?.id as string;
-
-    const initialValues = {
-        id_proyecto: null,
-        id_tarea: null,
-        id_recurso: null,
-        nombre_proyecto: null,
-        nombre_tareaa: null,
-        nombre_recurso: null,
-        fecha: props.registro.fecha_trabajada,
-        cantidad_horas: props.registro.cantidad,
-    };
+    // const defaultProject : Options = useProject(props.defaultRegistro.id_proyecto).project as Options
+    // const defaultTask : Options = useTask(props.defaultRegistro.id_tarea).task as Options
+    // const defaultRecurso : Options = useRecurso(props.defaultRegistro.id_recurso).recurso as Options
+    const defaultProject = useProject(props.defaultRegistro.id_proyecto).project
+    const defaultTask = useTask(props.defaultRegistro.id_tarea).task
+    const defaultRecurso = useRecurso(props.defaultRegistro.id_recurso).recurso
     
-    const validate = (values: any) => {
-    const errors: any = {};
-    // console.log(values)
-    if (!values.recurso) errors.recurso = "Requerido";
-    if (!values.fecha) errors.fecha = "Requerido";
-    if (!values.cantidad_horas) errors.cantidad_horas = "Requerido";
-    return errors;
-    };
+    const [projectValue, setProject] = useState<Options | null>(defaultProject);
+    const [tasksValue,setTasks] = useState<Options | null>(defaultTask);
+    const [recursoValue,setRecurso] = useState<Options | null>(defaultRecurso);
 
-    const onSubmit = async (values: any) => {
-        try {
+    const {projects} = useProjects();
+    const { project } = useProject((projectValue?.id ?? null) as unknown as string);
+    const { task } = useTask((tasksValue?.id ?? null) as unknown as string);
+    const date = '2020-01-01' as unknown as Date;
+
+    const formik = useFormik({
+        initialValues: {
+            nombre_proyecto: projectValue?.name,
+            nombre_tarea: tasksValue?.name,
+            nombre_recurso: recursoValue?.name,
+            id_proyecto: projectValue?.id,
+            id_tarea: tasksValue?.id,
+            id_recurso: recursoValue?.id,
+            cantidad: " ",
+            fecha_trabajada: date,
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
             console.log(values)
-            // await updateRegistro(values, registroId);
-        } catch (e) {
-            console.error(e);
-        }
-    }; 
+            updateRegistro(values as unknown as Registro, props.registroId)
+        },
+    });
 
-    return (
-        <div className='page'>
-
-        <Formik
-            initialValues={initialValues}
-            // validate={validate}
-            onSubmit={onSubmit}
-            >
-            {({ handleChange, values, setFieldValue }) => (
-            <Form>
-                <div>           
-                    <h3>Seleccionar Proyecto</h3>
-                    <Autocomplete
-                    options={projects.projects as Options[]}
-                    getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} 
-                    onChange={(event, newOption) => {
-                        setFieldValue("id_proyecto", newOption?.id);
-                        setFieldValue("nombre_proyecto", newOption?.name);
-                    } }
-                    renderInput={(params) => (
-                    <TextField 
-                        {...params} 
-                        onChange={handleChange}
-                        margin="normal"
-                        label="Proyecto"
-                        fullWidth
-                        value={values?.id_proyecto}
-                    />
-                    )}
-                    />    
-
-                    {/* <h3>Seleccionar Tarea</h3>
-                    <Autocomplete
-                    options={initialValues.id_proyecto as Options[]}
-                    getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} 
-                    onChange={(event, newOption) => {
-                        setFieldValue("tarea", newOption);
-                    } }
-                    renderInput={(params) => (
-                    <TextField 
-                        {...params} 
-                        onChange={handleChange}
-                        margin="normal"
-                        label="Tarea"
-                        fullWidth
-                        value={values?.tarea}
-                    />
-                    )}
-                    />               */}
-
-                    {/* <h3>Seleccionar Recursos</h3>
-                    <Autocomplete
-                    options={initialValues.tarea.collaborators as Options[]}
-                    getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} 
-                    onChange={(event, newOption) => {
-                        setFieldValue("tarea", newOption);
-                    } }
-                    renderInput={(params) => (
-                    <TextField 
-                        {...params} 
-                        onChange={handleChange}
-                        margin="normal"
-                        label="Tarea"
-                        fullWidth
-                        value={values?.tarea}
-                    />
-                    )}
-                    />                 */}
-  
-
-                    <h3>Seleccionar fecha</h3>
-                    <FormField
-                    name="fecha"
-                    type="date"
-                    label="Fecha trabajada"
-                    inputFormat="yyyy-MM-dd"
-                    />
-
-                    <h3>Seleccionar cantidad horas</h3>
-                    <FormField
-                    name="cantidad_horas"
-                    type="int"
-                    label="Cantidad horas"
-                    />
-                </div>
-            <br />
-            <div style={{display:"flex", justifyContent: "space-around"}}>
-                {/* <Button style={{width:"25%", borderColor:"black" , color:"white", backgroundColor:"red"}} type="submit" variant="outlined">Eliminar</Button> */}
-                <Button style={{width:"25%", borderColor:"black" , color:"white", backgroundColor:"green"}} type="submit" variant="contained">Actualizar</Button>
+  return (
+    <div>
+      <form onSubmit={formik.handleSubmit}>
+        <div 
+        style={{display:"flex", flexDirection:"column", gap:"20px"}}
+        >
+            <div>
+            <Autocomplete
+            sx={{ width: "100%"}}
+            onChange={(event: any, newOption: Options | null) => {
+                setProject(newOption);
+                formik.values.nombre_proyecto = newOption?.name;
+                formik.values.id_proyecto = newOption?.id;
+            }}
+            defaultValue={defaultProject}
+            renderInput={(params) => <TextField {...params} label={"Proyectos"}/>}
+            options={projects} 
+            getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} />
             </div>
-            </Form>
-            )}
-            </Formik>
-        </div>
-    )
-}
 
-export default ModificacionHoras
+            <div>
+            <Autocomplete
+            sx={{ width: "100%"}}
+            defaultValue={defaultTask}
+            options={project?.tasks ?? []} 
+            onChange={(event: any, newOption: Options | null) => {
+                setTasks(newOption);
+                formik.values.id_tarea = newOption?.id;
+                formik.values.nombre_tarea = newOption?.name;
+            } }
+            renderInput={(params) => <TextField {...params} label={"Tareas"}/>}
+            getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} />
+            </div>  
+
+            <div>
+            <Autocomplete
+            defaultValue={defaultRecurso}
+            options={task?.collaborators as Recurso[] ?? []}
+            onChange={(event: any, newOption: Recurso | null) => {
+                setRecurso(newOption);
+                formik.values.id_recurso = newOption?.id;
+                formik.values.nombre_recurso = newOption?.name;
+            } }
+            sx={{ width: "100%"}}
+            renderInput={(params) => <TextField {...params} label={"Recursos"}/>}
+            getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} />
+            </div>
+
+            <div>
+            <TextField
+                fullWidth
+                id="cantidad"
+                type='number'
+                name="cantidad"
+                label="Cantidad"
+                defaultValue={props.defaultRegistro.cantidad}
+                onChange={formik.handleChange}
+                error={formik.touched.cantidad && Boolean(formik.errors.cantidad)}
+                helperText={formik.touched.cantidad && formik.errors.cantidad}
+            />
+            </div>
+            
+            <div>
+            <TextField
+                id="fecha_trabajada"
+                type="date"
+                defaultValue={props.defaultRegistro.fecha_trabajada}
+                value={formik.values.fecha_trabajada}
+                onChange={formik.handleChange}
+                error={formik.touched.cantidad && Boolean(formik.errors.cantidad)}
+                helperText={formik.touched.cantidad && formik.errors.cantidad}
+                sx={{ width: "100%"}}
+            />
+            </div>
+            
+            <div style={{display:"flex", justifyContent: "space-around"}}>
+                <Button 
+                style={{width:"25%", borderColor:"black" , color:"white", backgroundColor:"red"}} 
+                variant="outlined"
+                onClick={() => {
+                    removeRegistro(props.registroId)
+                }}>
+                Eliminar
+                </Button>
+                <Button 
+                style={{width:"25%", borderColor:"black" , color:"white", backgroundColor:"green"}} 
+                type="submit" 
+                variant="contained">
+                Actualizar
+                </Button>
+            </div>
+        </div>
+      </form>
+    </div>
+  );
+};

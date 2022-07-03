@@ -11,9 +11,6 @@ const Home: NextPage = () => {
   const registrosData = useRegistrosDeHoras();
   const [open, setOpen] = useState(false);
 
-  console.log(registrosData.registrosDeHoras)
-  console.log(registrosData)
-
   return (
   <div>
     <div className="page">

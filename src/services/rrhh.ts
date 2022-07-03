@@ -72,7 +72,7 @@ export const useRecurso = (recursoId: string) => {
   return { recurso, error, loading, ...rest };
 };
 
-export const updateRegistro = async (registro: RegistroDeHoras, registroId?: string) =>
+export const updateRegistro = async (registro: Registro, registroId?: string) =>
 await fetch(`${rrhhApi}/rrhh/${registroId ?? ""}`, {
   method: "PUT",
   headers: saveHeaders,
@@ -94,3 +94,9 @@ export const saveRegistro = async (registro: Registro) =>
     headers: saveHeaders,
     body: JSON.stringify(removeEmpty(registro)),
   }).then(checkStatus);
+
+export const removeRegistro = async (registroId: string) =>
+  await fetch(`${rrhhApi}/rrhh/${registroId ?? ""}`, {
+    method: "DELETE",
+    headers: saveHeaders,
+  });

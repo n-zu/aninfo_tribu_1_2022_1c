@@ -12,7 +12,6 @@ const RegistrosList = ({ registrosDeHoras, error, loading }: RegistroDeHorasList
     <div className={" flexContainer"}>
       {loading ? "LOADING" : ""}
       {error ? "ERROR" : ""}
-      {/* Acá si no hay ningún registro cargado se rompe */}
       {registrosDeHoras?.map((registro: RegistroDeHoras, i: number) => (
         <RegistroCard key={i} info={registro} link="/rrhh/modificarRegistro?id="/> 
       ))}

@@ -31,11 +31,8 @@ export default function RegistroForm(){
 
     const {projects} = useProjects();
     const [projectValue, setProjetc] = useState<Options | null>();
-    const [inputProject, setInputProject] = useState('');
     const [tasksValue,setTasks] = useState<Options | null>();
-    const [inputTask, setInputTask] = useState('');
     const [recursoValue,setRecurso] = useState<Recurso | null>();
-    const [inputRecurso, setInputRecurso] = useState('');
     const { project } = useProject((projectValue?.id ?? null) as unknown as string);
     const { task } = useTask((tasksValue?.id ?? null) as unknown as string);
     const date = '2020-01-01' as unknown as Date;
@@ -67,63 +64,38 @@ export default function RegistroForm(){
         
         <div>
           <Autocomplete
-          // id="controllable-states-demo"
           sx={{ width: "100%"}}
-          // value={projectValue}
           onChange={(event: any, newOption: Options | null) => {
               setProjetc(newOption);
               formik.values.nombre_proyecto = newOption?.name;
               formik.values.id_proyecto = newOption?.id;
-          } }
-          // inputValue={inputProject}
-          // onInputChange={(event, newInputValue) => {
-          //     setInputProject(newInputValue);
-          //     formik.values.nombre_proyecto = newInputValue;  
-          // } }
-          
+          }}
           renderInput={(params) => <TextField {...params} label={"Proyectos"}/>}
-
           options={projects} 
           getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} />
         </div>
 
         <div>
           <Autocomplete
-          // id="controllable-states-demo"
           sx={{ width: "100%"}}
-          value={tasksValue}
-          // disabled = {(project?.tasks?.length === 0 && false)? true: false}
           options={project?.tasks ?? []}
           onChange={(event: any, newOption: Options | null) => {
               setTasks(newOption);
               formik.values.id_tarea = newOption?.id;
               formik.values.nombre_tarea = newOption?.name;
           } }
-          // inputValue={inputTask}
-          // onInputChange={(event, newInputValue) => {
-          //     setInputTask(newInputValue);
-          //     formik.values.nombre_tarea = newInputValue;
-          // } }
           renderInput={(params) => <TextField {...params} label={"Tareas"}/>}
           getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} />
         </div>  
 
         <div>
           <Autocomplete
-          // id="controllable-states-demo"
-          value={recursoValue}
-          // disabled = {(task?.collaborators?.length === 0 && false)? true: false}
           options={task?.collaborators as Recurso[] ?? []}
           onChange={(event: any, newOption: Recurso | null) => {
               setRecurso(newOption);
               formik.values.id_recurso = newOption?.id;
               // formik.values.nombre_recurso = newOption?.name;
           } }
-          // inputValue={inputRecurso}
-          // onInputChange={(event, newInputValue) => {
-          //   formik.values.nombre_recurso = newInputValue;
-          //   setInputRecurso(newInputValue);
-          // } }
           sx={{ width: "100%"}}
           renderInput={(params) => <TextField {...params} label={"Recursos"}/>}
           getOptionLabel={(option) => zeroPad(option?.id ?? 0) + " - " + option?.name??''} />
