@@ -16,8 +16,6 @@ const SupportHome: NextPage = () => {
   const { projectId } = router.query;
   const { data: tickets, error } = useSWR<Ticket[]>("/tickets", supportFetcher)
 
-  console.log({ tickets })
-
   return (
     <Container className="page">
       <h1>Tickets de soporte</h1>
