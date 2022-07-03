@@ -1,16 +1,19 @@
 import type { NextPage } from "next";
 import { Box, Typography, Button } from "@mui/material";
-import { useProject } from "../../services/projects";
+import { useProject, useProjectTRs } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad, routeToTask } from "../../util/util";
 import ListBar from "../../components/common/ListBar";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import TaskModal from "../../components/projects/tasks/TaskModal";
 import TasksList from "../../components/projects/tasks/TasksList";
 import { Task } from "../../services/types";
 import Loading from "../../components/common/Loading";
 import ProjectModal from "../../components/projects/ProjectModal";
 import TitledText from "../../components/common/TitledText";
+import StateChip from "../../components/projects/StateChip";
+
+import styles from "../../styles/Project.module.css";
 
 type TasksProps = {
   projectId: string;
@@ -42,8 +45,14 @@ const Tasks = ({ projectId, tasks, onCreate }: TasksProps) => {
 const Project: NextPage = () => {
   const router = useRouter();
   const projectId = router?.query?.id as string;
+  const lastTask = router?.query?.lastTask as string;
   const { project, error, loading, mutate } = useProject(projectId);
+  const { totalTime } = useProjectTRs(parseInt(projectId));
   const [open, setOpen] = useState(false);
+
+  const getEstimatedTime = () =>
+    project?.tasks?.reduce((acc, task) => acc + task?.estimated_hours, 0) ?? 0;
+  const estimatedTime = useMemo(getEstimatedTime, [project]);
 
   return (
     <div className="page">
@@ -58,9 +67,21 @@ const Project: NextPage = () => {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4" style={{ alignSelf: "center" }}>
-              {zeroPad(project?.id ?? 0)} - {project?.name}
-            </Typography>
+            <Box
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                variant="h4"
+                className={lastTask ? styles.ProjectTitle : ""}
+                style={{ marginRight: "15px" }}
+              >
+                {zeroPad(project?.id ?? 0)} - {project?.name}
+              </Typography>
+              <StateChip state={project?.state} />
+            </Box>
             <Button
               variant="contained"
               color="primary"
@@ -70,10 +91,17 @@ const Project: NextPage = () => {
               Editar Proyecto
             </Button>
           </Box>
-          <TitledText title="Fecha de inicio">
-            {project?.initial_date}
-          </TitledText>
-          <TitledText title="Fecha de fin">{project?.final_date}</TitledText>
+          <Box className={styles.dataRow}>
+            <TitledText title="Fecha de inicio">
+              {project?.initial_date}
+            </TitledText>
+            <TitledText title="Fecha de fin">{project?.final_date}</TitledText>
+            <TitledText title="Horas Estimadas">{estimatedTime}</TitledText>
+            <TitledText title="Horas Trabajadas">
+              {totalTime} ( {((totalTime / estimatedTime) * 100).toPrecision(2)}{" "}
+              % )
+            </TitledText>
+          </Box>
           <TitledText title="Descripción">{project?.description}</TitledText>
           <Tasks
             projectId={projectId}

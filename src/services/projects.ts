@@ -1,4 +1,4 @@
-import { projectsApi, projectsResourcesApi, useSWR } from "./requests";
+import { projectsApi, rrhhApi, useSWR } from "./requests";
 import { Project, Task, Employee } from "./types";
 
 const saveHeaders = {
@@ -14,7 +14,9 @@ const checkStatus = (res: Response) => {
 export const projectsFetch = async (url: string, request?: any) => {
   return fetch(projectsApi + url, {
     ...request,
-  }).then((res) => res.json());
+  })
+    .then(checkStatus)
+    .then((res) => res.json());
 };
 
 export const useProjects = () => {
@@ -60,34 +62,93 @@ export const useTask = (taskId: string) => {
   return { task, error, loading, ...rest };
 };
 
-export const saveTask = async (task: Task, projectId?: string, taskId?: number) =>
-  await fetch(projectsApi + (projectId ? `/projects/${projectId}/tasks/` : `/tasks/${taskId}`), {
-    method: projectId ? "POST" : "PUT",
-    headers: saveHeaders,
-    body: JSON.stringify(removeEmpty(task)),
-  }).then(checkStatus);
-
-export const employeesFetch = async (url: string, request?: any) => {
-  return fetch(projectsResourcesApi + url, {
-    ...request,
-    headers: {
-      accept: "application/json",
+export const saveTask = async (
+  task: Task,
+  projectId?: string,
+  taskId?: number
+) =>
+  await fetch(
+    projectsApi +
+      (projectId ? `/projects/${projectId}/tasks/` : `/tasks/${taskId}`),
+    {
+      method: projectId ? "POST" : "PUT",
+      headers: saveHeaders,
+      body: JSON.stringify(removeEmpty(task)),
     }
-  }).then((res) => res.json());
+  ).then(checkStatus);
+
+export const deleteCollaborator = async (colabId: number, taskId: string) => {
+  console.log("delete path: " + `/tasks/${taskId}/collaborators/${colabId}`);
+  return await fetch(
+    projectsApi + `/tasks/${taskId}/collaborators/${colabId}`,
+    {
+      method: "DELETE",
+      headers: saveHeaders,
+    }
+  ).then(checkStatus);
+};
+
+export const addCollaborator = async (colabId: number, taskId: string) => {
+  console.log("delete path: " + `/tasks/${taskId}/collaborators/`);
+  return await fetch(projectsApi + `/tasks/${taskId}/collaborators/`, {
+    method: "POST",
+    headers: saveHeaders,
+    body: JSON.stringify({ employee_id: colabId }),
+  }).then(checkStatus);
+};
+
+const removeEmpty = <T>(object: T): T => {
+  return Object.fromEntries(
+    Object.entries(object).map(([key, value]) => [
+      key,
+      value === "" ? null : value,
+    ])
+  ) as T;
+};
+
+export const rrhhFetch = async (url: string, request?: any) => {
+  return fetch(rrhhApi + url, {
+    ...request,
+  })
+    .then(checkStatus)
+    .then((res) => res.json());
 };
 
 export const useEmployees = () => {
   const { data, error, isValidating, ...rest } = useSWR(
-    "/resources/",
-    employeesFetch
+    "/recursos/",
+    rrhhFetch
   );
   const loadingEmployee = !data && isValidating;
 
-  const employees = data as Employee[];
+  const employees = error ? [] : (data as Employee[]);
 
   return { employees, error, loadingEmployee, ...rest };
 };
 
-const removeEmpty = <T>(object: T): T => {
-  return Object.fromEntries(Object.entries(object).map(([key, value]) => [key, value === "" ? null : value])) as T;
-}
+const useTRs = (name: string, id: number) => {
+  const { data, error, isValidating, ...rest } = useSWR(
+    id ? `/rrhh/${name}/${id}` : null,
+    rrhhFetch
+  );
+  const loading = !data && isValidating;
+
+  const timeRegistries = data as any;
+  const totalTime =
+    timeRegistries?.reduce(
+      (acc: number, curr: any) => acc + curr.cantidad,
+      0
+    ) ?? 0;
+
+  return {
+    timeRegistries,
+    totalTime,
+    error,
+    loading,
+  };
+};
+
+export const useProjectTRs = (projectId: number) =>
+  useTRs("proyecto", projectId);
+
+export const useTaskTRs = (projectId: number) => useTRs("tarea", projectId);

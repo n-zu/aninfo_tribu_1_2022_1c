@@ -1,6 +1,6 @@
 import { NextRouter } from 'next/router';
 
-export const zeroPad = (num: number, places: number = 3) => {
+export const zeroPad = (num: number, places: number = 4) => {
   let zero = places - num.toString().length + 1;
   return Array(+(zero > 0 && zero)).join("0") + num;
 };
@@ -22,4 +22,13 @@ export const dateDiff = (date1: Date, date2: Date) => {
 
 export const pluralize = (noun: string, count?: number, suffix:string = "s") => {
   return `${count} ${noun}${count !== 1 ? suffix : ''}`;
+}
+
+export const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export const routeToRegistro = (id : number | null, router : NextRouter) => {
+  if (!id) return;
+  router.push("/rrhh/registro?id=" + id);
 }

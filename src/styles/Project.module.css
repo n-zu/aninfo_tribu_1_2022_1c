@@ -1,0 +1,26 @@
+@keyframes _ProjectSubtitle {
+  to {
+    font-size: 1.5rem;
+    color: #0008;
+  }
+}
+.ProjectSubtitle {
+  animation: _ProjectSubtitle 1s forwards;
+}
+
+@keyframes _ProjectTitle {
+  from {
+    font-size: 1.5rem;
+    color: #0008;
+  }
+}
+.ProjectTitle {
+  animation: _ProjectTitle 0.5s forwards;
+}
+
+.dataRow {
+  display: flex;
+}
+.dataRow > div {
+  margin-right: 4em;
+}
