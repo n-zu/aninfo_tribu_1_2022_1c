@@ -29,6 +29,7 @@ const validate = (values: any) => {
   if (values.fecha_trabajada > today)
     errors.fecha_trabajada =
       "La fecha de finalización debe ser mayor a la de inicio";
+  console.log(errors);
   return errors;
 };
 
@@ -66,8 +67,8 @@ export default function RegistroForm(props: {
       id_proyecto: projectValue?.id,
       id_tarea: tasksValue?.id,
       id_recurso: recursoValue?.id,
-      cantidad: " ",
-      fecha_trabajada: date,
+      cantidad: props.defaultRegistro?.cantidad,
+      fecha_trabajada: props.defaultRegistro?.fecha_trabajada,
     },
     validate: validate,
     onSubmit: async (values) => {
@@ -195,7 +196,9 @@ export default function RegistroForm(props: {
                     try {
                       removeRegistro(props.registroId);
                       toast.success("Registro deleted successfully");
-                      setTimeout(function() { router.push('/rrhh'); }, 5000);
+                      setTimeout(function () {
+                        router.push("/rrhh");
+                      }, 5000);
                     } catch (err) {
                       console.error(err);
                       toast.error("ErrorMessage deleted successfully");
