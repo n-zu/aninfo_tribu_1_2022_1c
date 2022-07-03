@@ -106,14 +106,28 @@ const Task: NextPage = () => {
               {task?.id ? <AssociatedTickets taskId={task.id} /> : null}
             </Box>
             <div>
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ height: "fit-content" }}
-                onClick={onHours}
+              <Link
+                href={"/rrhh?cargarEn=" + task?.project?.id + "-" + task?.id}
+                style={
+                  !task?.project?.id || !task?.id
+                    ? {
+                        pointerEvents: "none",
+                      }
+                    : {}
+                }
               >
-                Cargar horas
-              </Button>
+                <a>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ height: "fit-content" }}
+                    onClick={onHours}
+                    disabled={!task?.project?.id || !task?.id}
+                  >
+                    Cargar horas
+                  </Button>
+                </a>
+              </Link>
             </div>
           </div>
           <TaskModal

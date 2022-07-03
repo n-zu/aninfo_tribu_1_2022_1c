@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ErrorMessage, Form, Formik, useFormik } from "formik";
 import { Alert, Autocomplete, Button, TextField } from "@mui/material";
 import styles from "./Formulario.module.css";
@@ -33,6 +33,10 @@ export default function RegistroForm(props: {
   onSave?: Function;
   onClose?: Function;
   setDisabled?: Function;
+  defaultValues: {
+    project: number;
+    task: number;
+  };
 }) {
   const { recursos } = useRecursos();
   const { projects, error, loading } = useProjects();
