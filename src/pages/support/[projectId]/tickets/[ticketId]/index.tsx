@@ -3,7 +3,9 @@ import dayjs from "dayjs";
 import es from "dayjs/locale/es";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import NextLink from "next/link"
 import { State, Ticket } from "@services/support/types";
+import { AiOutlineEdit } from "react-icons/ai";
 
 const ticket: Ticket = {
     id: 1,
@@ -29,7 +31,14 @@ const TicketScreen: NextPage = () => {
         <Container className="page" >
             <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <h1>#{ticketId} {ticket.title}</h1>
-                <Chip label="Abierto" sx={{ backgroundColor: colors.blue[600], color: "white", padding: "0 1em" }} />
+                <Stack direction="row" alignItems="center" spacing={2}>
+                    <Chip label="Abierto" sx={{ backgroundColor: colors.blue[600], color: "white", padding: "0 1em" }} />
+                    <NextLink href={`/support/${projectId}/tickets/${ticketId}/edit`} passHref>
+                        <Link>
+                            <AiOutlineEdit size={25} />
+                        </Link>
+                    </NextLink>
+                </Stack>
             </Stack>
 
             <Stack direction="row">
@@ -41,7 +50,7 @@ const TicketScreen: NextPage = () => {
                 <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
                     <Typography>Vencimiento: {ticket.expirationDate.format("DD/MM/YYYY")}</Typography>
                     <Typography>Fecha de creación: {ticket.creationDate.format("DD/MM/YYYY")}</Typography>
-                    <Typography>Última edición: {ticket.lastEditionDate.format("DD/MM/YYYY")}</Typography>
+                    <Typography>Última edición: {dayjs().format("DD/MM/YYYY")}</Typography>
                 </Stack>
             </Stack>
 
