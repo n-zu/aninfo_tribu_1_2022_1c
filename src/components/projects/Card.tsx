@@ -29,7 +29,7 @@ const InfoCard = ({
 }) => {
   const finishString = useMemo(() => {
     const today = new Date();
-    const prefix = "fecha de finalización ";
+    const prefix = "Fecha de finalización ";
     return prefix + dayjs(info.final_date).locale(es).from(today);
   }, [info.final_date]);
 
@@ -61,21 +61,25 @@ const InfoCard = ({
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
+                  alignItems: "flex-end",
                 }}
               >
-                <Tooltip
-                  title={`Fecha de fin: ${info.final_date}`}
-                  style={{
-                    width: "fit-content",
-                    height: "fit-content",
-                    alignSelf: "flex-end",
-                  }}
-                  placement="right"
-                >
+                <Box>
                   <Typography variant="subtitle1">
-                    {`Iniciado el ${info.initial_date} (${finishString})`}
+                    {`Iniciado el ${info.initial_date}`}
                   </Typography>
-                </Tooltip>
+                  <Tooltip
+                    title={`Fecha de fin: ${info.final_date}`}
+                    style={{
+                      width: "fit-content",
+                      height: "fit-content",
+                      alignSelf: "flex-end",
+                    }}
+                    placement="right"
+                  >
+                    <Typography variant="subtitle1">{finishString}</Typography>
+                  </Tooltip>
+                </Box>
                 <Box>{children}</Box>
               </Box>
             </CardContent>
