@@ -117,7 +117,8 @@ const CustomDatePicker: FunctionComponent<Omit<CustomProps, "options">> = ({ id,
                 return <TextField
                     variant="standard"
                     type="date"
-                    {...field} />
+                    {...field}
+                    value={dayjs(field.value).format("YYYY-MM-DD")}/>
             }}
         </Field>
     </Stack>
