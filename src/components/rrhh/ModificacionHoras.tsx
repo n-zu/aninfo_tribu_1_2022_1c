@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import DeleteIcon from "@mui/icons-material/Delete";
 import dayjs from "dayjs";
+import { useRouter } from "next/router";
 
 const today = dayjs().format("YYYY-MM-DD");
 
@@ -54,6 +55,8 @@ export default function RegistroForm(props: {
   );
   const { task } = useTask((tasksValue?.id ?? null) as unknown as string);
   const date = props.defaultRegistro.fecha_trabajada;
+
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -189,10 +192,10 @@ export default function RegistroForm(props: {
                   variant="outlined"
                   startIcon={<DeleteIcon />}
                   onClick={(event) => {
-                    //removeRegistro(props.registroId)
                     try {
                       removeRegistro(props.registroId);
                       toast.success("Registro deleted successfully");
+                      setTimeout(function() { router.push('/rrhh'); }, 5000);
                     } catch (err) {
                       console.error(err);
                       toast.error("ErrorMessage deleted successfully");

@@ -2,8 +2,6 @@ import { Registro } from "../../../services/types";
 import Modal from "../../common/Modal/Modal";
 import RegistroForm from "./RegistroForm";
 
-
-
 type Props = {
   open: boolean;
   onClose: () => void;

@@ -1,7 +1,6 @@
 import React from "react";
-import { ErrorMessage, Form, Formik, useFormik } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import { Alert, Autocomplete, Button, TextField } from "@mui/material";
-import styles from "./Formulario.module.css";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
@@ -22,10 +21,10 @@ const validate = (values: any) => {
   if (!values.id_recurso) errors.id_recurso = "Requerido";
   if (!values.cantidad) errors.cantidad = "Requerido";
   if (values?.cantidad < 1 || values?.cantidad > 8)
-    errors.cantidad = "La cantidad debe estar entre 1 y 8";
+    errors.cantidad = "La cantidad ingresada debe ser entre 1 y 8 horas";
   if (!values.fecha_trabajada) errors.fecha_trabajada = "Requerido";
   if (values.fecha_trabajada > today)
-    errors.fecha_trabajada = "La fecha de finalización debe ser mayor a hoy";
+    errors.fecha_trabajada = "La fecha trabajada debe ser anterior a la fecha actual";
   return errors;
 };
 
@@ -150,7 +149,7 @@ export default function RegistroForm(props: {
                 onChange={(event: any, newOption: Recurso | null) => {
                   setRecurso(newOption);
                   setFieldValue("id_recurso", newOption?.id);
-                  // formik.values.nombre_recurso = newOption?.name;
+                  setFieldValue("nombre_recurso", newOption?.name);
                 }}
                 disabled={loading || !values.id_tarea}
                 sx={{ width: "100%", marginTop: "10px" }}
