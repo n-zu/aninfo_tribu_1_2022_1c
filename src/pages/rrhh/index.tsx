@@ -1,13 +1,13 @@
 import { routeToRegistro } from "../../util/util";
-import RegistrosList from "../../components/rrhh/RegistrosList";
+import RegistrosList from "../../components/rrhh/registros/RegistrosList";
 import MenuHome from "../../components/rrhh/MenuHome";
 import { ListRegistosBar } from "../../components/common/ListBar";
 import { useRegistrosDeHoras } from "../../services/rrhh";
 import React, { useState } from "react";
-import RegistroModal from "../../components/rrhh/RegistroModal";
 import { NextPage } from "next";
 import Loading from "../../components/common/Loading";
 import { Alert } from "@mui/material";
+import RegistroModal from "../../components/rrhh/registros/RegistroModal";
 
 const Home: NextPage = () => {
   const registrosData = useRegistrosDeHoras();

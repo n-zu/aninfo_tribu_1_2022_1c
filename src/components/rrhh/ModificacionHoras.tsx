@@ -11,7 +11,7 @@ import Loading from '../common/Loading';
 import { toast } from 'react-toastify';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
-import styles from "./Formulario.module.css";
+
 
 const validationSchema = yup.object({
     nombre_proyecto: yup
@@ -31,18 +31,6 @@ const validationSchema = yup.object({
     .required('Requerido'),
 });
 
-
-var p1 = new Promise(function(resolve, reject) {
-    resolve('Success!');
-    // or
-    // reject ("Error!");
-  });
-  
-  p1.then(function(value) {
-    console.log(value); // Success!
-  }, function(reason) {
-    console.log(reason); // Error!
-  });
 
 export default function RegistroForm(props:{defaultRegistro : Registro, registroId: string, loadingRegistro?: boolean}){
 
@@ -174,10 +162,8 @@ export default function RegistroForm(props:{defaultRegistro : Registro, registro
                 onClick={(event) => {
                     //removeRegistro(props.registroId)
                     try{
-                            console.log("que onda" + props.registroId);
                             removeRegistro(props.registroId)
-                            const v =  toast.success("Registro deleted successfully")
-                            console.log(v);
+                            toast.success("Registro deleted successfully")
                             }
                     catch(err) {    
                             console.error(err);

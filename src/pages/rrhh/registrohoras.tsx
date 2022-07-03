@@ -10,7 +10,6 @@ const RegistroHoras: NextPage = () => {
   const router = useRouter();
   const registroId = router?.query?.id as string;
   const { registro, error, loading } = useRegistro(registroId);
-  console.log(registro);
   return (
     <div className="page" style={{width: '100%'}}>
       {loading ? <Loading /> : ""}

@@ -43,8 +43,6 @@ export const useRegistro = (registroId: string) => {
 
   const registro = data as Registro;
 
-  console.log(error);
-
   return { registro, error, loading, ...rest };
 };
 

@@ -2,15 +2,15 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Alert, Autocomplete, Button , TextField} from "@mui/material";
-import { useProject, useProjects, useTask } from '../../services/projects';
-import { Options, Recurso, Registro } from '../../services/types';
-import { zeroPad } from '../../util/util';
 import styles from "./Formulario.module.css";
-import { saveRegistro } from '../../services/rrhh';
 import { useState } from 'react'
 import { toast } from 'react-toastify';
-import Loading from '../common/Loading';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import { useProject, useProjects, useTask} from '../../../services/projects';
+import { Options, Recurso, Registro } from '../../../services/types';
+import { zeroPad } from '../../../util/util';
+import Loading from '../../common/Loading';
+import { saveRegistro } from '../../../services/rrhh';
 
 const validationSchema = yup.object({
     nombre_proyecto: yup
@@ -38,7 +38,6 @@ export default function RegistroForm(props:{onSave?: Function,onClose?: Function
     const [recursoValue,setRecurso] = useState<Recurso | null>();
     const { project } = useProject((projectValue?.id ?? null) as unknown as string);
     const { task } = useTask((tasksValue?.id ?? null) as unknown as string);
-    const [disable,setDisable] = useState<boolean >(true);
     const date = '2020-01-01' as unknown as Date;
 
 
@@ -67,7 +66,6 @@ export default function RegistroForm(props:{onSave?: Function,onClose?: Function
         },
     });
   
-  console.log("LOADING: "+loading);
   return (
     <div>
       {error ? (

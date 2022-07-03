@@ -1,8 +1,9 @@
-import styles from "../common/Card.module.css";
+import styles from "../../common/Card.module.css";
 import Link from "next/link";
-import { RegistroDeHoras } from "../../services/types";
-import { zeroPad } from "../../util/util";
+
 import { Card, CardActionArea, CardContent, Typography }  from '@mui/material';
+import { zeroPad } from "../../../util/util";
+import { RegistroDeHoras } from "../../../services/types";
 
 const RegistroCard = ({ info, link }: { info: RegistroDeHoras | null, link: string }) => {
  

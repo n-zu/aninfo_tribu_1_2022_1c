@@ -1,4 +1,4 @@
-import { RegistroDeHoras } from "../../services/types";
+import { RegistroDeHoras } from "../../../services/types";
 import RegistroCard from "./RegistroCard";
 
 type RegistroDeHorasListProps = {

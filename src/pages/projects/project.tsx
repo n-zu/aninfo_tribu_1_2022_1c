@@ -44,7 +44,6 @@ const Project: NextPage = () => {
   const projectId = router?.query?.id as string;
   const { project, error, loading, mutate } = useProject(projectId);
   const [open, setOpen] = useState(false);
-  console.log(project);
   return (
     <div className="page">
       {loading ? <Loading /> : ""}
