@@ -1,5 +1,19 @@
 import type { Dayjs } from "dayjs";
 
+// Products
+
+export type ProductVersion = {
+  id: number;
+  name: string;
+};
+
+export type Product = {
+  id: number;
+  name: string;
+  versions: ProductVersion[];
+};
+
+// Tickets
 
 export enum State {
   ABIERTO,
