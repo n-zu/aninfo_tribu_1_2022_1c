@@ -10,9 +10,8 @@ const RegistroHoras: NextPage = () => {
   const router = useRouter();
   const registroId = router?.query?.id as string;
   const { registro, error, loading } = useRegistro(registroId);
-  console.log(registro);
   return (
-    <div className="page">
+    <div className="page" style={{width: '100%'}}>
       {loading ? <Loading /> : ""}
       {error ? "ERROR" : ""}
       {/* {registro && 
@@ -48,7 +47,7 @@ const RegistroHoras: NextPage = () => {
         </div>
       }  */}
         {
-          registro && <ModificacionHoras registro={registro}/>
+          // registro && <ModificacionHoras registro={registro}/>
         }
        </div>
     );

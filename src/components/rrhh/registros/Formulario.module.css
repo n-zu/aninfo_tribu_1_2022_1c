@@ -1,0 +1,31 @@
+.formulario {
+	width: 600px;
+	height: 520px;
+	margin:0;
+	background: #fff;
+	border-radius: 5px;
+}
+
+.formulario > div {
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+}
+
+.formulario label {
+	display: block;
+	font-size: 14px;
+}
+
+.formulario button[type="submit"] {
+	cursor: pointer;
+	border-radius: 5px;
+	font-size: 16px;
+	transition: .3s ease all;
+	height: 50px;
+	width: auto;
+}
+
+.formulario input[type="radio"] {
+	width: auto;
+}

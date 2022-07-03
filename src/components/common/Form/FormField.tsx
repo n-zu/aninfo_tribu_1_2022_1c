@@ -57,12 +57,12 @@ const FormField = ({
   );
 };
 
-const AutoComplete = ({ setFieldValue, ...params }: any) => {
+const AutoComplete = ({ setFieldValue, label, name, ...params }: any) => {
   return (
     <AutoMui
-      renderInput={(props) => <TextField label={params.label} {...props} />}
+      renderInput={(props) => <TextField label={label} {...props} />}
       {...params}
-      onChange={(_, value) => setFieldValue(params.name, value)}
+      onChange={(_, value) => setFieldValue(name, value)}
     />
   );
 };

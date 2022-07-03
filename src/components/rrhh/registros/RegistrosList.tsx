@@ -1,4 +1,4 @@
-import { RegistroDeHoras } from "../../services/types";
+import { RegistroDeHoras } from "../../../services/types";
 import RegistroCard from "./RegistroCard";
 
 type RegistroDeHorasListProps = {
@@ -7,12 +7,13 @@ type RegistroDeHorasListProps = {
   loading: boolean;
 };
 const RegistrosList = ({ registrosDeHoras, error, loading }: RegistroDeHorasListProps) => {
+  
   return (
     <div className={" flexContainer"}>
       {loading ? "LOADING" : ""}
       {error ? "ERROR" : ""}
       {registrosDeHoras?.map((registro: RegistroDeHoras, i: number) => (
-        <RegistroCard key={i} info={registro} link="/rrhh/registrohoras?id="/>
+        <RegistroCard key={i} info={registro} link="/rrhh/modificarRegistro?id="/> 
       ))}
     </div>
   );
