@@ -1,6 +1,5 @@
 import React from "react";
 import { useFormik } from "formik";
-import * as yup from "yup";
 import { Alert, Autocomplete, Button, TextField } from "@mui/material";
 import { useProject, useProjects, useTask } from "../../services/projects";
 import { Options, Recurso, Registro } from "../../services/types";
