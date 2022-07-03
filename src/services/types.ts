@@ -1,11 +1,16 @@
 export type EmployeeId = {
   id: number;
-}
+};
 
 export type Task = {
   id?: number;
+  state: string;
   name: string;
   description: string;
+  project: {
+    id: number;
+    name: string;
+  };
   initial_date: string;
   final_date: string;
   estimated_hours: number;
@@ -15,6 +20,7 @@ export type Task = {
 
 export type Project = {
   id?: number;
+  state: string;
   name: string;
   initial_date: string;
   final_date: string;
@@ -30,9 +36,9 @@ export type Options = {
 };
 
 export type Employee = {
-  legajo: number;
-  Nombre: string;
-  Apellido: string;
+  id: number;
+  name: string;
+  lastname: string;
 };
 
 export type OptionsRegistros = {

@@ -1,4 +1,4 @@
-import { projectsApi, projectsResourcesApi, useSWR } from "./requests";
+import { projectsApi, rrhhApi, useSWR } from "./requests";
 import { Project, Task, Employee } from "./types";
 
 const saveHeaders = {
@@ -77,25 +77,24 @@ export const saveTask = async (
     }
   ).then(checkStatus);
 
-export const employeesFetch = async (url: string, request?: any) => {
-  return fetch(projectsResourcesApi + url, {
-    ...request,
-    headers: {
-      accept: "application/json",
-    },
-  }).then((res) => res.json());
+export const deleteCollaborator = async (colabId: number, taskId: string) => {
+  console.log("delete path: " + `/tasks/${taskId}/collaborators/${colabId}`);
+  return await fetch(
+    projectsApi + `/tasks/${taskId}/collaborators/${colabId}`,
+    {
+      method: "DELETE",
+      headers: saveHeaders,
+    }
+  ).then(checkStatus);
 };
 
-export const useEmployees = () => {
-  const { data, error, isValidating, ...rest } = useSWR(
-    "/resources/",
-    employeesFetch
-  );
-  const loadingEmployee = !data && isValidating;
-
-  const employees = data as Employee[];
-
-  return { employees, error, loadingEmployee, ...rest };
+export const addCollaborator = async (colabId: number, taskId: string) => {
+  console.log("delete path: " + `/tasks/${taskId}/collaborators/`);
+  return await fetch(projectsApi + `/tasks/${taskId}/collaborators/`, {
+    method: "POST",
+    headers: saveHeaders,
+    body: JSON.stringify({ employee_id: colabId }),
+  }).then(checkStatus);
 };
 
 const removeEmpty = <T>(object: T): T => {
@@ -106,3 +105,50 @@ const removeEmpty = <T>(object: T): T => {
     ])
   ) as T;
 };
+
+export const rrhhFetch = async (url: string, request?: any) => {
+  return fetch(rrhhApi + url, {
+    ...request,
+  })
+    .then(checkStatus)
+    .then((res) => res.json());
+};
+
+export const useEmployees = () => {
+  const { data, error, isValidating, ...rest } = useSWR(
+    "/recursos/",
+    rrhhFetch
+  );
+  const loadingEmployee = !data && isValidating;
+
+  const employees = error ? [] : (data as Employee[]);
+
+  return { employees, error, loadingEmployee, ...rest };
+};
+
+const useTRs = (name: string, id: number) => {
+  const { data, error, isValidating, ...rest } = useSWR(
+    id ? `/rrhh/${name}/${id}` : null,
+    rrhhFetch
+  );
+  const loading = !data && isValidating;
+
+  const timeRegistries = data as any;
+  const totalTime =
+    timeRegistries?.reduce(
+      (acc: number, curr: any) => acc + curr.cantidad,
+      0
+    ) ?? 0;
+
+  return {
+    timeRegistries,
+    totalTime,
+    error,
+    loading,
+  };
+};
+
+export const useProjectTRs = (projectId: number) =>
+  useTRs("proyecto", projectId);
+
+export const useTaskTRs = (projectId: number) => useTRs("tarea", projectId);

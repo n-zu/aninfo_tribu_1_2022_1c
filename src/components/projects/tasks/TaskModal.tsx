@@ -5,6 +5,17 @@ import { Button, Typography } from "@mui/material";
 import { saveTask } from "../../../services/projects";
 import { toast } from "react-toastify";
 import { Task } from "../../../services/types";
+import { capitalize } from "../../../util/util";
+
+// el orden en el que aparecen los estados acá
+// se usa para ordenarlos en la lista
+export const TASK_STATES = [
+  "bloqueada",
+  "en progreso",
+  "sin iniciar",
+  "finalizada",
+  "cancelada",
+];
 
 type Props = {
   projectId?: string;
@@ -19,6 +30,7 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
 
   const initialValues = {
     name: task?.name ?? "",
+    state: task?.state ?? null,
     initial_date: task?.initial_date ?? "",
     final_date: task?.final_date ?? "",
     estimated_hours: task?.estimated_hours ?? "",
@@ -28,12 +40,15 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
   const validate = (values: any) => {
     const errors: any = {};
     if (!values.name) errors.name = "Requerido";
+    if (!values.state) errors.state = "Requerido";
     if (!values.initial_date) errors.initial_date = "Requerido";
     if (!values.final_date) errors.final_date = "Requerido";
     if (values.final_date < values.initial_date)
       errors.final_date =
         "La fecha de finalización debe ser mayor a la de inicio";
     if (!values.description) errors.description = "Requerido";
+    if (values.estimated_hours && values.estimated_hours < 0)
+      errors.estimated_hours = "Debe ser mayor o igual a 0";
     return errors;
   };
 
@@ -59,10 +74,18 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
         validate={validate}
         onSubmit={onSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ setFieldValue }) => (
           <Form>
             <div>
               <FormField name="name" label="Nombre" />
+              <FormField
+                name="state"
+                label="Estado"
+                type="autocomplete"
+                options={TASK_STATES}
+                getOptionLabel={capitalize}
+                setFieldValue={setFieldValue}
+              />
               <FormField
                 name="initial_date"
                 type="date"

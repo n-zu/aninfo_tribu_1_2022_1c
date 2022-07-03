@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Field, ErrorMessage } from "formik";
 import { TextField, Autocomplete as AutoMui } from "@mui/material";
 import styles from "./FormField.module.css";
@@ -58,12 +57,12 @@ const FormField = ({
   );
 };
 
-const AutoComplete = ({ setFieldValue, ...params }: any) => {
+const AutoComplete = ({ setFieldValue, label, name, ...params }: any) => {
   return (
     <AutoMui
-      renderInput={(props) => <TextField {...props} />}
+      renderInput={(props) => <TextField label={label} {...props} />}
       {...params}
-      onChange={(_, value) => setFieldValue(params.name, value)}
+      onChange={(_, value) => setFieldValue(name, value)}
     />
   );
 };
