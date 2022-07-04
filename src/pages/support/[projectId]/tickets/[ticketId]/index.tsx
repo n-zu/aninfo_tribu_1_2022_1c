@@ -14,10 +14,11 @@ import { useRouter } from "next/router";
 import NextLink from "next/link";
 import { AiOutlineEdit } from "react-icons/ai";
 import useSWR from "swr";
-import { supportFetcher, Ticket } from "@services/support";
+import { Employee, supportFetcher, Ticket } from "@services/support";
 import { useRecursos } from "@services/rrhh";
+import EmployeeList from "src/components/common/EmployeeList";
+import { EmployeeId } from "src/services/types";
 import TasksPicker from "src/components/support/TasksPicker";
-
 const TicketScreen: NextPage = () => {
   const router = useRouter();
   const { projectId, ticketId } = router.query;
@@ -35,6 +36,39 @@ const TicketScreen: NextPage = () => {
   );
 };
 
+const saveHeaders = {
+  "Content-Type": "application/json",
+  Accept: "application/json",
+};
+
+const supportAPIUrl = "https://squad320221c-production.up.railway.app";
+
+const addResponsable = async (colabId: number, ticketId: number) => {
+  console.log(
+    "delete path: " + `/tickets/${ticketId}/employees?employee_id=${colabId}`
+  );
+  return await fetch(
+    supportAPIUrl + `/tickets/${ticketId}/employees?employee_id=${colabId}`,
+    {
+      method: "POST",
+      headers: saveHeaders,
+    }
+  );
+};
+
+export const deleteResponsable = async (colabId: number, ticketId: number) => {
+  console.log(
+    "delete path: " + `/tickets/${ticketId}/employees?employee_id=${colabId}`
+  );
+  return await fetch(
+    supportAPIUrl + `/tickets/${ticketId}/employees?employee_id=${colabId}`,
+    {
+      method: "DELETE",
+      headers: saveHeaders,
+    }
+  );
+};
+
 const CustomComponent = ({
   ticket,
   projectId,
@@ -43,6 +77,20 @@ const CustomComponent = ({
   projectId: string;
 }) => {
   const { recursos, error: employeesError } = useRecursos();
+
+  const currentEmployees: EmployeeId[] = ticket?.employees.map((employee) => {
+    let ids: EmployeeId = { id: employee };
+    return ids;
+  });
+
+  const addRes = (colabId: number) => {
+    addResponsable(colabId, ticket.id);
+  };
+
+  const deleteRes = (colabId: number) => {
+    deleteResponsable(colabId, ticket.id);
+  };
+
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -74,16 +122,16 @@ const CustomComponent = ({
           <Typography>Severidad: {ticket.severity}</Typography>
           <Typography>Prioridad: {ticket.priority}</Typography>
           <Typography>
-            Responsable/s:{" "}
-            {ticket.employees.map((employeeId) => {
-              const recurso = recursos?.find((r) => r.id == employeeId);
-              return recurso ? (
-                <Chip
-                  key={employeeId}
-                  label={`${recurso?.name} ${recurso?.lastname}`}
-                />
-              ) : undefined;
-            })}
+            Responsable/s:
+            {
+              <EmployeeList
+                name={"responsable"}
+                title={"responsables"}
+                currentEmployees={currentEmployees}
+                addEmployee={addRes}
+                removeEmployee={deleteRes}
+              />
+            }
           </Typography>
           <TasksPicker ticket={ticket} />
         </Stack>

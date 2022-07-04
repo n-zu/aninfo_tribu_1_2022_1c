@@ -7,8 +7,8 @@ import { capitalize } from "../../util/util";
 import { toast } from "react-toastify";
 
 type Props = {
-  addEmployee: (id: number) => Promise<void>;
-  removeEmployee: (id: number) => Promise<void>;
+  addEmployee: Function;//(id: number) => Promise<void>;
+  removeEmployee: Function;//(id: number) => Promise<void>;
   mutate?: () => void;
   name: string;
   title?: string;
