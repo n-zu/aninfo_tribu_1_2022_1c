@@ -18,17 +18,11 @@ import Caption from "../../common/Caption";
 import { zeroPad } from "../../../util/util";
 import TicketStatusChip from "../../support/TicketStatusChip";
 
-type AssociatedTask = {
-  id: number;
-  taskId: number;
-  ticketId: number;
-};
-
 type Ticket = {
   id: number;
   title: string;
   state: string;
-  tasks: AssociatedTask[];
+  tasks: number[];
 };
 
 const URL = "https://squad320221c-production.up.railway.app/tickets";
@@ -41,9 +35,8 @@ const AssociatedTickets = ({ taskId }: { taskId: number }) => {
   const tickets = useMemo(() => {
     if (!data) return [];
     return data.filter((ticket: Ticket) => {
-      return ticket.tasks.some(
-        (task: AssociatedTask) => task.taskId === taskId
-      );
+      console.log(ticket);
+      return ticket.tasks.some((id: number) => id === taskId);
     });
   }, [data, taskId]);
 
@@ -66,7 +59,7 @@ const AssociatedTickets = ({ taskId }: { taskId: number }) => {
       ) : null}
       {tickets.map((ticket: Ticket) => (
         <a key={ticket.id}>
-          <NextLink href={`/support/${ticket.id}`} passHref>
+          <NextLink href={`/support/53/tickets/${ticket.id}`} passHref>
             <ButtonBase sx={{ width: "100%" }} style={{ marginTop: 10 }}>
               <Card sx={{ width: "100%" }} className={styles.hover}>
                 <CardContent style={{ padding: 10 }}>
