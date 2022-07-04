@@ -12,6 +12,7 @@ import StateChip from "../../components/projects/StateChip";
 import styles from "../../styles/Project.module.css";
 import Collaborators from "../../components/projects/tasks/Collaborators";
 import AssociatedTickets from "../../components/projects/tasks/AssociatedTickets";
+import EmployeeAvatar from "../../components/projects/tasks/EmployeeAvatar";
 
 const Task: NextPage = () => {
   const router = useRouter();
@@ -131,7 +132,9 @@ const Task: NextPage = () => {
                   {task?.estimated_hours}
                 </TitledText>
                 <TitledText title="Horas Trabajadas">{worked_hours}</TitledText>
+                <EmployeeAvatar id={task?.assigned_employee} />
               </Box>
+
               <TitledText title="Descripción">{task?.description}</TitledText>
             </div>
 

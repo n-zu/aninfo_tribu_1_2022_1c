@@ -1,15 +1,23 @@
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, CircularProgressProps } from "@mui/material";
 
-const Loading = () => (
+type Props = {
+  center?: boolean;
+} & CircularProgressProps;
+
+const Loading = ({ center = true, ...rest }: Props) => (
   <div
-    style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "100%",
-    }}
+    style={
+      center
+        ? {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }
+        : undefined
+    }
   >
-    <CircularProgress />
+    <CircularProgress {...rest} />
   </div>
 );
 

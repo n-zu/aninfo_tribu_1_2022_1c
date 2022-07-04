@@ -20,6 +20,7 @@
 
 .dataRow {
   display: flex;
+  flex-wrap: wrap;
 }
 .dataRow > div {
   margin-right: 4em;
