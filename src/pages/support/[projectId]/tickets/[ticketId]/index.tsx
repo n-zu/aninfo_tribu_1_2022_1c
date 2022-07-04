@@ -1,108 +1,166 @@
-import { Chip, Container, Typography, colors, Divider, Box, Stack, Link } from "@mui/material";
+import {
+  Chip,
+  Container,
+  Typography,
+  colors,
+  Divider,
+  Box,
+  Stack,
+  Link,
+} from "@mui/material";
 import dayjs from "dayjs";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import NextLink from "next/link"
+import NextLink from "next/link";
 import { AiOutlineEdit } from "react-icons/ai";
 import useSWR from "swr";
 import { Employee, supportFetcher, Ticket } from "@services/support";
 import { useRecursos } from "@services/rrhh";
 import EmployeeList from "src/components/common/EmployeeList";
 import { EmployeeId } from "src/services/types";
+import TasksPicker from "src/components/support/TasksPicker";
 const TicketScreen: NextPage = () => {
-    const router = useRouter();
-    const { projectId, ticketId } = router.query;
-    const { data: ticket, error } = useSWR<Ticket>(`/tickets/${ticketId}`, supportFetcher);
+  const router = useRouter();
+  const { projectId, ticketId } = router.query;
+  const { data: ticket, error } = useSWR<Ticket>(
+    `/tickets/${ticketId}`,
+    supportFetcher
+  );
 
-    return (
-        <Container className="page" >
-            {(ticket !== undefined) && <CustomComponent ticket={ticket} projectId={projectId as string} />}
-        </Container>
-    );
+  return (
+    <Container className="page">
+      {ticket !== undefined && (
+        <CustomComponent ticket={ticket} projectId={projectId as string} />
+      )}
+    </Container>
+  );
 };
 
 const saveHeaders = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
+  "Content-Type": "application/json",
+  Accept: "application/json",
+};
 
 const supportAPIUrl = "https://squad320221c-production.up.railway.app";
 
 const addResponsable = async (colabId: number, ticketId: number) => {
-    console.log("delete path: " + `/tickets/${ticketId}/employees?employee_id=${colabId}`);
-    return await fetch(supportAPIUrl + `/tickets/${ticketId}/employees?employee_id=${colabId}`, {
+  console.log(
+    "delete path: " + `/tickets/${ticketId}/employees?employee_id=${colabId}`
+  );
+  return await fetch(
+    supportAPIUrl + `/tickets/${ticketId}/employees?employee_id=${colabId}`,
+    {
       method: "POST",
       headers: saveHeaders,
-    });
+    }
+  );
 };
 
 export const deleteResponsable = async (colabId: number, ticketId: number) => {
-    console.log("delete path: " + `/tickets/${ticketId}/employees?employee_id=${colabId}`);
-    return await fetch(
-        supportAPIUrl + `/tickets/${ticketId}/employees?employee_id=${colabId}`,
-      {
-        method: "DELETE",
-        headers: saveHeaders,
-      }
-    );
+  console.log(
+    "delete path: " + `/tickets/${ticketId}/employees?employee_id=${colabId}`
+  );
+  return await fetch(
+    supportAPIUrl + `/tickets/${ticketId}/employees?employee_id=${colabId}`,
+    {
+      method: "DELETE",
+      headers: saveHeaders,
+    }
+  );
 };
 
-const CustomComponent = ({ ticket, projectId }: { ticket: Ticket, projectId: string }) => {
-    const { recursos, error: employeesError } = useRecursos();
+const CustomComponent = ({
+  ticket,
+  projectId,
+}: {
+  ticket: Ticket;
+  projectId: string;
+}) => {
+  const { recursos, error: employeesError } = useRecursos();
 
-    const currentEmployees: EmployeeId[] = ticket?.employees.map((employee) => {
-        let ids: EmployeeId = {id: employee};
-        return ids;
-    });
+  const currentEmployees: EmployeeId[] = ticket?.employees.map((employee) => {
+    let ids: EmployeeId = { id: employee };
+    return ids;
+  });
 
-    const addRes = (colabId: number) => {
-        addResponsable(colabId, ticket.id);
-    };
+  const addRes = (colabId: number) => {
+    addResponsable(colabId, ticket.id);
+  };
 
-    const deleteRes = (colabId: number) => {
-        deleteResponsable(colabId, ticket.id);
-    };
+  const deleteRes = (colabId: number) => {
+    deleteResponsable(colabId, ticket.id);
+  };
 
-    return <>
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <h1>#{ticket.id} {ticket.title}</h1>
-            <Stack direction="row" alignItems="center" spacing={2}>
-                <Chip label="Abierto" sx={{ backgroundColor: colors.blue[600], color: "white", padding: "0 1em" }} />
-                <NextLink href={`/support/${projectId}/tickets/${ticket.id}/edit`} passHref>
-                    <Link>
-                        <AiOutlineEdit size={25} />
-                    </Link>
-                </NextLink>
-            </Stack>
+  return (
+    <>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <h1>
+          #{ticket.id} {ticket.title}
+        </h1>
+        <Stack direction="row" alignItems="center" spacing={2}>
+          <Chip
+            label="Abierto"
+            sx={{
+              backgroundColor: colors.blue[600],
+              color: "white",
+              padding: "0 1em",
+            }}
+          />
+          <NextLink
+            href={`/support/${projectId}/tickets/${ticket.id}/edit`}
+            passHref
+          >
+            <Link>
+              <AiOutlineEdit size={25} />
+            </Link>
+          </NextLink>
         </Stack>
+      </Stack>
 
-        <Stack direction="row">
-            <Stack direction="column" sx={{ flex: 1 }}>
-                <Typography>Severidad: {ticket.severity}</Typography>
-                <Typography>Prioridad: {ticket.priority}</Typography>
-                <Typography>Responsable/s: 
-                {<EmployeeList 
-                    name={"responsable"} 
-                    title={"responsables"} 
-                    currentEmployees={currentEmployees} 
-                    addEmployee={addRes}
-                    removeEmployee={deleteRes}
-                />}
-                </Typography>
-            </Stack>
-            <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
-                <Typography>Vencimiento: {dayjs(ticket.deadline).format("DD/MM/YYYY")}</Typography>
-                <Typography>Fecha de creación: {dayjs(ticket.creationDate).format("DD/MM/YYYY")}</Typography>
-                <Typography>Última edición: {dayjs().format("DD/MM/YYYY")}</Typography>
-            </Stack>
+      <Stack direction="row">
+        <Stack direction="column" sx={{ flex: 1 }}>
+          <Typography>Severidad: {ticket.severity}</Typography>
+          <Typography>Prioridad: {ticket.priority}</Typography>
+          <Typography>
+            Responsable/s:
+            {
+              <EmployeeList
+                name={"responsable"}
+                title={"responsables"}
+                currentEmployees={currentEmployees}
+                addEmployee={addRes}
+                removeEmployee={deleteRes}
+              />
+            }
+          </Typography>
+          <TasksPicker ticket={ticket} />
         </Stack>
+        <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
+          <Typography>
+            Vencimiento: {dayjs(ticket.deadline).format("DD/MM/YYYY")}
+          </Typography>
+          <Typography>
+            Fecha de creación: {dayjs(ticket.creationDate).format("DD/MM/YYYY")}
+          </Typography>
+          <Typography>
+            Última edición: {dayjs().format("DD/MM/YYYY")}
+          </Typography>
+        </Stack>
+      </Stack>
 
-        <Divider sx={{ margin: "1em 0" }} />
+      <Divider sx={{ margin: "1em 0" }} />
 
-        <Box sx={{ border: '0.75px solid grey', borderRadius: "5px", padding: "1em" }}>
-            <Typography>{ticket.description}</Typography>
-        </Box>
+      <Box
+        sx={{
+          border: "0.75px solid grey",
+          borderRadius: "5px",
+          padding: "1em",
+        }}
+      >
+        <Typography>{ticket.description}</Typography>
+      </Box>
     </>
-}
+  );
+};
 
 export default TicketScreen;
