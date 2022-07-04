@@ -1,5 +1,6 @@
-import { Container, Typography, Divider, Box, Stack, TextField, Button, FormLabel, Select, MenuItem } from "@mui/material";
-import { supportFetcher, Ticket } from "@services/support";
+import { Container, Typography, Divider, Box, Stack, TextField, Button, FormLabel, Select, MenuItem, Chip, Autocomplete } from "@mui/material";
+import { useRecursos } from "@services/rrhh";
+import { postHeaders, supportFetcher, Ticket } from "@services/support";
 import dayjs from "dayjs";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import type { NextPage } from "next";
@@ -15,94 +16,95 @@ const metadata = {
 
 const TicketEditScreen: NextPage = () => {
     const router = useRouter();
-    const { ticketId } = router.query;
+    const projectId = router.query.projectId as any as string;
+    const ticketId = router.query.ticketId as any as string;
+
+    console.log({ticketId})
+
     const { data: ticket, error } = useSWR<Ticket>(`/tickets/${ticketId}`, supportFetcher);
+    const { recursos, error: employeesError } = useRecursos();
 
     return (
         <Container className="page" >
-            {ticket && <CustomComponent ticket={ticket} />}
-        </Container>
-    );
-};
 
-const CustomComponent = ({ ticket }: { ticket: Ticket }) => {
-    const router = useRouter();
-    const { projectId } = router.query;
+            {recursos && ticket && <Formik
+                initialValues={ticket}
+                validate={(values) => {
+                    const errors: any = {};
+                    const require = (field: keyof Ticket) => { if (!values[field]) errors[field] = "Requerido" }
 
-    return <>
-        <Formik
-            initialValues={ticket}
-            validate={(values) => {
-                const errors: any = {};
-                const require = (field: keyof Ticket) => { if (!values[field]) errors[field] = "Requerido" }
-
-                require("title");
-                require("description");
-                require("deadline");
-                require("priority");
-                require("severity");
-                require("state");
-                return errors;
-            }}
-            onSubmit={
-                (values) => {
+                    require("title");
+                    require("description");
+                    require("deadline");
+                    require("priority");
+                    require("severity");
+                    require("state");
+                    return errors;
+                }}
+                onSubmit={(values) => {
                     const body = {
                         ...values,
-                        employees: [],
-                        tasks: [],
                         deadline: dayjs(values.deadline).toISOString()
                     };
 
-                    console.log({body})
-                    supportFetcher(`/tickets/${ticket.id}`, {
+                    supportFetcher(`/tickets/${ticketId}`, {
                         method: "PUT",
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
+                        headers: postHeaders,
                         body: JSON.stringify(body)
                     }).then(() => {
                         toast.success("Cambios guardados");
-                        router.push(`/support/${projectId}/tickets/${ticket.id}`)
+                        router.push(`/support/${projectId}/tickets/${ticketId}`)
                     }).catch(err => {
                         console.error(err)
                         toast.error("Ha ocurrido un error, por favor intente nuevamente mas tarde");
                     })
-                }
-            }
-        >
-            <Form>
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Stack direction="row" alignItems="center" spacing={2}>
-                        <h1>#{ticket.id}</h1>
-                        <Field name="title" as={TextField} variant="standard" InputProps={{ sx: { fontSize: "2em" } }} />
+                }}
+            >
+                <Form>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                            <h1>#{ticket.id}</h1>
+                            <Field name="title" as={TextField} variant="standard" InputProps={{ sx: { fontSize: "2em" } }} />
+                        </Stack>
                     </Stack>
-                </Stack>
 
-                <Stack direction="row">
-                    <Stack direction="column" sx={{ flex: 1 }}>
-                        <CustomSelect id="severity" label="Severidad:" options={metadata.severities} />
-                        <CustomSelect id="priority" label="Prioridad:" options={metadata.priorities} />
-                        <Typography>Responsable: {ticket.responsible}</Typography>
+                    <Stack direction="row">
+                        <Stack direction="column" sx={{ flex: 1 }}>
+                            <CustomSelect id="severity" label="Severidad:" options={metadata.severities} />
+                            <CustomSelect id="priority" label="Prioridad:" options={metadata.priorities} />
+                            <Typography>Responsable/s: {ticket.employees.map((employeeId) => {
+                                const recurso = recursos.find(r => r.id == employeeId);
+                                return recurso ?
+                                    <Chip key={employeeId}
+                                        label={`${recurso?.name} ${recurso?.lastname}`}
+                                        onDelete={() => {
+                                            supportFetcher(`/tickets/${ticketId}/employees?employee_id=${employeeId}`,
+                                                { headers: postHeaders, method: "DELETE" })
+                                                .then(res => toast.success("Responsable borrado exitosamente"))
+                                        }}
+                                    />
+                                    : undefined;
+                            })}</Typography>
+                        </Stack>
+                        <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
+                            <CustomDatePicker id="deadline" label="Vencimiento:" />
+                            <Typography>Fecha de creación: {dayjs(ticket.creationDate).format("DD/MM/YYYY")}</Typography>
+                            <Typography>Última edición: {dayjs(ticket.lastEditionDate).format("DD/MM/YYYY")}</Typography>
+                        </Stack>
                     </Stack>
-                    <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
-                        <CustomDatePicker id="deadline" label="Vencimiento:" />
-                        <Typography>Fecha de creación: {dayjs(ticket.creationDate).format("DD/MM/YYYY")}</Typography>
-                        <Typography>Última edición: {dayjs(ticket.lastEditionDate).format("DD/MM/YYYY")}</Typography>
-                    </Stack>
-                </Stack>
 
-                <Divider sx={{ margin: "1em 0" }} />
+                    <Divider sx={{ margin: "1em 0" }} />
 
-                <Field name="description" as={TextField} fullWidth multiline minRows={10}></Field>
+                    <Field name="description" as={TextField} fullWidth multiline minRows={10}></Field>
 
-                <Box>
-                    <Button type="submit">Guardar</Button>
-                </Box>
-            </Form>
-        </Formik>
-    </>
-}
+                    <Box>
+                        <Button type="submit">Guardar</Button>
+                    </Box>
+                </Form>
+            </Formik>}
+        </Container>
+    );
+};
 
 export default TicketEditScreen;
 

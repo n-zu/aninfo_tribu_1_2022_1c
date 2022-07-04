@@ -6,6 +6,7 @@ import NextLink from "next/link"
 import { AiOutlineEdit } from "react-icons/ai";
 import useSWR from "swr";
 import { supportFetcher, Ticket } from "@services/support";
+import { useRecursos } from "@services/rrhh";
 
 const TicketScreen: NextPage = () => {
     const router = useRouter();
@@ -20,6 +21,7 @@ const TicketScreen: NextPage = () => {
 };
 
 const CustomComponent = ({ ticket, projectId }: { ticket: Ticket, projectId: string }) => {
+    const { recursos, error: employeesError } = useRecursos();
     return <>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
             <h1>#{ticket.id} {ticket.title}</h1>
@@ -37,7 +39,12 @@ const CustomComponent = ({ ticket, projectId }: { ticket: Ticket, projectId: str
             <Stack direction="column" sx={{ flex: 1 }}>
                 <Typography>Severidad: {ticket.severity}</Typography>
                 <Typography>Prioridad: {ticket.priority}</Typography>
-                <Typography>Responsable: {ticket.responsible}</Typography>
+                <Typography>Responsable/s: {ticket.employees.map((employeeId) => {
+                    const recurso = recursos.find(r => r.id == employeeId);
+                    return recurso ?
+                        <Chip key={employeeId} label={`${recurso?.name} ${recurso?.lastname}`} />
+                        : undefined;
+                })}</Typography>
             </Stack>
             <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
                 <Typography>Vencimiento: {dayjs(ticket.deadline).format("DD/MM/YYYY")}</Typography>

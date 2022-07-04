@@ -24,8 +24,16 @@ export type Ticket = {
   description: string;
   severity: string;
   priority: string;
-  responsible: number[]; //TODO: revisar
+  employees: number[]; //TODO: revisar
+  tasks: number[];
   creationDate: string; // datetime
   deadline: string; // datetime
   lastEditionDate: string; // datetime
 };
+
+// Employees
+
+export type Employee = {
+  id: number;
+  name: string;
+}
