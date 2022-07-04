@@ -61,7 +61,7 @@ export default function RegistroForm(props: {
   const { task } = useTask((tasksValue?.id ?? null) as unknown as string);
   const collaborators =
     task?.collaborators?.map((colab: any) => {
-      const res = recursos.find((recurso: Recurso) => {
+      const res = recursos?.find((recurso: Recurso) => {
         return recurso.id === colab.id;
       });
 
