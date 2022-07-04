@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { Box, Typography, Button } from "@mui/material";
+import { Alert, Box, Typography, Button } from "@mui/material";
 import { useProject, useProjectTRs } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad, routeToTask } from "../../util/util";
@@ -63,8 +63,12 @@ const Project: NextPage = () => {
 
   return (
     <div className="page">
-      {loading ? <Loading /> : ""}
-      {error ? "ERROR" : ""}
+      {loading ? <Loading style={{ marginTop: "30px" }} /> : ""}
+      {error && !project ? (
+        <Alert severity="error" style={{ width: "100%", marginTop: "10px" }}>
+          No se pudo cargar el proyecto
+        </Alert>
+      ) : null}
       {project && (
         <>
           <Box
