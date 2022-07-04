@@ -98,6 +98,9 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
               <FormField
                 name="estimated_hours"
                 type="number"
+                inputProps={{ min: "0" }}
+                placeholder="0"
+                InputLabelProps={{ shrink: true }}
                 label="Horas estimadas"
               />
               <FormField
