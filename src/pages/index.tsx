@@ -22,11 +22,11 @@ const Home: NextPage = () => {
 
       <p>
         Facilitar la toma de decisiones en base a datos, tanto para procesos
-        internos como externos
+        internos como externos.
       </p>
       <p>
         Centralizar la información de los distintos procesos de manera fluida en
-        una única herramienta
+        una única herramienta.
       </p>
       <div>
         <HomeCard
@@ -42,9 +42,8 @@ const Home: NextPage = () => {
         <HomeCard
           title="Proyectos"
           items={[
-            "Gestión de proyectos, fases, iteraciones y tareas",
-            "Gestión y visibilidad de Riesgos",
-            "Asignaciones de tareas a desarrolladores",
+            "Gestión de proyectos y tareas",
+            "Asignaciones de tareas a recursos",
           ]}
           href="/projects"
           Icon={AssignmentOutlinedIcon}
