@@ -1,4 +1,4 @@
-import { routeToRegistro } from "../../util/util";
+import { routeToRegistro, tryParse } from "../../util/util";
 import RegistrosList from "../../components/rrhh/registros/RegistrosList";
 import MenuHome from "../../components/rrhh/MenuHome";
 import { ListRegistosBar } from "../../components/common/ListBar";
@@ -14,7 +14,8 @@ const Home: NextPage = () => {
   const registrosData = useRegistrosDeHoras();
   const router = useRouter();
   const { cargarEn } = router.query;
-  const [open, setOpen] = useState(!!cargarEn);
+  const _cargarEn = tryParse(cargarEn as string);
+  const [open, setOpen] = useState(!!_cargarEn);
 
   return (
     <div>
@@ -43,20 +44,7 @@ const Home: NextPage = () => {
         )}
         <RegistroModal
           open={open}
-          defaultValues={
-            cargarEn
-              ? {
-                  //@ts-ignore
-                  project_id: cargarEn?.split("-")[0],
-                  //@ts-ignore
-                  project_name: cargarEn?.split("-")[1],
-                  //@ts-ignore
-                  task_id: cargarEn?.split("-")[2],
-                  //@ts-ignore
-                  task_name: cargarEn?.split("-")[3],
-                }
-              : {}
-          }
+          defaultValues={_cargarEn}
           onClose={() => {
             setOpen(false);
             router.replace("/rrhh", undefined, { shallow: true });
