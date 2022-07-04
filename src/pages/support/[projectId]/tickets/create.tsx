@@ -1,6 +1,5 @@
 import {
   Container,
-  Typography,
   Divider,
   Box,
   Stack,
@@ -9,8 +8,6 @@ import {
   FormLabel,
   Select,
   MenuItem,
-  Chip,
-  Autocomplete,
 } from "@mui/material";
 import { useRecursos } from "@services/rrhh";
 import { postHeaders, supportFetcher, Ticket } from "@services/support";
@@ -38,9 +35,9 @@ const TicketEditScreen: NextPage = () => {
     priority: "Baja",
     severity: "s1",
     state: "state",
-    employees: [0],
-    tasks: [0],
-    clientId: 0,
+    employees: [1],
+    tasks: [],
+    clientId: 1,
     versionId: projectId,
   };
   const { recursos, error: employeesError } = useRecursos();
