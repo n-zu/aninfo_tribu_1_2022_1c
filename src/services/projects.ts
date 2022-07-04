@@ -50,10 +50,13 @@ export const saveProject = async (project: Project, id?: number) =>
     body: JSON.stringify(removeEmpty(project)),
   }).then(checkStatus);
 
-export const useTask = (taskId: string) => {
+export const useTask = (taskId: string, initialTask?: Task) => {
   const { data, error, isValidating, ...rest } = useSWR(
     taskId ? "/tasks/" + taskId : null,
-    projectsFetch
+    projectsFetch,
+    {
+      fallbackData: initialTask,
+    }
   );
   const loading = !data && isValidating;
 

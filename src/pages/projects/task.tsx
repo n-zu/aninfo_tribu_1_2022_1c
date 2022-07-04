@@ -13,10 +13,14 @@ import styles from "../../styles/Project.module.css";
 import Collaborators from "../../components/projects/tasks/Collaborators";
 import AssociatedTickets from "../../components/projects/tasks/AssociatedTickets";
 import EmployeeAvatar from "../../components/projects/tasks/EmployeeAvatar";
+import { projectsApi } from "../../services/requests";
 
-const Task: NextPage = () => {
-  const router = useRouter();
-  const taskId = router?.query?.id as string;
+type Props = {
+  task: any;
+  taskId: string;
+};
+
+const Task: NextPage<Props> = ({ taskId, task: initialTask }) => {
   const { task, error, loading, mutate } = useTask(taskId);
   const [open, setOpen] = useState(false);
   const { totalTime } = useTaskTRs(parseInt(taskId));
@@ -135,7 +139,7 @@ const Task: NextPage = () => {
                   {task?.estimated_hours}
                 </TitledText>
                 <TitledText title="Horas Trabajadas">{worked_hours}</TitledText>
-                <EmployeeAvatar id={task?.assigned_employee} />
+                <EmployeeAvatar id={task?.assigned_employee as any} />
               </Box>
 
               <TitledText title="Descripción">{task?.description}</TitledText>
@@ -164,3 +168,19 @@ const Task: NextPage = () => {
 };
 
 export default Task;
+
+export async function getServerSideProps({ query }: any) {
+  const taskId = query?.id ?? "";
+
+  const task = await fetch(projectsApi + "/tasks/" + taskId).then((res) => {
+    if (res.ok) return res.json();
+    return null;
+  });
+
+  return {
+    props: {
+      taskId,
+      task,
+    },
+  };
+}
