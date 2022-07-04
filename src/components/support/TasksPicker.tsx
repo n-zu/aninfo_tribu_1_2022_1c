@@ -39,7 +39,7 @@ const TasksPicker = ({ ticket }: any) => {
 
   const deleteTask = async (task_id: number) => {
     await fetch(
-      `${supportAPIUrl}/tickets/${ticket?.id}/task?task_id=${task_id}`,
+      `${supportAPIUrl}/tickets/${ticket?.id}/tasks?task_id=${task_id}`,
       {
         method: "DELETE",
       }
