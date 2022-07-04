@@ -1,11 +1,12 @@
 import Modal from "../../common/Modal/Modal";
 import { Formik, Form } from "formik";
 import FormField from "../../common/Form/FormField";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, Avatar, Box } from "@mui/material";
 import { saveTask } from "../../../services/projects";
 import { toast } from "react-toastify";
 import { Task } from "../../../services/types";
 import { capitalize } from "../../../util/util";
+import { useEmployees } from "../../../services/projects";
 
 // el orden en el que aparecen los estados acá
 // se usa para ordenarlos en la lista
@@ -27,6 +28,7 @@ type Props = {
 
 const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
   const creating = task == null;
+  const { employees, loadingEmployee, error } = useEmployees();
 
   const initialValues = {
     name: task?.name ?? "",
@@ -35,6 +37,7 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
     final_date: task?.final_date ?? "",
     estimated_hours: task?.estimated_hours ?? "",
     description: task?.description ?? "",
+    assigned_employee: task?.assigned_employee ?? null,
   };
 
   const validate = (values: any) => {
@@ -95,7 +98,28 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
               <FormField
                 name="estimated_hours"
                 type="number"
+                inputProps={{ min: "0" }}
+                placeholder="0"
+                InputLabelProps={{ shrink: true }}
                 label="Horas estimadas"
+              />
+              <FormField
+                name="assigned_employee"
+                type="autocomplete"
+                label={employeeLabel(loadingEmployee, error)}
+                options={employees.map((e) => e.id)}
+                getOptionLabel={(id: any) => {
+                  const employee = employees.find((e) => e?.id === id);
+                  return `${employee?.name}  ${employee?.lastname}`;
+                }}
+                renderOption={(props: any, option: any) =>
+                  renderOption(
+                    props,
+                    employees.find((e) => e?.id === option)
+                  )
+                }
+                setFieldValue={setFieldValue}
+                disabled={loadingEmployee || error}
               />
               <FormField
                 name="description"
@@ -112,6 +136,28 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
         )}
       </Formik>
     </Modal>
+  );
+};
+
+const employeeLabel = (loading: boolean, error: any) => {
+  if (loading) return "Cargando...";
+  if (error) return "Error cargando empleados";
+  return "Empleado asignado";
+};
+
+const renderOption = (props: any, option: any) => {
+  const employee = `${option?.name}  ${option?.lastname}`;
+  return (
+    <Box
+      component="li"
+      style={{ display: "flex", alignItems: "center", gap: "5px" }}
+      {...props}
+    >
+      <Avatar style={{ transform: "scale(0.7)", backgroundColor: "gray" }}>
+        {employee?.[0]}
+      </Avatar>
+      <Typography>{employee}</Typography>
+    </Box>
   );
 };
 
