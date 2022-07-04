@@ -5,7 +5,7 @@ import { Button, Typography, Avatar, Box } from "@mui/material";
 import { saveTask } from "../../../services/projects";
 import { toast } from "react-toastify";
 import { Task } from "../../../services/types";
-import { capitalize } from "../../../util/util";
+import { capitalize, zeroPad } from "../../../util/util";
 import { useEmployees } from "../../../services/projects";
 
 // el orden en el que aparecen los estados acá
@@ -146,7 +146,9 @@ const employeeLabel = (loading: boolean, error: any) => {
 };
 
 const renderOption = (props: any, option: any) => {
-  const employee = `${option?.name}  ${option?.lastname}`;
+  const employee = `${zeroPad(option?.id)} - ${option?.name}  ${
+    option?.lastname
+  }`;
   return (
     <Box
       component="li"
@@ -154,7 +156,7 @@ const renderOption = (props: any, option: any) => {
       {...props}
     >
       <Avatar style={{ transform: "scale(0.7)", backgroundColor: "gray" }}>
-        {employee?.[0]}
+        {option?.name?.[0]}
       </Avatar>
       <Typography>{employee}</Typography>
     </Box>
