@@ -123,7 +123,7 @@ export default function RegistroForm(props: {
                         setFieldValue("nombre_proyecto", newOption?.name);
                         setFieldValue("id_proyecto", newOption?.id);
                       }}
-                      disabled={loading}
+                      disabled={loading || !!values?.id_tarea}
                       defaultValue={defaultProject}
                       renderInput={(params) => (
                         <TextField {...params} label={"Proyectos"} />
@@ -145,7 +145,7 @@ export default function RegistroForm(props: {
                       sx={{ width: "100%" }}
                       defaultValue={defaultTask}
                       options={project?.tasks ?? []}
-                      disabled={loading}
+                      disabled={loading || !values.id_proyecto || !!values.id_recurso}
                       onChange={(event: any, newOption: Options | null) => {
                         setTasks(newOption);
                         setFieldValue("nombre_tarea", newOption?.name);
@@ -168,7 +168,7 @@ export default function RegistroForm(props: {
                   <div>
                     <Autocomplete
                       defaultValue={defaultRecurso}
-                      disabled={loading}
+                      disabled={loading || !values.id_tarea}
                       options={(collaborators as Options[]) ?? []}
                       onChange={(event: any, newOption: Options | null) => {
                         setRecurso(newOption);
