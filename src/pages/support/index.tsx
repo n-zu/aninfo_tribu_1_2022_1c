@@ -10,7 +10,7 @@ const SupportProject: NextPage = () => {
     const { data, error } = useSWR<Product[]>('/products', supportFetcher);
 
     return <Container className="page">
-        <h1>Proyectos</h1>
+        <h1>Productos</h1>
 
         {error && <Alert severity="error">
             <AlertTitle>Error</AlertTitle>
