@@ -59,7 +59,7 @@ const AssociatedTickets = ({ taskId }: { taskId: number }) => {
       ) : null}
       {tickets.map((ticket: Ticket) => (
         <a key={ticket.id}>
-          <NextLink href={`/support/53/tickets/${ticket.id}`} passHref>
+          <NextLink href={`/support/51/tickets/${ticket.id}`} passHref>
             <ButtonBase sx={{ width: "100%" }} style={{ marginTop: 10 }}>
               <Card sx={{ width: "100%" }} className={styles.hover}>
                 <CardContent style={{ padding: 10 }}>
