@@ -1,7 +1,7 @@
 import { Container, Typography, Divider, Box, Stack, TextField, Button, FormLabel, Select, MenuItem } from "@mui/material";
 import { supportFetcher, Ticket } from "@services/support";
 import dayjs from "dayjs";
-import { Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { FunctionComponent } from "react";
@@ -32,24 +32,40 @@ const CustomComponent = ({ ticket }: { ticket: Ticket }) => {
     return <>
         <Formik
             initialValues={ticket}
+            validate={(values) => {
+                const errors: any = {};
+                const require = (field: keyof Ticket) => { if (!values[field]) errors[field] = "Requerido" }
+
+                require("title");
+                require("description");
+                require("deadline");
+                require("priority");
+                require("severity");
+                require("state");
+                return errors;
+            }}
             onSubmit={
                 (values) => {
-                    console.log({ values })
+                    const body = {
+                        ...values,
+                        employees: [],
+                        tasks: [],
+                        deadline: dayjs(values.deadline).toISOString()
+                    };
+
+                    console.log({body})
                     supportFetcher(`/tickets/${ticket.id}`, {
                         method: "PUT",
                         headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({
-                            ...values,
-                            employees: [],
-                            tasks: [],
-                        })
+                        body: JSON.stringify(body)
                     }).then(() => {
                         toast.success("Cambios guardados");
                         router.push(`/support/${projectId}/tickets/${ticket.id}`)
                     }).catch(err => {
+                        console.error(err)
                         toast.error("Ha ocurrido un error, por favor intente nuevamente mas tarde");
                     })
                 }
@@ -101,25 +117,33 @@ type CustomProps = {
 const CustomSelect: FunctionComponent<CustomProps> = ({ id, label, options }) => (
     <Stack direction="row" alignItems="center" spacing={1}>
         <FormLabel htmlFor={id ?? label}>{label}</FormLabel>
-        <Field name={id ?? label} as={Select} variant="standard">
-            {options.map((val) => (
-                <MenuItem key={val} value={val}>{val}</MenuItem>
-            ))}
-        </Field>
+        <Box>
+
+            <Field name={id ?? label} as={Select} variant="standard">
+                {options.map((val) => (
+                    <MenuItem key={val} value={val}>{val}</MenuItem>
+                ))}
+            </Field>
+            <ErrorMessage name={id ?? label} />
+        </Box>
     </Stack>
 )
 
 const CustomDatePicker: FunctionComponent<Omit<CustomProps, "options">> = ({ id, label }) => (
     <Stack direction="row" alignItems="center" spacing={1}>
         <FormLabel htmlFor={id ?? label}>{label}</FormLabel>
-        <Field name={id ?? label}>
-            {({ field }: { [x: string]: any }) => {
-                return <TextField
-                    variant="standard"
-                    type="date"
-                    {...field}
-                    value={dayjs(field.value).format("YYYY-MM-DD")}/>
-            }}
-        </Field>
+        <Box>
+
+            <Field name={id ?? label}>
+                {({ field }: { [x: string]: any }) => {
+                    return <TextField
+                        variant="standard"
+                        type="date"
+                        {...field}
+                        value={dayjs(field.value).format("YYYY-MM-DD")} />
+                }}
+            </Field>
+            <ErrorMessage name={id ?? label} />
+        </Box>
     </Stack>
 )
