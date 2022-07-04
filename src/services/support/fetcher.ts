@@ -17,7 +17,7 @@ const genericFetcher = (
       if (res.status >= 400) throw new Error(`Error code: ${res.status}`);
       return res;
     })
-    .then((res) => res.json());
+    .then((res) => res?.json());
 
 export const supportFetcher = (resource: string, options?: RequestInit) =>
   genericFetcher(supportAPIUrl, resource, options);
