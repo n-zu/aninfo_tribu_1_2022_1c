@@ -95,6 +95,7 @@ const TicketEditScreen: NextPage = () => {
                     <Box>
                         <Button type="submit">Guardar</Button>
                     </Box>
+                    
                 </Form>
             </Formik>}
         </Container>
