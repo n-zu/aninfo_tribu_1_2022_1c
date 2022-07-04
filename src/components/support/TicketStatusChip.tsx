@@ -3,7 +3,7 @@ import { FunctionComponent } from "react";
 
 type TicketStatusChipProps = {
   label: string;
-  size: "small" | "medium" | undefined;
+  size?: "small" | "medium";
 };
 
 const getColor = (label: string) => {
