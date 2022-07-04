@@ -16,6 +16,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import useSWR from "swr";
 import { supportFetcher, Ticket } from "@services/support";
 import { useRecursos } from "@services/rrhh";
+import TasksPicker from "src/components/support/TasksPicker";
 
 const TicketScreen: NextPage = () => {
   const router = useRouter();
@@ -84,6 +85,7 @@ const CustomComponent = ({
               ) : undefined;
             })}
           </Typography>
+          <TasksPicker ticket={ticket} />
         </Stack>
         <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
           <Typography>

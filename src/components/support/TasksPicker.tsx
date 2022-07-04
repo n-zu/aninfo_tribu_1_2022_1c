@@ -24,6 +24,8 @@ const TasksPicker = ({ ticket }: any) => {
     // TODO: Mostrar un dialogo para seleccionar una tarea
     const task = await prompt("Ingrese el id de la tarea");
 
+    if (!task) return;
+
     await fetch(`${supportAPIUrl}/tickets/${ticket.id}/tasks?task_id=${task}`, {
       method: "POST",
       headers: {
