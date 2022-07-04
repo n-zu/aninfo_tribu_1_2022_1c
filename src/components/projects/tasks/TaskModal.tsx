@@ -110,7 +110,7 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
                 options={employees.map((e) => e.id)}
                 getOptionLabel={(id: any) => {
                   const employee = employees.find((e) => e?.id === id);
-                  return `${zeroPad(employee?.id ?? 0)} - ${employee?.name}  ${
+                  return `${zeroPad(employee?.id ?? 0)} - ${employee?.name} ${
                     employee?.lastname
                   }`;
                 }}
@@ -148,7 +148,7 @@ const employeeLabel = (loading: boolean, error: any) => {
 };
 
 const renderOption = (props: any, option: any) => {
-  const employee = `${zeroPad(option?.id)} - ${option?.name}  ${
+  const employee = `${zeroPad(option?.id)} - ${option?.name} ${
     option?.lastname
   }`;
   return (
