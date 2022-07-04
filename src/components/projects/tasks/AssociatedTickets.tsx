@@ -16,18 +16,13 @@ import { useSWR } from "../../../services/requests";
 import styles from "../../common/Card.module.css";
 import Caption from "../../common/Caption";
 import { zeroPad } from "../../../util/util";
-
-type AssociatedTask = {
-  id: number;
-  taskId: number;
-  ticketId: number;
-};
+import TicketStatusChip from "../../support/TicketStatusChip";
 
 type Ticket = {
   id: number;
   title: string;
   state: string;
-  tasks: AssociatedTask[];
+  tasks: number[];
 };
 
 const URL = "https://squad320221c-production.up.railway.app/tickets";
@@ -40,9 +35,8 @@ const AssociatedTickets = ({ taskId }: { taskId: number }) => {
   const tickets = useMemo(() => {
     if (!data) return [];
     return data.filter((ticket: Ticket) => {
-      return ticket.tasks.some(
-        (task: AssociatedTask) => task.taskId === taskId
-      );
+      console.log(ticket);
+      return ticket.tasks.some((id: number) => id === taskId);
     });
   }, [data, taskId]);
 
@@ -65,7 +59,7 @@ const AssociatedTickets = ({ taskId }: { taskId: number }) => {
       ) : null}
       {tickets.map((ticket: Ticket) => (
         <a key={ticket.id}>
-          <NextLink href={`/support/${ticket.id}`} passHref>
+          <NextLink href={`/support/51/tickets/${ticket.id}`} passHref>
             <ButtonBase sx={{ width: "100%" }} style={{ marginTop: 10 }}>
               <Card sx={{ width: "100%" }} className={styles.hover}>
                 <CardContent style={{ padding: 10 }}>
@@ -74,14 +68,7 @@ const AssociatedTickets = ({ taskId }: { taskId: number }) => {
                       <Typography>
                         {zeroPad(ticket.id ?? 0) + " - " + ticket.title}
                       </Typography>
-                      <Chip
-                        label="Abierto"
-                        sx={{
-                          backgroundColor: colors.blue[600],
-                          color: "white",
-                        }}
-                        size="small"
-                      />
+                      <TicketStatusChip label={ticket.state} size="small" />
                     </Stack>
                   </Box>
                 </CardContent>

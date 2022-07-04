@@ -1,7 +1,12 @@
 import { useState, useMemo } from "react";
 import type { NextPage } from "next";
 import { Alert, Box, Typography, Button } from "@mui/material";
-import { useTask, useTaskTRs } from "../../services/projects";
+import {
+  useTask,
+  useTaskTRs,
+  deleteCollaborator,
+  addCollaborator,
+} from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
 import Loading from "../../components/common/Loading";
@@ -10,7 +15,7 @@ import TitledText from "../../components/common/TitledText";
 import Link from "next/link";
 import StateChip from "../../components/projects/StateChip";
 import styles from "../../styles/Project.module.css";
-import Collaborators from "../../components/projects/tasks/Collaborators";
+import EmployeeList from "../../components/common/EmployeeList";
 import AssociatedTickets from "../../components/projects/tasks/AssociatedTickets";
 import EmployeeAvatar from "../../components/projects/tasks/EmployeeAvatar";
 
@@ -145,7 +150,20 @@ const Task: NextPage = () => {
                 justifyContent: "space-between",
               }}
             >
-              {task ? <Collaborators task={task} mutate={mutate} /> : null}
+              {task ? (
+                <EmployeeList
+                  name="colaborador"
+                  title="Colaboradores"
+                  mutate={mutate}
+                  addEmployee={async (id: number) => {
+                    await addCollaborator(id, taskId);
+                  }}
+                  removeEmployee={async (id: number) => {
+                    await deleteCollaborator(id, taskId);
+                  }}
+                  currentEmployees={task?.collaborators}
+                />
+              ) : null}
               {task?.id ? <AssociatedTickets taskId={task.id} /> : null}
             </Box>
           </div>

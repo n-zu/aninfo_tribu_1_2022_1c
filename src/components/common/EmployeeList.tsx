@@ -1,17 +1,18 @@
 import { Typography, Chip, Avatar } from "@mui/material";
-import AutoComplete from "../../common/AutoComplete";
+import AutoComplete from "./AutoComplete";
 import AddIcon from "@mui/icons-material/Add";
-import { Task, Employee, EmployeeId } from "../../../services/types";
-import {
-  useEmployees,
-  deleteCollaborator,
-  addCollaborator,
-} from "../../../services/projects";
+import { Employee, EmployeeId } from "../../services/types";
+import { useEmployees } from "../../services/projects";
+import { capitalize } from "../../util/util";
 import { toast } from "react-toastify";
 
 type Props = {
-  task: Task;
+  addEmployee: Function;//(id: number) => Promise<void>;
+  removeEmployee: Function;//(id: number) => Promise<void>;
   mutate?: () => void;
+  name: string;
+  title?: string;
+  currentEmployees?: EmployeeId[];
 };
 
 type Tag = {
@@ -19,7 +20,14 @@ type Tag = {
   name: string;
 };
 
-const Collaborators = ({ task, mutate }: Props) => {
+const EmployeeList = ({
+  addEmployee,
+  removeEmployee,
+  name,
+  title,
+  mutate,
+  currentEmployees,
+}: Props) => {
   const { employees } = useEmployees();
 
   const getEmployeeNameById = (id: number) => {
@@ -44,31 +52,29 @@ const Collaborators = ({ task, mutate }: Props) => {
     return list;
   };
 
-  const employeeList = getEmployeeList(task.collaborators, employees);
+  const employeeList = getEmployeeList(currentEmployees ?? [], employees);
 
   const onDeleteColab = async (id: number) => {
     if (!id) return;
-    console.log("delete " + id);
     try {
-      await deleteCollaborator(id, String(task.id));
-      toast.success("Colaborador eliminado correctamente");
+      await removeEmployee(id);
+      toast.success(`${capitalize(name)} eliminado correctamente`);
       mutate && mutate();
     } catch (e) {
       console.error(e);
-      toast.error("Error al eliminar colaborador");
+      toast.error(`Error al eliminar ${name}`);
     }
   };
 
   const onAddColab = async (id: number) => {
-    console.log("add " + id);
     if (!id) return;
     try {
-      await addCollaborator(id, String(task.id));
-      toast.success("Colaborador agregado correctamente");
+      await addEmployee(id);
+      toast.success(`${capitalize(name)} agregado correctamente`);
       mutate && mutate();
     } catch (e) {
       console.error(e);
-      toast.error("Error al agregar colaborador");
+      toast.error(`Error al agregar ${name}`);
     }
   };
 
@@ -81,18 +87,18 @@ const Collaborators = ({ task, mutate }: Props) => {
       }}
     >
       <Typography variant="overline" style={{ lineHeight: "normal" }}>
-        Colaboradores
+        {title}
       </Typography>
       <div style={{ marginTop: 10, marginBottom: 10, width: "100%" }}>
         <AutoComplete
-          label="Agregar colaborador"
+          label={`Agregar ${name}`}
           options={employeeList}
           routeFunction={onAddColab}
           icon={<AddIcon />}
         />
       </div>
       <div>
-        {task?.collaborators?.map((colab: EmployeeId, index: number) => {
+        {currentEmployees?.map((colab: EmployeeId, index: number) => {
           const name = getEmployeeNameById(colab.id);
           return (
             <Chip
@@ -109,4 +115,4 @@ const Collaborators = ({ task, mutate }: Props) => {
   );
 };
 
-export default Collaborators;
+export default EmployeeList;

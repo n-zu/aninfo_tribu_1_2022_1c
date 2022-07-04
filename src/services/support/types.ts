@@ -1,25 +1,39 @@
 import type { Dayjs } from "dayjs";
 
+// Products
 
-export enum State {
-  ABIERTO,
-  CERRADO,
-}
+export type ProductVersion = {
+  id: number;
+  name: string;
+};
+
+export type Product = {
+  id: number;
+  name: string;
+  versions: ProductVersion[];
+};
+
+// Tickets
+
+export type State = "Abierto" | "Cerrado"
 
 export type Ticket = {
   id: number;
-  title: string;
   state: State;
+  title: string;
+  description: string;
   severity: string;
   priority: string;
-  responsible: string; //TODO: revisar
-  creationDate: Dayjs;
-  expirationDate: Dayjs;
-  lastEditionDate: Dayjs;
-  description: string;
+  employees: number[]; //TODO: revisar
+  tasks: number[];
+  creationDate: string; // datetime
+  deadline: string; // datetime
+  lastEditionDate: string; // datetime
 };
 
-export type TicketSummary = Pick<
-  Ticket,
-  "id" | "title" | "state" | "priority" | "severity" | "expirationDate"
->;
+// Employees
+
+export type Employee = {
+  id: number;
+  name: string;
+}

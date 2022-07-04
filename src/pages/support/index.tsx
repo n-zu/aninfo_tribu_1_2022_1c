@@ -1,57 +1,38 @@
-import type { NextPage } from "next";
-import { State, TicketSummary } from "../../services/support/types";
-import NextLink from "next/link"
-import dayjs from "dayjs";
-import es from "dayjs/locale/es"
-import relativeTime from "dayjs/plugin/relativeTime"
-import { Card, CardContent, Chip, Divider, Stack, Typography, colors, Box, Container, ButtonBase, Button } from "@mui/material";
+import { NextPage } from "next";
+import Link from 'next/link';
+import { Alert, AlertTitle, Button, Card, CardActions, CardContent, Container, Typography } from "@mui/material";
+import useSWR from "swr";
+import { supportFetcher, Product } from "@services/support";
 
-const tickets: TicketSummary[] = [
-  {
-    id: 1,
-    title: "ERP PSA",
-    state: State.ABIERTO,
-    expirationDate: dayjs("2022-6-18").locale(es),
-    priority: "Alto",
-    severity: "S1"
-  }
-];
 
-dayjs.extend(relativeTime)
 
-const TicketCard = ({ id, title, expirationDate: expiration, priority, severity }: TicketSummary) => (
-  <NextLink href={`/support/${id}`} passHref>
-    <ButtonBase sx={{ width: "100%" }}>
-      <Card sx={{ width: "100%" }}>
-        <CardContent>
-          <Box>
-            <Stack direction="row" justifyContent="space-between">
-              <Typography>{title}</Typography>
-              <Chip label="Abierto" sx={{ backgroundColor: colors.blue[600], color: "white" }} />
-            </Stack>
-          </Box>
+const SupportProject: NextPage = () => {
+    const { data, error } = useSWR<Product[]>('/products', supportFetcher);
 
-          <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem />}>
-            <Typography>Vence en: {expiration.fromNow()}</Typography>
-            <Typography>Prioridad: {priority}</Typography>
-            <Typography>Severidad: {severity}</Typography>
-          </Stack>
-        </CardContent>
-      </Card>
-    </ButtonBase>
-  </NextLink>
-)
+    return <Container className="page">
+        <h1>Proyectos</h1>
 
-const SupportHome: NextPage = () => {
+        {error && <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            Ha habido un problema al intentar obtener los datos. Por favor, intente nuevamente en un rato.
+        </Alert>}
 
-  return (
-    <Container className="page">
-      <h1>Tickets de soporte</h1>
-      {tickets.map((ticket) =>
-        <TicketCard key={ticket.id} {...ticket} />
-      )}
-    </Container >
-  );
-};
+        {data?.map(product => (
+            <Card key={product.id} style={{ marginTop: "1em" }}>
+                <CardContent>
+                    <Typography variant="h6">{product.name}</Typography>
+                </CardContent>
+                <CardActions>
+                    {product.versions.map(version => (
+                        <Link key={version.id} href={`/support/${version.id}/tickets`}>
+                            <Button>{version.name}</Button>
+                        </Link>
+                    ))}
+                </CardActions>
+            </Card>
+        ))}
 
-export default SupportHome;
+    </Container>
+}
+
+export default SupportProject;
