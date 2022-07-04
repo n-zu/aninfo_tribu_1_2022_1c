@@ -146,7 +146,7 @@ export default function RegistroForm(props: {
               <Autocomplete
                 sx={{ width: "100%", marginTop: "10px" }}
                 options={project?.tasks ?? (tasksValue ? [tasksValue] : [])}
-                disabled={loading || !values.id_proyecto || !values.id_recurso}
+                disabled={loading || !values.id_proyecto || !!values.id_recurso}
                 onChange={(event: any, newOption: Options | null) => {
                   setTasks(newOption);
                   setFieldValue("id_tarea", newOption?.id);
