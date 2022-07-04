@@ -16,6 +16,7 @@ import { useSWR } from "../../../services/requests";
 import styles from "../../common/Card.module.css";
 import Caption from "../../common/Caption";
 import { zeroPad } from "../../../util/util";
+import TicketStatusChip from "../../support/TicketStatusChip";
 
 type AssociatedTask = {
   id: number;
@@ -74,14 +75,7 @@ const AssociatedTickets = ({ taskId }: { taskId: number }) => {
                       <Typography>
                         {zeroPad(ticket.id ?? 0) + " - " + ticket.title}
                       </Typography>
-                      <Chip
-                        label="Abierto"
-                        sx={{
-                          backgroundColor: colors.blue[600],
-                          color: "white",
-                        }}
-                        size="small"
-                      />
+                      <TicketStatusChip label={ticket.state} size="small" />
                     </Stack>
                   </Box>
                 </CardContent>
