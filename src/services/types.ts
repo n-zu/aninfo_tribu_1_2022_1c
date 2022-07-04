@@ -14,7 +14,7 @@ export type Task = {
   initial_date: string;
   final_date: string;
   estimated_hours: number;
-  assigned_employee: EmployeeId;
+  assigned_employee: number;
   collaborators: EmployeeId[];
 };
 
