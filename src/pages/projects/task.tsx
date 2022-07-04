@@ -29,6 +29,13 @@ const Task: NextPage = () => {
     console.log("Cargar horas");
   };
 
+  const taskQuery = JSON.stringify({
+    task_id: task?.id,
+    project_id: task?.project?.id,
+    task_name: task?.name,
+    project_name: task?.project?.name,
+  });
+
   const worked_hours = useMemo(() => {
     if (!task?.estimated_hours) return `${totalTime} (no hay estimación)`;
 
@@ -97,16 +104,7 @@ const Task: NextPage = () => {
                 Editar Tarea
               </Button>
               <Link
-                href={
-                  "/rrhh?cargarEn=" +
-                  task?.project?.id +
-                  "-" +
-                  task?.project?.name +
-                  "-" +
-                  task?.id +
-                  "-" +
-                  task?.name
-                }
+                href={"/rrhh?cargarEn=" + taskQuery}
                 style={
                   !task?.project?.id || !task?.id
                     ? {

@@ -5,7 +5,7 @@ import { Button, Typography, Avatar, Box } from "@mui/material";
 import { saveTask } from "../../../services/projects";
 import { toast } from "react-toastify";
 import { Task } from "../../../services/types";
-import { capitalize } from "../../../util/util";
+import { capitalize, zeroPad } from "../../../util/util";
 import { useEmployees } from "../../../services/projects";
 
 // el orden en el que aparecen los estados acá
@@ -110,7 +110,9 @@ const TaskModal = ({ projectId, open, onClose, onSave, task }: Props) => {
                 options={employees.map((e) => e.id)}
                 getOptionLabel={(id: any) => {
                   const employee = employees.find((e) => e?.id === id);
-                  return `${employee?.name}  ${employee?.lastname}`;
+                  return `${zeroPad(employee?.id ?? 0)} - ${employee?.name}  ${
+                    employee?.lastname
+                  }`;
                 }}
                 renderOption={(props: any, option: any) =>
                   renderOption(
@@ -146,7 +148,9 @@ const employeeLabel = (loading: boolean, error: any) => {
 };
 
 const renderOption = (props: any, option: any) => {
-  const employee = `${option?.name}  ${option?.lastname}`;
+  const employee = `${zeroPad(option?.id)} - ${option?.name}  ${
+    option?.lastname
+  }`;
   return (
     <Box
       component="li"
@@ -154,7 +158,7 @@ const renderOption = (props: any, option: any) => {
       {...props}
     >
       <Avatar style={{ transform: "scale(0.7)", backgroundColor: "gray" }}>
-        {employee?.[0]}
+        {option?.name?.[0]}
       </Avatar>
       <Typography>{employee}</Typography>
     </Box>
