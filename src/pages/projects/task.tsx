@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import type { NextPage } from "next";
-import { Box, Typography, Button } from "@mui/material";
+import { Alert, Box, Typography, Button } from "@mui/material";
 import { useTask, useTaskTRs } from "../../services/projects";
 import { useRouter } from "next/router";
 import { zeroPad } from "../../util/util";
@@ -12,6 +12,7 @@ import StateChip from "../../components/projects/StateChip";
 import styles from "../../styles/Project.module.css";
 import Collaborators from "../../components/projects/tasks/Collaborators";
 import AssociatedTickets from "../../components/projects/tasks/AssociatedTickets";
+import EmployeeAvatar from "../../components/projects/tasks/EmployeeAvatar";
 
 const Task: NextPage = () => {
   const router = useRouter();
@@ -19,7 +20,6 @@ const Task: NextPage = () => {
   const { task, error, loading, mutate } = useTask(taskId);
   const [open, setOpen] = useState(false);
   const { totalTime } = useTaskTRs(parseInt(taskId));
-
   const onHours = () => {
     console.log("Cargar horas");
   };
@@ -34,8 +34,12 @@ const Task: NextPage = () => {
 
   return (
     <div className="page">
-      {loading ? <Loading /> : ""}
-      {error ? "ERROR" : ""}
+      {loading ? <Loading style={{ marginTop: "30px" }} /> : ""}
+      {error && !task ? (
+        <Alert severity="error" style={{ width: "100%", marginTop: "10px" }}>
+          No se pudo cargar la tarea
+        </Alert>
+      ) : null}
       {task && (
         <>
           <Box
@@ -131,7 +135,9 @@ const Task: NextPage = () => {
                   {task?.estimated_hours}
                 </TitledText>
                 <TitledText title="Horas Trabajadas">{worked_hours}</TitledText>
+                <EmployeeAvatar id={task?.assigned_employee} />
               </Box>
+
               <TitledText title="Descripción">{task?.description}</TitledText>
             </div>
 

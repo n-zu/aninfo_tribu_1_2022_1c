@@ -17,10 +17,17 @@ import styles from "../../common/Card.module.css";
 import Caption from "../../common/Caption";
 import { zeroPad } from "../../../util/util";
 
+type AssociatedTask = {
+  id: number;
+  taskId: number;
+  ticketId: number;
+};
+
 type Ticket = {
   id: number;
   title: string;
   state: string;
+  tasks: AssociatedTask[];
 };
 
 const URL = "https://squad320221c-production.up.railway.app/tickets";
@@ -33,9 +40,9 @@ const AssociatedTickets = ({ taskId }: { taskId: number }) => {
   const tickets = useMemo(() => {
     if (!data) return [];
     return data.filter((ticket: Ticket) => {
-      // TODO: filtrar los que tengan esta tarea asociada
-      let x = taskId;
-      return true;
+      return ticket.tasks.some(
+        (task: AssociatedTask) => task.taskId === taskId
+      );
     });
   }, [data, taskId]);
 
@@ -53,7 +60,7 @@ const AssociatedTickets = ({ taskId }: { taskId: number }) => {
       {loading && !error ? <Loading /> : null}
       {error ? (
         <Alert severity="error" style={{ width: "100%" }}>
-          No se pudieron cargar las tareas
+          No se pudieron cargar los tickets asociados
         </Alert>
       ) : null}
       {tickets.map((ticket: Ticket) => (
@@ -84,7 +91,9 @@ const AssociatedTickets = ({ taskId }: { taskId: number }) => {
         </a>
       ))}
       <Caption>
-        {tickets?.length === 0 ? "No hay tickets asociados" : ""}
+        {tickets?.length === 0 && !loading && !error
+          ? "No hay tickets asociados"
+          : ""}
       </Caption>
     </div>
   );

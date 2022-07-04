@@ -10,4 +10,7 @@
   padding: 2rem;
   pointer-events: all;
   min-width: min(600px, 90%);
+  max-height: 95vh;
+  overflow: auto;
 }
+

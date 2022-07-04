@@ -126,6 +126,18 @@ export const useEmployees = () => {
   return { employees, error, loadingEmployee, ...rest };
 };
 
+export const useEmployee = (id: number) => {
+  const { data, error, isValidating, ...rest } = useSWR(
+    `/recursos/${id}`,
+    rrhhFetch
+  );
+  const loadingEmployee = !data && isValidating;
+
+  const employee = error ? null : (data as Employee);
+
+  return { employee, error, loadingEmployee, ...rest };
+};
+
 const useTRs = (name: string, id: number) => {
   const { data, error, isValidating, ...rest } = useSWR(
     id ? `/rrhh/${name}/${id}` : null,
