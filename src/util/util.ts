@@ -30,5 +30,5 @@ export const capitalize = (str: string) => {
 
 export const routeToRegistro = (id : number | null, router : NextRouter) => {
   if (!id) return;
-  router.push("/rrhh/registro?id=" + id);
+  router.push("/rrhh/modificarRegistro?id=" + id);
 }
