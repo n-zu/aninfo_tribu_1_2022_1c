@@ -27,7 +27,14 @@ const EmployeeAvatar = ({ id }: { id: number }) => {
           component="li"
           style={{ display: "flex", alignItems: "center", gap: "5px" }}
         >
-          <Avatar style={{ backgroundColor: "gray", transform: "scale(0.8)" }}>
+          <Avatar
+            style={{
+              backgroundColor: "gray",
+              height: "24px",
+              width: "24px",
+              fontSize: "10pt",
+            }}
+          >
             {name?.[0]}
           </Avatar>
           <Typography>{name}</Typography>
