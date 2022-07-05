@@ -62,6 +62,20 @@ export const useTask = (taskId: string) => {
   return { task, error, loading, ...rest };
 };
 
+export const useTasks= () => {
+  const { data, error, isValidating, ...rest } = useSWR(
+    "/tasks/",
+    projectsFetch
+  );
+  const loading = !data && isValidating;
+
+  const tasks = data as Task[];
+
+
+  return { tasks, error, loading, ...rest };
+};
+
+
 export const saveTask = async (
   task: Task,
   projectId?: string,

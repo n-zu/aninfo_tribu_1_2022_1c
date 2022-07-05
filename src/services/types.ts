@@ -76,3 +76,9 @@ export type Recurso = {
   name: string;
   lastname: string;
 };
+
+export type Client = {
+  id?: number;
+  "razon social": string;
+  CUIT: string;
+};

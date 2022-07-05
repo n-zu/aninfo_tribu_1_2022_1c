@@ -59,6 +59,7 @@ export const useRecursos = () => {
 };
 
 export const useRecurso = (recursoId: string) => {
+
   const { data, error, isValidating, ...rest } = useSWR(
     recursoId ? "/recursos/" + recursoId : null,
     rrhhFetch
@@ -66,7 +67,7 @@ export const useRecurso = (recursoId: string) => {
   const loading = !data && isValidating;
 
   const recurso = data as Recurso;
-  
+
   return { recurso, error, loading, ...rest };
 };
 

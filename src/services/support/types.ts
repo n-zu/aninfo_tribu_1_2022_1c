@@ -29,6 +29,7 @@ export type Ticket = {
   creationDate: string; // datetime
   deadline: string; // datetime
   lastEditionDate: string; // datetime
+  clientId: number;
 };
 
 // Employees

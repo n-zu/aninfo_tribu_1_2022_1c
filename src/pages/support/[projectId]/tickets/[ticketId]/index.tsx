@@ -19,6 +19,8 @@ import { useRecursos } from "@services/rrhh";
 import EmployeeList from "src/components/common/EmployeeList";
 import { EmployeeId } from "src/services/types";
 import TasksPicker from "src/components/support/TasksPicker";
+import ResponsablePicker from "src/components/support/ResponsablePicker";
+import { useState } from "react";
 const TicketScreen: NextPage = () => {
   const router = useRouter();
   const { projectId, ticketId } = router.query;
@@ -27,6 +29,8 @@ const TicketScreen: NextPage = () => {
     supportFetcher
   );
 
+
+  
   return (
     <Container className="page">
       {ticket !== undefined && (
@@ -91,6 +95,9 @@ const CustomComponent = ({
     deleteResponsable(colabId, ticket.id);
   };
 
+  const [tasks, setTasks] = useState(ticket?.tasks ?? [])
+  const [responsables, setResponsables] = useState(ticket?.employees ?? [])
+  
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -121,19 +128,8 @@ const CustomComponent = ({
         <Stack direction="column" sx={{ flex: 1 }}>
           <Typography>Severidad: {ticket.severity}</Typography>
           <Typography>Prioridad: {ticket.priority}</Typography>
-          <Typography>
-            Responsable/s:
-            {
-              <EmployeeList
-                name={"responsable"}
-                title={"responsables"}
-                currentEmployees={currentEmployees}
-                addEmployee={addRes}
-                removeEmployee={deleteRes}
-              />
-            }
-          </Typography>
-          <TasksPicker ticket={ticket} />
+          <ResponsablePicker ticket={ticket}  responsables={responsables} setResponsables={setResponsables}/>
+          <TasksPicker ticket={ticket}  tasks={tasks} setTasks={setTasks}/>
         </Stack>
         <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
           <Typography>

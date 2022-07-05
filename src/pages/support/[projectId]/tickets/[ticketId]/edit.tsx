@@ -18,9 +18,11 @@ import dayjs from "dayjs";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import { toast } from "react-toastify";
 import useSWR from "swr";
+
+import ResponsablePicker from "src/components/support/ResponsablePicker";
 import TasksPicker from "src/components/support/TasksPicker";
 
 const metadata = {
@@ -32,6 +34,7 @@ const TicketEditScreen: NextPage = () => {
   const router = useRouter();
   const projectId = router.query.projectId as any as string;
   const ticketId = router.query.ticketId as any as string;
+  
 
   console.log({ ticketId });
 
@@ -40,6 +43,9 @@ const TicketEditScreen: NextPage = () => {
     supportFetcher
   );
   const { recursos, error: employeesError } = useRecursos();
+ 
+  const [tasks, setTasks] = useState(ticket?.tasks ?? [])
+  const [responsables, setResponsables] = useState(ticket?.employees ?? [])
 
   return (
     <Container className="page">
@@ -63,6 +69,8 @@ const TicketEditScreen: NextPage = () => {
           onSubmit={(values) => {
             const body = {
               ...values,
+              employees: responsables,
+              tasks: tasks,
               deadline: dayjs(values.deadline).toISOString(),
             };
 
@@ -112,27 +120,9 @@ const TicketEditScreen: NextPage = () => {
                   label="Prioridad:"
                   options={metadata.priorities}
                 />
-                <Typography>
-                  Responsable/s:{" "}
-                  {ticket.employees.map((employeeId) => {
-                    const recurso = recursos.find((r) => r.id == employeeId);
-                    return recurso ? (
-                      <Chip
-                        key={employeeId}
-                        label={`${recurso?.name} ${recurso?.lastname}`}
-                        onDelete={() => {
-                          supportFetcher(
-                            `/tickets/${ticketId}/employees?employee_id=${employeeId}`,
-                            { headers: postHeaders, method: "DELETE" }
-                          ).then((res) =>
-                            toast.success("Responsable borrado exitosamente")
-                          );
-                        }}
-                      />
-                    ) : undefined;
-                  })}
-                </Typography>
-                <TasksPicker ticket={ticket} />
+                <ResponsablePicker ticket={ticket}  responsables={responsables} setResponsables={setResponsables}/>
+                <TasksPicker ticket={ticket}  tasks={tasks} setTasks={setTasks}/>
+                
               </Stack>
               <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
                 <CustomDatePicker id="deadline" label="Vencimiento:" />
