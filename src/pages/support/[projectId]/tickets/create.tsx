@@ -25,7 +25,7 @@ import TasksPicker from "src/components/support/TasksPicker";
 import ResponsablePicker from "src/components/support/ResponsablePicker";
 import React, { useEffect } from "react";
 import { AiOutlineHourglass } from "react-icons/ai";
-import { Client } from "@services/types";
+import { Client, Recurso } from "@services/types";
 import { zeroPad } from "src/util/util";
 
 
@@ -39,8 +39,9 @@ const TicketEditScreen: NextPage = () => {
   const projectId = router.query.projectId as any as string;
   const [tasks, setTasks] = useState([])
   const [responsables, setResponsables] = useState([])
-  const [clients, setClients] = useState([])
-  const [client, setClient] = useState(1)
+  // const [clients, setClients] = useState([])
+  const {data: clients} = useSWR<Client[]>("/clients", supportFetcher);
+  const [client, setClient] = useState<number | null>(null)
 
   const ticket = {
     id: null,
@@ -55,11 +56,6 @@ const TicketEditScreen: NextPage = () => {
     versionId: projectId,
     
   };
-
-  fetch("https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc-56d50131d0ae/clientes-psa/1.0.0/m/api/clientes")
-  .then(response=>response.json())
-  .then(data=>{ setClients(data)
-  });
 
   const { recursos, error: employeesError } = useRecursos();
 
@@ -166,8 +162,8 @@ const TicketEditScreen: NextPage = () => {
                 
                <Autocomplete
                 options={(clients as Client[]) ?? []}
-                onChange={(event: any, newOption: Recurso | null) => {
-                  newOption ? setClient(newOption.id) : setClient(newOption)
+                onChange={(event: any, newOption: Client | null) => {
+                  newOption  ? setClient(newOption.id!) : setClient(newOption)
                   console.log(client)
                 }}
                 sx={{ width: 500, marginTop: "10px" }}
