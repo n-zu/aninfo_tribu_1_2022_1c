@@ -11,6 +11,7 @@ import {
   MenuItem,
   Chip,
   Autocomplete,
+  Input,
 } from "@mui/material";
 import { useRecursos } from "@services/rrhh";
 import { postHeaders, supportFetcher, Ticket } from "@services/support";
@@ -24,6 +25,7 @@ import useSWR from "swr";
 
 import ResponsablePicker from "src/components/support/ResponsablePicker";
 import TasksPicker from "src/components/support/TasksPicker";
+import TicketStatusChip from "src/components/support/TicketStatusChip";
 
 const metadata = {
   severities: ["s1", "s2", "s3", "s4", "s5"].reverse(),
@@ -43,9 +45,11 @@ const TicketEditScreen: NextPage = () => {
     supportFetcher
   );
   const { recursos, error: employeesError } = useRecursos();
+  const client = ticket.clientId ? useSWR<Ticket>(`/clients/${ticket.clientId}`,supportFetcher).data : "-"
  
   const [tasks, setTasks] = useState(ticket?.tasks ?? [])
   const [responsables, setResponsables] = useState(ticket?.employees ?? [])
+  const [status, setStatus] = useState(ticket?.state ?? "")
 
   return (
     <Container className="page">
@@ -71,6 +75,7 @@ const TicketEditScreen: NextPage = () => {
               ...values,
               employees: responsables,
               tasks: tasks,
+              state: status,
               deadline: dayjs(values.deadline).toISOString(),
             };
 
@@ -106,10 +111,29 @@ const TicketEditScreen: NextPage = () => {
                   InputProps={{ sx: { fontSize: "2em" } }}
                 />
               </Stack>
+
+              <Select
+                value={status}
+                onChange={e => {
+                  setStatus(e.target.value)
+                }}
+                input={<Input/>}
+                renderValue={(selected) => <TicketStatusChip label={status} />}
+                disableUnderline
+              >
+                {["Abierto", "Cerrado", "En Progreso"].map(
+                  (statusLabel) => (
+                    <MenuItem key={statusLabel} value={statusLabel}>
+                      <TicketStatusChip label={statusLabel} />
+                    </MenuItem>
+                  )
+                )}
+              </Select>
             </Stack>
 
             <Stack direction="row">
               <Stack direction="column" sx={{ flex: 1 }}>
+                <Typography>Cliente: {client ? client["razon social"] : "-"}</Typography>
                 <CustomSelect
                   id="severity"
                   label="Severidad:"
