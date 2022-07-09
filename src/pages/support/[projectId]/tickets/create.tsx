@@ -54,7 +54,6 @@ const TicketEditScreen: NextPage = () => {
     tasks: tasks,
     clientId: client,
     versionId: projectId,
-    
   };
 
   const { recursos, error: employeesError } = useRecursos();
