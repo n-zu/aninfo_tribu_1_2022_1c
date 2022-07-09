@@ -26,6 +26,7 @@ import useSWR from "swr";
 import ResponsablePicker from "src/components/support/ResponsablePicker";
 import TasksPicker from "src/components/support/TasksPicker";
 import TicketStatusChip from "src/components/support/TicketStatusChip";
+import { Client } from "@services/types";
 
 const metadata = {
   severities: ["s1", "s2", "s3", "s4", "s5"].reverse(),
@@ -36,7 +37,7 @@ const TicketEditScreen: NextPage = () => {
   const router = useRouter();
   const projectId = router.query.projectId as any as string;
   const ticketId = router.query.ticketId as any as string;
-  
+
 
   console.log({ ticketId });
 
@@ -45,8 +46,8 @@ const TicketEditScreen: NextPage = () => {
     supportFetcher
   );
   const { recursos, error: employeesError } = useRecursos();
-  const client = ticket.clientId ? useSWR<Ticket>(`/clients/${ticket.clientId}`,supportFetcher).data : "-"
- 
+  const {data: client} = useSWR<Client>(`/clients/${ticket?.clientId}`, (resource: string) => supportFetcher(resource).catch(err => "-"))
+
   const [tasks, setTasks] = useState(ticket?.tasks ?? [])
   const [responsables, setResponsables] = useState(ticket?.employees ?? [])
   const [status, setStatus] = useState(ticket?.state ?? "")
@@ -117,7 +118,7 @@ const TicketEditScreen: NextPage = () => {
                 onChange={e => {
                   setStatus(e.target.value)
                 }}
-                input={<Input/>}
+                input={<Input />}
                 renderValue={(selected) => <TicketStatusChip label={status} />}
                 disableUnderline
               >
@@ -133,7 +134,7 @@ const TicketEditScreen: NextPage = () => {
 
             <Stack direction="row">
               <Stack direction="column" sx={{ flex: 1 }}>
-                <Typography>Cliente: {client ? client["razon social"] : "-"}</Typography>
+                <Typography>Cliente: {client?.["razon social"] ?? "-"}</Typography>
                 <CustomSelect
                   id="severity"
                   label="Severidad:"
@@ -144,9 +145,9 @@ const TicketEditScreen: NextPage = () => {
                   label="Prioridad:"
                   options={metadata.priorities}
                 />
-                <ResponsablePicker ticket={ticket}  responsables={responsables} setResponsables={setResponsables}/>
-                <TasksPicker ticket={ticket}  tasks={tasks} setTasks={setTasks}/>
-                
+                <ResponsablePicker ticket={ticket} responsables={responsables} setResponsables={setResponsables} />
+                <TasksPicker ticket={ticket} tasks={tasks} setTasks={setTasks} />
+
               </Stack>
               <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
                 <CustomDatePicker id="deadline" label="Vencimiento:" />

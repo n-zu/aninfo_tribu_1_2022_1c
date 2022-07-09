@@ -20,7 +20,7 @@ import useSWR from "swr";
 import { Employee, supportFetcher, Ticket, postHeaders } from "@services/support";
 import { useRecursos } from "@services/rrhh";
 import EmployeeList from "src/components/common/EmployeeList";
-import { EmployeeId } from "src/services/types";
+import { Client, EmployeeId } from "src/services/types";
 import TasksPicker from "src/components/support/TasksPicker";
 import ResponsablePicker from "src/components/support/ResponsablePicker";
 import TicketStatusChip from "src/components/support/TicketStatusChip";
@@ -35,8 +35,8 @@ const TicketScreen: NextPage = () => {
     supportFetcher
   );
 
-  
-  
+
+
   return (
     <Container className="page">
       {ticket !== undefined && (
@@ -88,7 +88,7 @@ const CustomComponent = ({
 }) => {
   const { recursos, error: employeesError } = useRecursos();
 
-  const client = ticket.clientId ? useSWR<Ticket>(`/clients/${ticket.clientId}`,supportFetcher).data : "-"
+  const { data: client } = useSWR<Client>(`/clients/${ticket?.clientId}`, (resource: string) => supportFetcher(resource).catch(err => "-"))
 
   const currentEmployees: EmployeeId[] = ticket?.employees.map((employee) => {
     let ids: EmployeeId = { id: employee };
@@ -106,7 +106,7 @@ const CustomComponent = ({
   const [tasks, setTasks] = useState(ticket?.tasks ?? [])
   const [responsables, setResponsables] = useState(ticket?.employees ?? [])
   const [status, setStatus] = useState(ticket.state)
-  
+
 
   return (
     <>
@@ -116,7 +116,7 @@ const CustomComponent = ({
         </h1>
         <Stack direction="row" alignItems="center" spacing={2}>
 
-        <TicketStatusChip label={ticket.state} />
+          <TicketStatusChip label={ticket.state} />
           <NextLink
             href={`/support/${projectId}/tickets/${ticket.id}/edit`}
             passHref
@@ -130,11 +130,11 @@ const CustomComponent = ({
 
       <Stack direction="row">
         <Stack direction="column" sx={{ flex: 1 }}>
-          <Typography>Cliente: {client ? client["razon social"] : "-"}</Typography>
+          <Typography>Cliente: {client?.["razon social"] ?? "-"}</Typography>
           <Typography>Severidad: {ticket.severity}</Typography>
           <Typography>Prioridad: {ticket.priority}</Typography>
-          <ResponsablePicker ticket={ticket}  responsables={responsables} setResponsables={setResponsables}/>
-          <TasksPicker ticket={ticket}  tasks={tasks} setTasks={setTasks}/>
+          <ResponsablePicker ticket={ticket} responsables={responsables} setResponsables={setResponsables} />
+          <TasksPicker ticket={ticket} tasks={tasks} setTasks={setTasks} />
         </Stack>
         <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
           <Typography>
