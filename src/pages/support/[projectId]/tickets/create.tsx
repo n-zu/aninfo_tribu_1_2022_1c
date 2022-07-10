@@ -69,6 +69,8 @@ const TicketEditScreen: NextPage = () => {
               if (!values[field]) errors[field] = "Requerido";
               if (responsables.length <= 0) errors["employees"] = "Se debe asignar al menos un responsable";
               if (!client)  errors["clientId"] = "Se debe asignar un cliente";
+              var now = dayjs()
+              if (dayjs(values.deadline) < now) errors["deadline"] = "La fecha de vencimiento debe ser posterior a la actual";
             };
 
             

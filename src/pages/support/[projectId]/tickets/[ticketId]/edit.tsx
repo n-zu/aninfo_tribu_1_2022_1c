@@ -61,10 +61,11 @@ const TicketEditScreen: NextPage = () => {
             const errors: any = {};
             const require = (field: keyof Ticket) => {
               if (!values[field]) errors[field] = "Requerido";
+              var now = dayjs()
+              if (dayjs(values.deadline) < now) errors["deadline"] = "La fecha de vencimiento debe ser posterior a la actual";
             };
 
             require("title");
-            require("description");
             require("deadline");
             require("priority");
             require("severity");
@@ -111,8 +112,12 @@ const TicketEditScreen: NextPage = () => {
                   variant="standard"
                   InputProps={{ sx: { fontSize: "2em" } }}
                 />
-              </Stack>
+                <ErrorMessage name={"title"}>
+                      { msg => <div style={{ color: 'red' }}>Se debe colocar un título</div> }
+                </ErrorMessage>
 
+              </Stack>
+              
               <Select
                 value={status}
                 onChange={e => {
@@ -151,6 +156,9 @@ const TicketEditScreen: NextPage = () => {
               </Stack>
               <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
                 <CustomDatePicker id="deadline" label="Vencimiento:" />
+                <ErrorMessage name={"deadline"}>
+                  { msg => <div style={{ color: 'red' }}>{msg}</div> }
+                </ErrorMessage>
                 <Typography>
                   Fecha de creación:{" "}
                   {dayjs(ticket.creationDate).format("DD/MM/YYYY")}
@@ -206,7 +214,9 @@ const CustomSelect: FunctionComponent<CustomProps> = ({
           </MenuItem>
         ))}
       </Field>
-      <ErrorMessage name={id ?? label} />
+      <ErrorMessage name={id ?? label}>
+        { msg => <div style={{ color: 'red', marginLeft: 20 }}>{msg}</div> }
+     </ErrorMessage>
     </Box>
   </Stack>
 );
@@ -230,7 +240,9 @@ const CustomDatePicker: FunctionComponent<Omit<CustomProps, "options">> = ({
           );
         }}
       </Field>
-      <ErrorMessage name={id ?? label} />
+      
     </Box>
+    
   </Stack>
+  
 );
