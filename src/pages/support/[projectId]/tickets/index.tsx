@@ -10,7 +10,7 @@ import TicketCard from "src/components/support/TicketCard";
 const SupportHome: NextPage = () => {
   const router = useRouter();
   const { projectId } = router.query;
-  const { data: tickets, error } = useSWR<Ticket[]>("/tickets", supportFetcher)
+  const { data: tickets, error } = useSWR<Ticket[]>(`/tickets?versionId=${projectId}`, supportFetcher)
 
   return (
     <Container className="page">

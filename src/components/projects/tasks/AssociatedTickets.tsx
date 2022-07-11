@@ -15,7 +15,7 @@ import Loading from "../../common/Loading";
 import { useSWR } from "../../../services/requests";
 import styles from "../../common/Card.module.css";
 import Caption from "../../common/Caption";
-import { zeroPad } from "../../../util/util";
+import { zeroPad, capitalize } from "../../../util/util";
 import TicketStatusChip from "../../support/TicketStatusChip";
 
 type Ticket = {
@@ -23,6 +23,7 @@ type Ticket = {
   title: string;
   state: string;
   tasks: number[];
+  versionId: number;
 };
 
 const URL = "https://squad320221c-production.up.railway.app/tickets";
@@ -59,7 +60,10 @@ const AssociatedTickets = ({ taskId }: { taskId: number }) => {
       ) : null}
       {tickets.map((ticket: Ticket) => (
         <a key={ticket.id}>
-          <NextLink href={`/support/51/tickets/${ticket.id}`} passHref>
+          <NextLink
+            href={`/support/${ticket.versionId}/tickets/${ticket.id}`}
+            passHref
+          >
             <ButtonBase sx={{ width: "100%" }} style={{ marginTop: 10 }}>
               <Card sx={{ width: "100%" }} className={styles.hover}>
                 <CardContent style={{ padding: 10 }}>
@@ -68,7 +72,10 @@ const AssociatedTickets = ({ taskId }: { taskId: number }) => {
                       <Typography>
                         {zeroPad(ticket.id ?? 0) + " - " + ticket.title}
                       </Typography>
-                      <TicketStatusChip label={ticket.state} size="small" />
+                      <TicketStatusChip
+                        label={capitalize(ticket.state)}
+                        size="small"
+                      />
                     </Stack>
                   </Box>
                 </CardContent>

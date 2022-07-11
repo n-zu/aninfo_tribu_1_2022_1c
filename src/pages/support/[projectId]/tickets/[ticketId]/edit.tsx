@@ -11,6 +11,7 @@ import {
   MenuItem,
   Chip,
   Autocomplete,
+  Input,
 } from "@mui/material";
 import { useRecursos } from "@services/rrhh";
 import { postHeaders, supportFetcher, Ticket } from "@services/support";
@@ -18,10 +19,14 @@ import dayjs from "dayjs";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import { toast } from "react-toastify";
 import useSWR from "swr";
+
+import ResponsablePicker from "src/components/support/ResponsablePicker";
 import TasksPicker from "src/components/support/TasksPicker";
+import TicketStatusChip from "src/components/support/TicketStatusChip";
+import { Client } from "@services/types";
 
 const metadata = {
   severities: ["s1", "s2", "s3", "s4", "s5"].reverse(),
@@ -33,6 +38,7 @@ const TicketEditScreen: NextPage = () => {
   const projectId = router.query.projectId as any as string;
   const ticketId = router.query.ticketId as any as string;
 
+
   console.log({ ticketId });
 
   const { data: ticket, error } = useSWR<Ticket>(
@@ -40,6 +46,11 @@ const TicketEditScreen: NextPage = () => {
     supportFetcher
   );
   const { recursos, error: employeesError } = useRecursos();
+  const {data: client} = useSWR<Client>(`/clients/${ticket?.clientId}`, (resource: string) => supportFetcher(resource).catch(err => "-"))
+
+  const [tasks, setTasks] = useState(ticket?.tasks ?? [])
+  const [responsables, setResponsables] = useState(ticket?.employees ?? [])
+  const [status, setStatus] = useState(ticket?.state ?? "")
 
   return (
     <Container className="page">
@@ -50,10 +61,11 @@ const TicketEditScreen: NextPage = () => {
             const errors: any = {};
             const require = (field: keyof Ticket) => {
               if (!values[field]) errors[field] = "Requerido";
+              var now = dayjs()
+              if (dayjs(values.deadline) < now) errors["deadline"] = "La fecha de vencimiento debe ser posterior a la actual";
             };
 
             require("title");
-            require("description");
             require("deadline");
             require("priority");
             require("severity");
@@ -63,6 +75,9 @@ const TicketEditScreen: NextPage = () => {
           onSubmit={(values) => {
             const body = {
               ...values,
+              employees: responsables,
+              tasks: tasks,
+              state: status,
               deadline: dayjs(values.deadline).toISOString(),
             };
 
@@ -97,11 +112,34 @@ const TicketEditScreen: NextPage = () => {
                   variant="standard"
                   InputProps={{ sx: { fontSize: "2em" } }}
                 />
+                <ErrorMessage name={"title"}>
+                      { msg => <div style={{ color: 'red' }}>Se debe colocar un título</div> }
+                </ErrorMessage>
+
               </Stack>
+              
+              <Select
+                value={status}
+                onChange={e => {
+                  setStatus(e.target.value)
+                }}
+                input={<Input />}
+                renderValue={(selected) => <TicketStatusChip label={status} />}
+                disableUnderline
+              >
+                {["Abierto", "Cerrado", "En Progreso"].map(
+                  (statusLabel) => (
+                    <MenuItem key={statusLabel} value={statusLabel}>
+                      <TicketStatusChip label={statusLabel} />
+                    </MenuItem>
+                  )
+                )}
+              </Select>
             </Stack>
 
             <Stack direction="row">
               <Stack direction="column" sx={{ flex: 1 }}>
+                <Typography>Cliente: {client?.["razon social"] ?? "-"}</Typography>
                 <CustomSelect
                   id="severity"
                   label="Severidad:"
@@ -112,30 +150,15 @@ const TicketEditScreen: NextPage = () => {
                   label="Prioridad:"
                   options={metadata.priorities}
                 />
-                <Typography>
-                  Responsable/s:{" "}
-                  {ticket.employees.map((employeeId) => {
-                    const recurso = recursos.find((r) => r.id == employeeId);
-                    return recurso ? (
-                      <Chip
-                        key={employeeId}
-                        label={`${recurso?.name} ${recurso?.lastname}`}
-                        onDelete={() => {
-                          supportFetcher(
-                            `/tickets/${ticketId}/employees?employee_id=${employeeId}`,
-                            { headers: postHeaders, method: "DELETE" }
-                          ).then((res) =>
-                            toast.success("Responsable borrado exitosamente")
-                          );
-                        }}
-                      />
-                    ) : undefined;
-                  })}
-                </Typography>
-                <TasksPicker ticket={ticket} />
+                <ResponsablePicker ticket={ticket} responsables={responsables} setResponsables={setResponsables} />
+                <TasksPicker ticket={ticket} tasks={tasks} setTasks={setTasks} />
+
               </Stack>
               <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
                 <CustomDatePicker id="deadline" label="Vencimiento:" />
+                <ErrorMessage name={"deadline"}>
+                  { msg => <div style={{ color: 'red' }}>{msg}</div> }
+                </ErrorMessage>
                 <Typography>
                   Fecha de creación:{" "}
                   {dayjs(ticket.creationDate).format("DD/MM/YYYY")}
@@ -191,7 +214,9 @@ const CustomSelect: FunctionComponent<CustomProps> = ({
           </MenuItem>
         ))}
       </Field>
-      <ErrorMessage name={id ?? label} />
+      <ErrorMessage name={id ?? label}>
+        { msg => <div style={{ color: 'red', marginLeft: 20 }}>{msg}</div> }
+     </ErrorMessage>
     </Box>
   </Stack>
 );
@@ -215,7 +240,9 @@ const CustomDatePicker: FunctionComponent<Omit<CustomProps, "options">> = ({
           );
         }}
       </Field>
-      <ErrorMessage name={id ?? label} />
+      
     </Box>
+    
   </Stack>
+  
 );

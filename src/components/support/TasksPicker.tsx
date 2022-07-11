@@ -1,12 +1,22 @@
-import { Chip, Typography } from "@mui/material";
+import { Chip, CircularProgress, Typography } from "@mui/material";
 import { useTask } from "@services/projects";
 import { supportAPIUrl } from "@services/support";
-import { useState } from "react";
 import { toast } from "react-toastify";
 
 const TaskChip = ({ task_id, deleteTask }: any) => {
-  const { task } = useTask(task_id);
+  const { task, error, loading, ...rest } = useTask(task_id);
+  
+  if(!task){
 
+    if(!loading) {
+      deleteTask(task_id)
+      toast.error("La tarea que intenta agregar no existe");
+    }
+    return(
+        <CircularProgress style={{width: 20, height: 20, marginLeft: 10, marginRight: 10}} />
+    )
+  }
+    
   return (
     <Chip
       label={`${task_id} ${task?.name}` ?? ""}
@@ -15,41 +25,49 @@ const TaskChip = ({ task_id, deleteTask }: any) => {
   );
 };
 
-const TasksPicker = ({ ticket }: any) => {
+const TasksPicker = ({ ticket, setTasks, tasks }: any ) => {
   const initialTasks = ticket?.tasks ?? [];
 
-  const [tasks, setTasks] = useState(initialTasks);
 
   const addTask = async () => {
+
+
     // TODO: Mostrar un dialogo para seleccionar una tarea
-    const task = await prompt("Ingrese el id de la tarea");
+    const taskId = await prompt("Ingrese el id de la tarea");
 
-    if (!task) return;
+    if (!taskId) return;
 
-    await fetch(`${supportAPIUrl}/tickets/${ticket.id}/tasks?task_id=${task}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
-    setTasks([...tasks, task]);
-    toast.success("Tarea agregada exitosamente");
+    
+
+    if(ticket.id) {
+      await fetch(`${supportAPIUrl}/tickets/${ticket.id}/tasks?task_id=${taskId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+    }
+    
+    setTasks([...tasks, taskId]);
   };
 
   const deleteTask = async (task_id: number) => {
-    await fetch(
-      `${supportAPIUrl}/tickets/${ticket?.id}/tasks?task_id=${task_id}`,
-      {
-        method: "DELETE",
-      }
-    );
+    if (ticket.id) {
+      await fetch(
+        `${supportAPIUrl}/tickets/${ticket?.id}/tasks?task_id=${task_id}`,
+        {
+          method: "DELETE",
+        }
+      )
+      
+    }
     setTasks(tasks.filter((task: number) => task !== task_id));
-    toast.success("Tarea borrada exitosamente");
+    
   };
 
   return (
-    <Typography>
+    <Typography component={'span'}>
       Tarea/s:{" "}
       {tasks.map((task: number) => (
         <TaskChip key={task} task_id={task} deleteTask={deleteTask} />

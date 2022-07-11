@@ -7,6 +7,9 @@ import {
   Box,
   Stack,
   Link,
+  Input,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import dayjs from "dayjs";
 import type { NextPage } from "next";
@@ -14,11 +17,16 @@ import { useRouter } from "next/router";
 import NextLink from "next/link";
 import { AiOutlineEdit } from "react-icons/ai";
 import useSWR from "swr";
-import { Employee, supportFetcher, Ticket } from "@services/support";
+import { Employee, supportFetcher, Ticket, postHeaders } from "@services/support";
 import { useRecursos } from "@services/rrhh";
 import EmployeeList from "src/components/common/EmployeeList";
-import { EmployeeId } from "src/services/types";
+import { Client, EmployeeId } from "src/services/types";
 import TasksPicker from "src/components/support/TasksPicker";
+import ResponsablePicker from "src/components/support/ResponsablePicker";
+import TicketStatusChip from "src/components/support/TicketStatusChip";
+import { useState } from "react";
+
+
 const TicketScreen: NextPage = () => {
   const router = useRouter();
   const { projectId, ticketId } = router.query;
@@ -26,6 +34,8 @@ const TicketScreen: NextPage = () => {
     `/tickets/${ticketId}`,
     supportFetcher
   );
+
+
 
   return (
     <Container className="page">
@@ -78,6 +88,8 @@ const CustomComponent = ({
 }) => {
   const { recursos, error: employeesError } = useRecursos();
 
+  const { data: client } = useSWR<Client>(`/clients/${ticket?.clientId}`, (resource: string) => supportFetcher(resource).catch(err => "-"))
+
   const currentEmployees: EmployeeId[] = ticket?.employees.map((employee) => {
     let ids: EmployeeId = { id: employee };
     return ids;
@@ -91,6 +103,11 @@ const CustomComponent = ({
     deleteResponsable(colabId, ticket.id);
   };
 
+  const [tasks, setTasks] = useState(ticket?.tasks ?? [])
+  const [responsables, setResponsables] = useState(ticket?.employees ?? [])
+  const [status, setStatus] = useState(ticket.state)
+
+
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -98,14 +115,8 @@ const CustomComponent = ({
           #{ticket.id} {ticket.title}
         </h1>
         <Stack direction="row" alignItems="center" spacing={2}>
-          <Chip
-            label="Abierto"
-            sx={{
-              backgroundColor: colors.blue[600],
-              color: "white",
-              padding: "0 1em",
-            }}
-          />
+
+          <TicketStatusChip label={ticket.state} />
           <NextLink
             href={`/support/${projectId}/tickets/${ticket.id}/edit`}
             passHref
@@ -119,21 +130,11 @@ const CustomComponent = ({
 
       <Stack direction="row">
         <Stack direction="column" sx={{ flex: 1 }}>
+          <Typography>Cliente: {client?.["razon social"] ?? "-"}</Typography>
           <Typography>Severidad: {ticket.severity}</Typography>
           <Typography>Prioridad: {ticket.priority}</Typography>
-          <Typography>
-            Responsable/s:
-            {
-              <EmployeeList
-                name={"responsable"}
-                title={"responsables"}
-                currentEmployees={currentEmployees}
-                addEmployee={addRes}
-                removeEmployee={deleteRes}
-              />
-            }
-          </Typography>
-          <TasksPicker ticket={ticket} />
+          <ResponsablePicker ticket={ticket} responsables={responsables} setResponsables={setResponsables} />
+          <TasksPicker ticket={ticket} tasks={tasks} setTasks={setTasks} />
         </Stack>
         <Stack direction="column" sx={{ flex: 1, alignItems: "end" }}>
           <Typography>
